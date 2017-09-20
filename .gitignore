@@ -1,6 +1,4 @@
 gcc-build/
 gcc-install/
+!gcc-src/gcc
 gcc-src/*
-!.gitignore
-!gcc-src/gcc/tiger/
-
