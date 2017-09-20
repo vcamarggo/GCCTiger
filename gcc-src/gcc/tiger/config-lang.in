@@ -1,0 +1,14 @@
+# gcc-src/gcc/config/config-lang.in
+language="tiger"
+ 
+compilers="tiger1\$(exeext)"
+ 
+target_libs=""
+ 
+gtfiles="\$(srcdir)/tiger/tiger1.cc"
+ 
+# We will write the tiger FE in C++
+lang_requires_boot_languages=c++
+ 
+# Do not build by default
+build_by_default="no"

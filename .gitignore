@@ -2,5 +2,5 @@ gcc-build/
 gcc-install/
 gcc-src/*
 !gcc-src/gcc/
-gcc-src/gcc
+gcc-src/gcc/*
 !gcc-src/gcc/tiger/
