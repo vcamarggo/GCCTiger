@@ -1,0 +1,23 @@
+<id=LET, testes/test27.tig, line=2, col=1>
+<id=VAR, testes/test27.tig, line=3, col=5>
+<id=IDENTIFIER, text=a, testes/test27.tig, line=3, col=9>
+<id=ASSIG, testes/test27.tig, line=3, col=10>
+<id=INTEGER_LITERAL, text=0, testes/test27.tig, line=3, col=12>
+<id=FUNCTION, testes/test27.tig, line=5, col=5>
+<id=IDENTIFIER, text=g, testes/test27.tig, line=5, col=14>
+<id=LEFT_PAREN, testes/test27.tig, line=5, col=15>
+<id=IDENTIFIER, text=a, testes/test27.tig, line=5, col=16>
+<id=COLON, testes/test27.tig, line=5, col=17>
+<id=IDENTIFIER, text=int, testes/test27.tig, line=5, col=18>
+<id=RIGHT_PAREN, testes/test27.tig, line=5, col=21>
+<id=COLON, testes/test27.tig, line=5, col=22>
+<id=IDENTIFIER, text=int, testes/test27.tig, line=5, col=23>
+<id=EQUAL, testes/test27.tig, line=5, col=27>
+<id=IDENTIFIER, text=a, testes/test27.tig, line=5, col=29>
+<id=IDENTIFIER, text=in, testes/test27.tig, line=6, col=1>
+<id=IDENTIFIER, text=g, testes/test27.tig, line=7, col=2>
+<id=LEFT_PAREN, testes/test27.tig, line=7, col=3>
+<id=INTEGER_LITERAL, text=2, testes/test27.tig, line=7, col=4>
+<id=RIGHT_PAREN, testes/test27.tig, line=7, col=5>
+<id=END, testes/test27.tig, line=8, col=1>
+<id=END_OF_FILE, testes/test27.tig, line=9, col=1>

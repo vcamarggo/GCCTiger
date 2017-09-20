@@ -1,0 +1,12 @@
+<id=LET, testes/test43.tig, line=3, col=1>
+<id=VAR, testes/test43.tig, line=4, col=5>
+<id=IDENTIFIER, text=a, testes/test43.tig, line=4, col=9>
+<id=ASSIG, testes/test43.tig, line=4, col=11>
+<id=LEFT_PAREN, testes/test43.tig, line=4, col=14>
+<id=RIGHT_PAREN, testes/test43.tig, line=4, col=15>
+<id=IDENTIFIER, text=in, testes/test43.tig, line=5, col=1>
+<id=IDENTIFIER, text=a, testes/test43.tig, line=6, col=5>
+<id=PLUS, testes/test43.tig, line=6, col=7>
+<id=INTEGER_LITERAL, text=3, testes/test43.tig, line=6, col=9>
+<id=END, testes/test43.tig, line=7, col=1>
+<id=END_OF_FILE, testes/test43.tig, line=8, col=1>

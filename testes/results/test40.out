@@ -1,0 +1,17 @@
+<id=LET, testes/test40.tig, line=2, col=1>
+<id=FUNCTION, testes/test40.tig, line=3, col=5>
+<id=IDENTIFIER, text=g, testes/test40.tig, line=3, col=14>
+<id=LEFT_PAREN, testes/test40.tig, line=3, col=15>
+<id=IDENTIFIER, text=a, testes/test40.tig, line=3, col=16>
+<id=COLON, testes/test40.tig, line=3, col=17>
+<id=IDENTIFIER, text=int, testes/test40.tig, line=3, col=18>
+<id=RIGHT_PAREN, testes/test40.tig, line=3, col=21>
+<id=EQUAL, testes/test40.tig, line=3, col=23>
+<id=IDENTIFIER, text=a, testes/test40.tig, line=3, col=25>
+<id=IDENTIFIER, text=in, testes/test40.tig, line=4, col=1>
+<id=IDENTIFIER, text=g, testes/test40.tig, line=5, col=5>
+<id=LEFT_PAREN, testes/test40.tig, line=5, col=6>
+<id=INTEGER_LITERAL, text=2, testes/test40.tig, line=5, col=7>
+<id=RIGHT_PAREN, testes/test40.tig, line=5, col=8>
+<id=END, testes/test40.tig, line=6, col=1>
+<id=END_OF_FILE, testes/test40.tig, line=8, col=1>

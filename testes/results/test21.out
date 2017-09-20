@@ -1,0 +1,31 @@
+<id=LET, testes/test21.tig, line=2, col=1>
+<id=FUNCTION, testes/test21.tig, line=5, col=1>
+<id=IDENTIFIER, text=nfactor, testes/test21.tig, line=5, col=10>
+<id=LEFT_PAREN, testes/test21.tig, line=5, col=17>
+<id=IDENTIFIER, text=n, testes/test21.tig, line=5, col=18>
+<id=COLON, testes/test21.tig, line=5, col=19>
+<id=IDENTIFIER, text=int, testes/test21.tig, line=5, col=21>
+<id=RIGHT_PAREN, testes/test21.tig, line=5, col=24>
+<id=EQUAL, testes/test21.tig, line=5, col=26>
+<id=IF, testes/test21.tig, line=6, col=9>
+<id=IDENTIFIER, text=n, testes/test21.tig, line=6, col=13>
+<id=EQUAL, testes/test21.tig, line=6, col=15>
+<id=INTEGER_LITERAL, text=0, testes/test21.tig, line=6, col=17>
+<id=THEN, testes/test21.tig, line=7, col=13>
+<id=INTEGER_LITERAL, text=1, testes/test21.tig, line=7, col=18>
+<id=ELSE, testes/test21.tig, line=8, col=13>
+<id=IDENTIFIER, text=n, testes/test21.tig, line=8, col=18>
+<id=ASTERISK, testes/test21.tig, line=8, col=20>
+<id=IDENTIFIER, text=nfactor, testes/test21.tig, line=8, col=22>
+<id=LEFT_PAREN, testes/test21.tig, line=8, col=29>
+<id=IDENTIFIER, text=n, testes/test21.tig, line=8, col=30>
+<id=MINUS, testes/test21.tig, line=8, col=31>
+<id=INTEGER_LITERAL, text=1, testes/test21.tig, line=8, col=32>
+<id=RIGHT_PAREN, testes/test21.tig, line=8, col=33>
+<id=IDENTIFIER, text=in, testes/test21.tig, line=10, col=1>
+<id=IDENTIFIER, text=nfactor, testes/test21.tig, line=11, col=5>
+<id=LEFT_PAREN, testes/test21.tig, line=11, col=12>
+<id=INTEGER_LITERAL, text=10, testes/test21.tig, line=11, col=13>
+<id=RIGHT_PAREN, testes/test21.tig, line=11, col=15>
+<id=END, testes/test21.tig, line=12, col=1>
+<id=END_OF_FILE, testes/test21.tig, line=14, col=1>

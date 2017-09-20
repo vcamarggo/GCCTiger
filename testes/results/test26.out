@@ -1,0 +1,4 @@
+<id=INTEGER_LITERAL, text=3, testes/test26.tig, line=3, col=1>
+<id=PLUS, testes/test26.tig, line=3, col=3>
+<id=STRING_LITERAL, text=var, testes/test26.tig, line=3, col=5>
+<id=END_OF_FILE, testes/test26.tig, line=4, col=1>

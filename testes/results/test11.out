@@ -1,0 +1,13 @@
+<id=FOR, testes/test11.tig, line=2, col=1>
+<id=IDENTIFIER, text=i, testes/test11.tig, line=2, col=5>
+<id=ASSIG, testes/test11.tig, line=2, col=6>
+<id=INTEGER_LITERAL, text=10, testes/test11.tig, line=2, col=8>
+<id=TO, testes/test11.tig, line=2, col=11>
+<id=STRING_LITERAL, text= , testes/test11.tig, line=2, col=14>
+<id=DO, testes/test11.tig, line=2, col=17>
+<id=IDENTIFIER, text=i, testes/test11.tig, line=3, col=5>
+<id=ASSIG, testes/test11.tig, line=3, col=7>
+<id=IDENTIFIER, text=i, testes/test11.tig, line=3, col=10>
+<id=MINUS, testes/test11.tig, line=3, col=12>
+<id=INTEGER_LITERAL, text=1, testes/test11.tig, line=3, col=14>
+<id=END_OF_FILE, testes/test11.tig, line=4, col=1>

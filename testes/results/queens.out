@@ -1,0 +1,238 @@
+<id=LET, testes/queens.tig, line=3, col=1>
+<id=VAR, testes/queens.tig, line=4, col=5>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=4, col=9>
+<id=ASSIG, testes/queens.tig, line=4, col=11>
+<id=INTEGER_LITERAL, text=8, testes/queens.tig, line=4, col=14>
+<id=TYPE, testes/queens.tig, line=6, col=5>
+<id=IDENTIFIER, text=intArray, testes/queens.tig, line=6, col=10>
+<id=EQUAL, testes/queens.tig, line=6, col=19>
+<id=ARRAY, testes/queens.tig, line=6, col=21>
+<id=OF, testes/queens.tig, line=6, col=27>
+<id=IDENTIFIER, text=int, testes/queens.tig, line=6, col=30>
+<id=VAR, testes/queens.tig, line=8, col=5>
+<id=IDENTIFIER, text=row, testes/queens.tig, line=8, col=9>
+<id=ASSIG, testes/queens.tig, line=8, col=13>
+<id=IDENTIFIER, text=intArray, testes/queens.tig, line=8, col=16>
+<id=LEFT_SQUARE, testes/queens.tig, line=8, col=25>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=8, col=27>
+<id=RIGHT_SQUARE, testes/queens.tig, line=8, col=29>
+<id=OF, testes/queens.tig, line=8, col=31>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=8, col=34>
+<id=VAR, testes/queens.tig, line=9, col=5>
+<id=IDENTIFIER, text=col, testes/queens.tig, line=9, col=9>
+<id=ASSIG, testes/queens.tig, line=9, col=13>
+<id=IDENTIFIER, text=intArray, testes/queens.tig, line=9, col=16>
+<id=LEFT_SQUARE, testes/queens.tig, line=9, col=25>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=9, col=27>
+<id=RIGHT_SQUARE, testes/queens.tig, line=9, col=29>
+<id=OF, testes/queens.tig, line=9, col=31>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=9, col=34>
+<id=VAR, testes/queens.tig, line=10, col=5>
+<id=IDENTIFIER, text=diag1, testes/queens.tig, line=10, col=9>
+<id=ASSIG, testes/queens.tig, line=10, col=15>
+<id=IDENTIFIER, text=intArray, testes/queens.tig, line=10, col=18>
+<id=LEFT_SQUARE, testes/queens.tig, line=10, col=27>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=10, col=28>
+<id=PLUS, testes/queens.tig, line=10, col=29>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=10, col=30>
+<id=MINUS, testes/queens.tig, line=10, col=31>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=10, col=32>
+<id=RIGHT_SQUARE, testes/queens.tig, line=10, col=33>
+<id=OF, testes/queens.tig, line=10, col=35>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=10, col=38>
+<id=VAR, testes/queens.tig, line=11, col=5>
+<id=IDENTIFIER, text=diag2, testes/queens.tig, line=11, col=9>
+<id=ASSIG, testes/queens.tig, line=11, col=15>
+<id=IDENTIFIER, text=intArray, testes/queens.tig, line=11, col=18>
+<id=LEFT_SQUARE, testes/queens.tig, line=11, col=27>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=11, col=28>
+<id=PLUS, testes/queens.tig, line=11, col=29>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=11, col=30>
+<id=MINUS, testes/queens.tig, line=11, col=31>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=11, col=32>
+<id=RIGHT_SQUARE, testes/queens.tig, line=11, col=33>
+<id=OF, testes/queens.tig, line=11, col=35>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=11, col=38>
+<id=FUNCTION, testes/queens.tig, line=13, col=5>
+<id=IDENTIFIER, text=printboard, testes/queens.tig, line=13, col=14>
+<id=LEFT_PAREN, testes/queens.tig, line=13, col=24>
+<id=RIGHT_PAREN, testes/queens.tig, line=13, col=25>
+<id=EQUAL, testes/queens.tig, line=13, col=27>
+<id=LEFT_PAREN, testes/queens.tig, line=14, col=8>
+<id=FOR, testes/queens.tig, line=14, col=9>
+<id=IDENTIFIER, text=i, testes/queens.tig, line=14, col=13>
+<id=ASSIG, testes/queens.tig, line=14, col=15>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=14, col=18>
+<id=TO, testes/queens.tig, line=14, col=20>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=14, col=23>
+<id=MINUS, testes/queens.tig, line=14, col=24>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=14, col=25>
+<id=DO, testes/queens.tig, line=15, col=6>
+<id=LEFT_PAREN, testes/queens.tig, line=15, col=9>
+<id=FOR, testes/queens.tig, line=15, col=10>
+<id=IDENTIFIER, text=j, testes/queens.tig, line=15, col=14>
+<id=ASSIG, testes/queens.tig, line=15, col=16>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=15, col=19>
+<id=TO, testes/queens.tig, line=15, col=21>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=15, col=24>
+<id=MINUS, testes/queens.tig, line=15, col=25>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=15, col=26>
+<id=DO, testes/queens.tig, line=16, col=11>
+<id=IDENTIFIER, text=print, testes/queens.tig, line=16, col=14>
+<id=LEFT_PAREN, testes/queens.tig, line=16, col=19>
+<id=IF, testes/queens.tig, line=16, col=20>
+<id=IDENTIFIER, text=col, testes/queens.tig, line=16, col=23>
+<id=LEFT_SQUARE, testes/queens.tig, line=16, col=26>
+<id=IDENTIFIER, text=i, testes/queens.tig, line=16, col=27>
+<id=RIGHT_SQUARE, testes/queens.tig, line=16, col=28>
+<id=EQUAL, testes/queens.tig, line=16, col=29>
+<id=IDENTIFIER, text=j, testes/queens.tig, line=16, col=30>
+<id=THEN, testes/queens.tig, line=16, col=32>
+<id=STRING_LITERAL, text= O, testes/queens.tig, line=16, col=37>
+<id=ELSE, testes/queens.tig, line=16, col=41>
+<id=STRING_LITERAL, text= ., testes/queens.tig, line=16, col=46>
+<id=RIGHT_PAREN, testes/queens.tig, line=16, col=49>
+<id=SEMICOLON, testes/queens.tig, line=16, col=50>
+<id=IDENTIFIER, text=print, testes/queens.tig, line=17, col=10>
+<id=LEFT_PAREN, testes/queens.tig, line=17, col=15>
+<id=STRING_LITERAL, text=\n, testes/queens.tig, line=17, col=16>
+<id=RIGHT_PAREN, testes/queens.tig, line=17, col=19>
+<id=RIGHT_PAREN, testes/queens.tig, line=17, col=20>
+<id=SEMICOLON, testes/queens.tig, line=17, col=21>
+<id=IDENTIFIER, text=print, testes/queens.tig, line=18, col=10>
+<id=LEFT_PAREN, testes/queens.tig, line=18, col=15>
+<id=STRING_LITERAL, text=\n, testes/queens.tig, line=18, col=16>
+<id=RIGHT_PAREN, testes/queens.tig, line=18, col=19>
+<id=RIGHT_PAREN, testes/queens.tig, line=18, col=20>
+<id=FUNCTION, testes/queens.tig, line=20, col=5>
+<id=IDENTIFIER, text=try, testes/queens.tig, line=20, col=14>
+<id=LEFT_PAREN, testes/queens.tig, line=20, col=17>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=20, col=18>
+<id=COLON, testes/queens.tig, line=20, col=19>
+<id=IDENTIFIER, text=int, testes/queens.tig, line=20, col=20>
+<id=RIGHT_PAREN, testes/queens.tig, line=20, col=23>
+<id=EQUAL, testes/queens.tig, line=20, col=25>
+<id=LEFT_PAREN, testes/queens.tig, line=21, col=1>
+<id=IF, testes/queens.tig, line=22, col=6>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=22, col=9>
+<id=EQUAL, testes/queens.tig, line=22, col=10>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=22, col=11>
+<id=THEN, testes/queens.tig, line=23, col=6>
+<id=IDENTIFIER, text=printboard, testes/queens.tig, line=23, col=11>
+<id=LEFT_PAREN, testes/queens.tig, line=23, col=21>
+<id=RIGHT_PAREN, testes/queens.tig, line=23, col=22>
+<id=ELSE, testes/queens.tig, line=24, col=6>
+<id=FOR, testes/queens.tig, line=24, col=11>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=24, col=15>
+<id=ASSIG, testes/queens.tig, line=24, col=17>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=24, col=20>
+<id=TO, testes/queens.tig, line=24, col=22>
+<id=IDENTIFIER, text=N, testes/queens.tig, line=24, col=25>
+<id=MINUS, testes/queens.tig, line=24, col=26>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=24, col=27>
+<id=DO, testes/queens.tig, line=25, col=8>
+<id=IF, testes/queens.tig, line=25, col=11>
+<id=IDENTIFIER, text=row, testes/queens.tig, line=25, col=14>
+<id=LEFT_SQUARE, testes/queens.tig, line=25, col=17>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=25, col=18>
+<id=RIGHT_SQUARE, testes/queens.tig, line=25, col=19>
+<id=EQUAL, testes/queens.tig, line=25, col=20>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=25, col=21>
+<id=AND, testes/queens.tig, line=25, col=23>
+<id=IDENTIFIER, text=diag1, testes/queens.tig, line=25, col=25>
+<id=LEFT_SQUARE, testes/queens.tig, line=25, col=30>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=25, col=31>
+<id=PLUS, testes/queens.tig, line=25, col=32>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=25, col=33>
+<id=RIGHT_SQUARE, testes/queens.tig, line=25, col=34>
+<id=EQUAL, testes/queens.tig, line=25, col=35>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=25, col=36>
+<id=AND, testes/queens.tig, line=25, col=38>
+<id=IDENTIFIER, text=diag2, testes/queens.tig, line=25, col=40>
+<id=LEFT_SQUARE, testes/queens.tig, line=25, col=45>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=25, col=46>
+<id=PLUS, testes/queens.tig, line=25, col=47>
+<id=INTEGER_LITERAL, text=7, testes/queens.tig, line=25, col=48>
+<id=MINUS, testes/queens.tig, line=25, col=49>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=25, col=50>
+<id=RIGHT_SQUARE, testes/queens.tig, line=25, col=51>
+<id=EQUAL, testes/queens.tig, line=25, col=52>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=25, col=53>
+<id=THEN, testes/queens.tig, line=26, col=16>
+<id=LEFT_PAREN, testes/queens.tig, line=26, col=21>
+<id=IDENTIFIER, text=row, testes/queens.tig, line=26, col=22>
+<id=LEFT_SQUARE, testes/queens.tig, line=26, col=25>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=26, col=26>
+<id=RIGHT_SQUARE, testes/queens.tig, line=26, col=27>
+<id=ASSIG, testes/queens.tig, line=26, col=28>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=26, col=30>
+<id=SEMICOLON, testes/queens.tig, line=26, col=31>
+<id=IDENTIFIER, text=diag1, testes/queens.tig, line=26, col=33>
+<id=LEFT_SQUARE, testes/queens.tig, line=26, col=38>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=26, col=39>
+<id=PLUS, testes/queens.tig, line=26, col=40>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=26, col=41>
+<id=RIGHT_SQUARE, testes/queens.tig, line=26, col=42>
+<id=ASSIG, testes/queens.tig, line=26, col=43>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=26, col=45>
+<id=SEMICOLON, testes/queens.tig, line=26, col=46>
+<id=IDENTIFIER, text=diag2, testes/queens.tig, line=26, col=48>
+<id=LEFT_SQUARE, testes/queens.tig, line=26, col=53>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=26, col=54>
+<id=PLUS, testes/queens.tig, line=26, col=55>
+<id=INTEGER_LITERAL, text=7, testes/queens.tig, line=26, col=56>
+<id=MINUS, testes/queens.tig, line=26, col=57>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=26, col=58>
+<id=RIGHT_SQUARE, testes/queens.tig, line=26, col=59>
+<id=ASSIG, testes/queens.tig, line=26, col=60>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=26, col=62>
+<id=SEMICOLON, testes/queens.tig, line=26, col=63>
+<id=IDENTIFIER, text=col, testes/queens.tig, line=27, col=18>
+<id=LEFT_SQUARE, testes/queens.tig, line=27, col=21>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=27, col=22>
+<id=RIGHT_SQUARE, testes/queens.tig, line=27, col=23>
+<id=ASSIG, testes/queens.tig, line=27, col=24>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=27, col=26>
+<id=SEMICOLON, testes/queens.tig, line=27, col=27>
+<id=IDENTIFIER, text=try, testes/queens.tig, line=28, col=22>
+<id=LEFT_PAREN, testes/queens.tig, line=28, col=25>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=28, col=26>
+<id=PLUS, testes/queens.tig, line=28, col=27>
+<id=INTEGER_LITERAL, text=1, testes/queens.tig, line=28, col=28>
+<id=RIGHT_PAREN, testes/queens.tig, line=28, col=29>
+<id=SEMICOLON, testes/queens.tig, line=28, col=30>
+<id=IDENTIFIER, text=row, testes/queens.tig, line=29, col=14>
+<id=LEFT_SQUARE, testes/queens.tig, line=29, col=17>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=29, col=18>
+<id=RIGHT_SQUARE, testes/queens.tig, line=29, col=19>
+<id=ASSIG, testes/queens.tig, line=29, col=20>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=29, col=22>
+<id=SEMICOLON, testes/queens.tig, line=29, col=23>
+<id=IDENTIFIER, text=diag1, testes/queens.tig, line=29, col=25>
+<id=LEFT_SQUARE, testes/queens.tig, line=29, col=30>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=29, col=31>
+<id=PLUS, testes/queens.tig, line=29, col=32>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=29, col=33>
+<id=RIGHT_SQUARE, testes/queens.tig, line=29, col=34>
+<id=ASSIG, testes/queens.tig, line=29, col=35>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=29, col=37>
+<id=SEMICOLON, testes/queens.tig, line=29, col=38>
+<id=IDENTIFIER, text=diag2, testes/queens.tig, line=29, col=40>
+<id=LEFT_SQUARE, testes/queens.tig, line=29, col=45>
+<id=IDENTIFIER, text=r, testes/queens.tig, line=29, col=46>
+<id=PLUS, testes/queens.tig, line=29, col=47>
+<id=INTEGER_LITERAL, text=7, testes/queens.tig, line=29, col=48>
+<id=MINUS, testes/queens.tig, line=29, col=49>
+<id=IDENTIFIER, text=c, testes/queens.tig, line=29, col=50>
+<id=RIGHT_SQUARE, testes/queens.tig, line=29, col=51>
+<id=ASSIG, testes/queens.tig, line=29, col=52>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=29, col=54>
+<id=RIGHT_PAREN, testes/queens.tig, line=29, col=55>
+<id=RIGHT_PAREN, testes/queens.tig, line=31, col=1>
+<id=IDENTIFIER, text=in, testes/queens.tig, line=32, col=2>
+<id=IDENTIFIER, text=try, testes/queens.tig, line=32, col=5>
+<id=LEFT_PAREN, testes/queens.tig, line=32, col=8>
+<id=INTEGER_LITERAL, text=0, testes/queens.tig, line=32, col=9>
+<id=RIGHT_PAREN, testes/queens.tig, line=32, col=10>
+<id=END, testes/queens.tig, line=33, col=1>
+<id=END_OF_FILE, testes/queens.tig, line=34, col=5>

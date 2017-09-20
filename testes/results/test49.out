@@ -1,0 +1,22 @@
+<id=LET, testes/test49.tig, line=2, col=1>
+<id=TYPE, testes/test49.tig, line=3, col=5>
+<id=IDENTIFIER, text=rectype, testes/test49.tig, line=3, col=10>
+<id=EQUAL, testes/test49.tig, line=3, col=18>
+<id=LEFT_BRACKET, testes/test49.tig, line=3, col=20>
+<id=IDENTIFIER, text=name, testes/test49.tig, line=3, col=21>
+<id=COLON, testes/test49.tig, line=3, col=25>
+<id=STRING, testes/test49.tig, line=3, col=26>
+<id=COMMA, testes/test49.tig, line=3, col=32>
+<id=IDENTIFIER, text=id, testes/test49.tig, line=3, col=34>
+<id=COLON, testes/test49.tig, line=3, col=36>
+<id=IDENTIFIER, text=int, testes/test49.tig, line=3, col=37>
+<id=RIGHT_BRACKET, testes/test49.tig, line=3, col=40>
+<id=VAR, testes/test49.tig, line=5, col=5>
+<id=IDENTIFIER, text=a, testes/test49.tig, line=5, col=9>
+<id=ASSIG, testes/test49.tig, line=5, col=10>
+<id=IDENTIFIER, text=rectype, testes/test49.tig, line=5, col=13>
+<id=NIL, testes/test49.tig, line=5, col=21>
+<id=IDENTIFIER, text=in, testes/test49.tig, line=6, col=1>
+<id=IDENTIFIER, text=a, testes/test49.tig, line=7, col=5>
+<id=END, testes/test49.tig, line=8, col=1>
+<id=END_OF_FILE, testes/test49.tig, line=9, col=1>

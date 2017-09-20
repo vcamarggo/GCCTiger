@@ -1,0 +1,31 @@
+<id=LET, testes/test48.tig, line=2, col=1>
+<id=FUNCTION, testes/test48.tig, line=3, col=5>
+<id=IDENTIFIER, text=g, testes/test48.tig, line=3, col=14>
+<id=LEFT_PAREN, testes/test48.tig, line=3, col=15>
+<id=IDENTIFIER, text=a, testes/test48.tig, line=3, col=16>
+<id=COLON, testes/test48.tig, line=3, col=17>
+<id=IDENTIFIER, text=int, testes/test48.tig, line=3, col=18>
+<id=RIGHT_PAREN, testes/test48.tig, line=3, col=21>
+<id=COLON, testes/test48.tig, line=3, col=22>
+<id=IDENTIFIER, text=int, testes/test48.tig, line=3, col=23>
+<id=EQUAL, testes/test48.tig, line=3, col=27>
+<id=IDENTIFIER, text=a, testes/test48.tig, line=3, col=29>
+<id=TYPE, testes/test48.tig, line=4, col=5>
+<id=IDENTIFIER, text=t, testes/test48.tig, line=4, col=10>
+<id=EQUAL, testes/test48.tig, line=4, col=12>
+<id=IDENTIFIER, text=int, testes/test48.tig, line=4, col=14>
+<id=FUNCTION, testes/test48.tig, line=5, col=5>
+<id=IDENTIFIER, text=g, testes/test48.tig, line=5, col=14>
+<id=LEFT_PAREN, testes/test48.tig, line=5, col=15>
+<id=IDENTIFIER, text=a, testes/test48.tig, line=5, col=16>
+<id=COLON, testes/test48.tig, line=5, col=17>
+<id=IDENTIFIER, text=int, testes/test48.tig, line=5, col=18>
+<id=RIGHT_PAREN, testes/test48.tig, line=5, col=21>
+<id=COLON, testes/test48.tig, line=5, col=22>
+<id=IDENTIFIER, text=int, testes/test48.tig, line=5, col=23>
+<id=EQUAL, testes/test48.tig, line=5, col=27>
+<id=IDENTIFIER, text=a, testes/test48.tig, line=5, col=29>
+<id=IDENTIFIER, text=in, testes/test48.tig, line=6, col=1>
+<id=INTEGER_LITERAL, text=0, testes/test48.tig, line=7, col=5>
+<id=END, testes/test48.tig, line=8, col=1>
+<id=END_OF_FILE, testes/test48.tig, line=9, col=1>

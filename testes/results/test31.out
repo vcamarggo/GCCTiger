@@ -1,0 +1,11 @@
+<id=LET, testes/test31.tig, line=2, col=1>
+<id=VAR, testes/test31.tig, line=3, col=5>
+<id=IDENTIFIER, text=a, testes/test31.tig, line=3, col=9>
+<id=COLON, testes/test31.tig, line=3, col=10>
+<id=IDENTIFIER, text=int, testes/test31.tig, line=3, col=11>
+<id=ASSIG, testes/test31.tig, line=3, col=15>
+<id=STRING_LITERAL, text= , testes/test31.tig, line=3, col=18>
+<id=IDENTIFIER, text=in, testes/test31.tig, line=4, col=1>
+<id=IDENTIFIER, text=a, testes/test31.tig, line=5, col=5>
+<id=END, testes/test31.tig, line=6, col=1>
+<id=END_OF_FILE, testes/test31.tig, line=7, col=1>

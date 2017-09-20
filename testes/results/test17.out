@@ -1,0 +1,35 @@
+<id=LET, testes/test17.tig, line=2, col=1>
+<id=TYPE, testes/test17.tig, line=4, col=1>
+<id=IDENTIFIER, text=tree, testes/test17.tig, line=4, col=6>
+<id=EQUAL, testes/test17.tig, line=4, col=11>
+<id=LEFT_BRACKET, testes/test17.tig, line=4, col=12>
+<id=IDENTIFIER, text=key, testes/test17.tig, line=4, col=13>
+<id=COLON, testes/test17.tig, line=4, col=16>
+<id=IDENTIFIER, text=int, testes/test17.tig, line=4, col=18>
+<id=COMMA, testes/test17.tig, line=4, col=21>
+<id=IDENTIFIER, text=children, testes/test17.tig, line=4, col=23>
+<id=COLON, testes/test17.tig, line=4, col=31>
+<id=IDENTIFIER, text=treelist, testes/test17.tig, line=4, col=33>
+<id=RIGHT_BRACKET, testes/test17.tig, line=4, col=41>
+<id=VAR, testes/test17.tig, line=5, col=1>
+<id=IDENTIFIER, text=d, testes/test17.tig, line=5, col=5>
+<id=COLON, testes/test17.tig, line=5, col=6>
+<id=IDENTIFIER, text=int, testes/test17.tig, line=5, col=7>
+<id=ASSIG, testes/test17.tig, line=5, col=11>
+<id=INTEGER_LITERAL, text=0, testes/test17.tig, line=5, col=13>
+<id=TYPE, testes/test17.tig, line=6, col=1>
+<id=IDENTIFIER, text=treelist, testes/test17.tig, line=6, col=6>
+<id=EQUAL, testes/test17.tig, line=6, col=15>
+<id=LEFT_BRACKET, testes/test17.tig, line=6, col=17>
+<id=IDENTIFIER, text=hd, testes/test17.tig, line=6, col=18>
+<id=COLON, testes/test17.tig, line=6, col=20>
+<id=IDENTIFIER, text=tree, testes/test17.tig, line=6, col=22>
+<id=COMMA, testes/test17.tig, line=6, col=26>
+<id=IDENTIFIER, text=tl, testes/test17.tig, line=6, col=28>
+<id=COLON, testes/test17.tig, line=6, col=30>
+<id=IDENTIFIER, text=treelist, testes/test17.tig, line=6, col=32>
+<id=RIGHT_BRACKET, testes/test17.tig, line=6, col=40>
+<id=IDENTIFIER, text=in, testes/test17.tig, line=8, col=1>
+<id=IDENTIFIER, text=d, testes/test17.tig, line=9, col=5>
+<id=END, testes/test17.tig, line=10, col=1>
+<id=END_OF_FILE, testes/test17.tig, line=11, col=1>

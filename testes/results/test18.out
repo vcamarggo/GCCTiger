@@ -1,0 +1,58 @@
+<id=LET, testes/test18.tig, line=2, col=1>
+<id=FUNCTION, testes/test18.tig, line=4, col=1>
+<id=IDENTIFIER, text=do_nothing1, testes/test18.tig, line=4, col=10>
+<id=LEFT_PAREN, testes/test18.tig, line=4, col=21>
+<id=IDENTIFIER, text=a, testes/test18.tig, line=4, col=22>
+<id=COLON, testes/test18.tig, line=4, col=23>
+<id=IDENTIFIER, text=int, testes/test18.tig, line=4, col=25>
+<id=COMMA, testes/test18.tig, line=4, col=28>
+<id=IDENTIFIER, text=b, testes/test18.tig, line=4, col=30>
+<id=COLON, testes/test18.tig, line=4, col=31>
+<id=STRING, testes/test18.tig, line=4, col=33>
+<id=RIGHT_PAREN, testes/test18.tig, line=4, col=39>
+<id=COLON, testes/test18.tig, line=4, col=40>
+<id=IDENTIFIER, text=int, testes/test18.tig, line=4, col=41>
+<id=EQUAL, testes/test18.tig, line=4, col=44>
+<id=LEFT_PAREN, testes/test18.tig, line=5, col=9>
+<id=IDENTIFIER, text=do_nothing2, testes/test18.tig, line=5, col=10>
+<id=LEFT_PAREN, testes/test18.tig, line=5, col=21>
+<id=IDENTIFIER, text=a, testes/test18.tig, line=5, col=22>
+<id=PLUS, testes/test18.tig, line=5, col=23>
+<id=INTEGER_LITERAL, text=1, testes/test18.tig, line=5, col=24>
+<id=RIGHT_PAREN, testes/test18.tig, line=5, col=25>
+<id=SEMICOLON, testes/test18.tig, line=5, col=26>
+<id=INTEGER_LITERAL, text=0, testes/test18.tig, line=5, col=27>
+<id=RIGHT_PAREN, testes/test18.tig, line=5, col=28>
+<id=VAR, testes/test18.tig, line=7, col=1>
+<id=IDENTIFIER, text=d, testes/test18.tig, line=7, col=5>
+<id=ASSIG, testes/test18.tig, line=7, col=6>
+<id=INTEGER_LITERAL, text=0, testes/test18.tig, line=7, col=8>
+<id=FUNCTION, testes/test18.tig, line=9, col=1>
+<id=IDENTIFIER, text=do_nothing2, testes/test18.tig, line=9, col=10>
+<id=LEFT_PAREN, testes/test18.tig, line=9, col=21>
+<id=IDENTIFIER, text=d, testes/test18.tig, line=9, col=22>
+<id=COLON, testes/test18.tig, line=9, col=23>
+<id=IDENTIFIER, text=int, testes/test18.tig, line=9, col=25>
+<id=RIGHT_PAREN, testes/test18.tig, line=9, col=28>
+<id=COLON, testes/test18.tig, line=9, col=29>
+<id=STRING, testes/test18.tig, line=9, col=30>
+<id=EQUAL, testes/test18.tig, line=9, col=37>
+<id=LEFT_PAREN, testes/test18.tig, line=10, col=9>
+<id=IDENTIFIER, text=do_nothing1, testes/test18.tig, line=10, col=10>
+<id=LEFT_PAREN, testes/test18.tig, line=10, col=21>
+<id=IDENTIFIER, text=d, testes/test18.tig, line=10, col=22>
+<id=COMMA, testes/test18.tig, line=10, col=23>
+<id=STRING_LITERAL, text=str, testes/test18.tig, line=10, col=25>
+<id=RIGHT_PAREN, testes/test18.tig, line=10, col=29>
+<id=SEMICOLON, testes/test18.tig, line=10, col=30>
+<id=STRING_LITERAL, text= , testes/test18.tig, line=10, col=31>
+<id=RIGHT_PAREN, testes/test18.tig, line=10, col=33>
+<id=IDENTIFIER, text=in, testes/test18.tig, line=12, col=1>
+<id=IDENTIFIER, text=do_nothing1, testes/test18.tig, line=13, col=5>
+<id=LEFT_PAREN, testes/test18.tig, line=13, col=16>
+<id=INTEGER_LITERAL, text=0, testes/test18.tig, line=13, col=17>
+<id=COMMA, testes/test18.tig, line=13, col=18>
+<id=STRING_LITERAL, text=str2, testes/test18.tig, line=13, col=20>
+<id=RIGHT_PAREN, testes/test18.tig, line=13, col=25>
+<id=END, testes/test18.tig, line=14, col=1>
+<id=END_OF_FILE, testes/test18.tig, line=16, col=1>

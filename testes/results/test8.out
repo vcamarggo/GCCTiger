@@ -1,0 +1,11 @@
+<id=IF, testes/test8.tig, line=2, col=1>
+<id=LEFT_PAREN, testes/test8.tig, line=2, col=4>
+<id=INTEGER_LITERAL, text=10, testes/test8.tig, line=2, col=5>
+<id=GREATER, testes/test8.tig, line=2, col=8>
+<id=INTEGER_LITERAL, text=20, testes/test8.tig, line=2, col=10>
+<id=RIGHT_PAREN, testes/test8.tig, line=2, col=12>
+<id=THEN, testes/test8.tig, line=2, col=14>
+<id=INTEGER_LITERAL, text=30, testes/test8.tig, line=2, col=19>
+<id=ELSE, testes/test8.tig, line=2, col=22>
+<id=INTEGER_LITERAL, text=40, testes/test8.tig, line=2, col=27>
+<id=END_OF_FILE, testes/test8.tig, line=3, col=1>

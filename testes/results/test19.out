@@ -1,0 +1,54 @@
+<id=LET, testes/test19.tig, line=2, col=1>
+<id=FUNCTION, testes/test19.tig, line=4, col=1>
+<id=IDENTIFIER, text=do_nothing1, testes/test19.tig, line=4, col=10>
+<id=LEFT_PAREN, testes/test19.tig, line=4, col=21>
+<id=IDENTIFIER, text=a, testes/test19.tig, line=4, col=22>
+<id=COLON, testes/test19.tig, line=4, col=23>
+<id=IDENTIFIER, text=int, testes/test19.tig, line=4, col=25>
+<id=COMMA, testes/test19.tig, line=4, col=28>
+<id=IDENTIFIER, text=b, testes/test19.tig, line=4, col=30>
+<id=COLON, testes/test19.tig, line=4, col=31>
+<id=STRING, testes/test19.tig, line=4, col=33>
+<id=RIGHT_PAREN, testes/test19.tig, line=4, col=39>
+<id=COLON, testes/test19.tig, line=4, col=40>
+<id=IDENTIFIER, text=int, testes/test19.tig, line=4, col=41>
+<id=EQUAL, testes/test19.tig, line=4, col=44>
+<id=LEFT_PAREN, testes/test19.tig, line=5, col=9>
+<id=IDENTIFIER, text=do_nothing2, testes/test19.tig, line=5, col=10>
+<id=LEFT_PAREN, testes/test19.tig, line=5, col=21>
+<id=IDENTIFIER, text=a, testes/test19.tig, line=5, col=22>
+<id=PLUS, testes/test19.tig, line=5, col=23>
+<id=INTEGER_LITERAL, text=1, testes/test19.tig, line=5, col=24>
+<id=RIGHT_PAREN, testes/test19.tig, line=5, col=25>
+<id=SEMICOLON, testes/test19.tig, line=5, col=26>
+<id=INTEGER_LITERAL, text=0, testes/test19.tig, line=5, col=27>
+<id=RIGHT_PAREN, testes/test19.tig, line=5, col=28>
+<id=FUNCTION, testes/test19.tig, line=7, col=1>
+<id=IDENTIFIER, text=do_nothing2, testes/test19.tig, line=7, col=10>
+<id=LEFT_PAREN, testes/test19.tig, line=7, col=21>
+<id=IDENTIFIER, text=d, testes/test19.tig, line=7, col=22>
+<id=COLON, testes/test19.tig, line=7, col=23>
+<id=IDENTIFIER, text=int, testes/test19.tig, line=7, col=25>
+<id=RIGHT_PAREN, testes/test19.tig, line=7, col=28>
+<id=COLON, testes/test19.tig, line=7, col=29>
+<id=STRING, testes/test19.tig, line=7, col=30>
+<id=EQUAL, testes/test19.tig, line=7, col=37>
+<id=LEFT_PAREN, testes/test19.tig, line=8, col=9>
+<id=IDENTIFIER, text=do_nothing1, testes/test19.tig, line=8, col=10>
+<id=LEFT_PAREN, testes/test19.tig, line=8, col=21>
+<id=IDENTIFIER, text=a, testes/test19.tig, line=8, col=22>
+<id=COMMA, testes/test19.tig, line=8, col=23>
+<id=STRING_LITERAL, text=str, testes/test19.tig, line=8, col=25>
+<id=RIGHT_PAREN, testes/test19.tig, line=8, col=29>
+<id=SEMICOLON, testes/test19.tig, line=8, col=30>
+<id=STRING_LITERAL, text= , testes/test19.tig, line=8, col=31>
+<id=RIGHT_PAREN, testes/test19.tig, line=8, col=33>
+<id=IDENTIFIER, text=in, testes/test19.tig, line=10, col=1>
+<id=IDENTIFIER, text=do_nothing1, testes/test19.tig, line=11, col=5>
+<id=LEFT_PAREN, testes/test19.tig, line=11, col=16>
+<id=INTEGER_LITERAL, text=0, testes/test19.tig, line=11, col=17>
+<id=COMMA, testes/test19.tig, line=11, col=18>
+<id=STRING_LITERAL, text=str2, testes/test19.tig, line=11, col=20>
+<id=RIGHT_PAREN, testes/test19.tig, line=11, col=25>
+<id=END, testes/test19.tig, line=12, col=1>
+<id=END_OF_FILE, testes/test19.tig, line=14, col=1>

@@ -1,0 +1,20 @@
+<id=LET, testes/test32.tig, line=3, col=1>
+<id=TYPE, testes/test32.tig, line=4, col=5>
+<id=IDENTIFIER, text=arrayty, testes/test32.tig, line=4, col=10>
+<id=EQUAL, testes/test32.tig, line=4, col=18>
+<id=ARRAY, testes/test32.tig, line=4, col=20>
+<id=OF, testes/test32.tig, line=4, col=26>
+<id=IDENTIFIER, text=int, testes/test32.tig, line=4, col=29>
+<id=VAR, testes/test32.tig, line=6, col=5>
+<id=IDENTIFIER, text=a, testes/test32.tig, line=6, col=9>
+<id=ASSIG, testes/test32.tig, line=6, col=11>
+<id=IDENTIFIER, text=arrayty, testes/test32.tig, line=6, col=14>
+<id=LEFT_SQUARE, testes/test32.tig, line=6, col=22>
+<id=INTEGER_LITERAL, text=10, testes/test32.tig, line=6, col=23>
+<id=RIGHT_SQUARE, testes/test32.tig, line=6, col=25>
+<id=OF, testes/test32.tig, line=6, col=27>
+<id=STRING_LITERAL, text= , testes/test32.tig, line=6, col=30>
+<id=IDENTIFIER, text=in, testes/test32.tig, line=7, col=1>
+<id=INTEGER_LITERAL, text=0, testes/test32.tig, line=8, col=5>
+<id=END, testes/test32.tig, line=9, col=1>
+<id=END_OF_FILE, testes/test32.tig, line=10, col=1>

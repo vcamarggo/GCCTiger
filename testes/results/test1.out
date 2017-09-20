@@ -1,0 +1,22 @@
+<id=LET, testes/test1.tig, line=2, col=1>
+<id=TYPE, testes/test1.tig, line=3, col=5>
+<id=IDENTIFIER, text=arrtype, testes/test1.tig, line=3, col=11>
+<id=EQUAL, testes/test1.tig, line=3, col=19>
+<id=ARRAY, testes/test1.tig, line=3, col=21>
+<id=OF, testes/test1.tig, line=3, col=27>
+<id=IDENTIFIER, text=int, testes/test1.tig, line=3, col=30>
+<id=VAR, testes/test1.tig, line=4, col=5>
+<id=IDENTIFIER, text=arr1, testes/test1.tig, line=4, col=9>
+<id=COLON, testes/test1.tig, line=4, col=13>
+<id=IDENTIFIER, text=arrtype, testes/test1.tig, line=4, col=14>
+<id=ASSIG, testes/test1.tig, line=4, col=22>
+<id=IDENTIFIER, text=arrtype, testes/test1.tig, line=4, col=25>
+<id=LEFT_SQUARE, testes/test1.tig, line=4, col=33>
+<id=INTEGER_LITERAL, text=10, testes/test1.tig, line=4, col=34>
+<id=RIGHT_SQUARE, testes/test1.tig, line=4, col=36>
+<id=OF, testes/test1.tig, line=4, col=38>
+<id=INTEGER_LITERAL, text=0, testes/test1.tig, line=4, col=41>
+<id=IDENTIFIER, text=in, testes/test1.tig, line=5, col=1>
+<id=IDENTIFIER, text=arr1, testes/test1.tig, line=6, col=5>
+<id=END, testes/test1.tig, line=7, col=1>
+<id=END_OF_FILE, testes/test1.tig, line=8, col=1>

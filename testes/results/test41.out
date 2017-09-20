@@ -1,0 +1,16 @@
+<id=LET, testes/test41.tig, line=2, col=1>
+<id=TYPE, testes/test41.tig, line=3, col=5>
+<id=IDENTIFIER, text=a, testes/test41.tig, line=3, col=10>
+<id=EQUAL, testes/test41.tig, line=3, col=12>
+<id=IDENTIFIER, text=int, testes/test41.tig, line=3, col=14>
+<id=IDENTIFIER, text=in, testes/test41.tig, line=4, col=1>
+<id=LET, testes/test41.tig, line=5, col=5>
+<id=TYPE, testes/test41.tig, line=6, col=9>
+<id=IDENTIFIER, text=a, testes/test41.tig, line=6, col=14>
+<id=EQUAL, testes/test41.tig, line=6, col=16>
+<id=STRING, testes/test41.tig, line=6, col=18>
+<id=IDENTIFIER, text=in, testes/test41.tig, line=7, col=5>
+<id=INTEGER_LITERAL, text=0, testes/test41.tig, line=8, col=9>
+<id=END, testes/test41.tig, line=9, col=5>
+<id=END, testes/test41.tig, line=10, col=1>
+<id=END_OF_FILE, testes/test41.tig, line=11, col=1>

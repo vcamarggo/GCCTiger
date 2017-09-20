@@ -1,0 +1,42 @@
+<id=LET, testes/test6.tig, line=2, col=1>
+<id=FUNCTION, testes/test6.tig, line=4, col=1>
+<id=IDENTIFIER, text=do_nothing1, testes/test6.tig, line=4, col=10>
+<id=LEFT_PAREN, testes/test6.tig, line=4, col=21>
+<id=IDENTIFIER, text=a, testes/test6.tig, line=4, col=22>
+<id=COLON, testes/test6.tig, line=4, col=23>
+<id=IDENTIFIER, text=int, testes/test6.tig, line=4, col=25>
+<id=COMMA, testes/test6.tig, line=4, col=28>
+<id=IDENTIFIER, text=b, testes/test6.tig, line=4, col=30>
+<id=COLON, testes/test6.tig, line=4, col=31>
+<id=STRING, testes/test6.tig, line=4, col=33>
+<id=RIGHT_PAREN, testes/test6.tig, line=4, col=39>
+<id=EQUAL, testes/test6.tig, line=4, col=40>
+<id=IDENTIFIER, text=do_nothing2, testes/test6.tig, line=5, col=9>
+<id=LEFT_PAREN, testes/test6.tig, line=5, col=20>
+<id=IDENTIFIER, text=a, testes/test6.tig, line=5, col=21>
+<id=PLUS, testes/test6.tig, line=5, col=22>
+<id=INTEGER_LITERAL, text=1, testes/test6.tig, line=5, col=23>
+<id=RIGHT_PAREN, testes/test6.tig, line=5, col=24>
+<id=FUNCTION, testes/test6.tig, line=7, col=1>
+<id=IDENTIFIER, text=do_nothing2, testes/test6.tig, line=7, col=10>
+<id=LEFT_PAREN, testes/test6.tig, line=7, col=21>
+<id=IDENTIFIER, text=d, testes/test6.tig, line=7, col=22>
+<id=COLON, testes/test6.tig, line=7, col=23>
+<id=IDENTIFIER, text=int, testes/test6.tig, line=7, col=25>
+<id=RIGHT_PAREN, testes/test6.tig, line=7, col=28>
+<id=EQUAL, testes/test6.tig, line=7, col=30>
+<id=IDENTIFIER, text=do_nothing1, testes/test6.tig, line=8, col=9>
+<id=LEFT_PAREN, testes/test6.tig, line=8, col=20>
+<id=IDENTIFIER, text=d, testes/test6.tig, line=8, col=21>
+<id=COMMA, testes/test6.tig, line=8, col=22>
+<id=STRING_LITERAL, text=str, testes/test6.tig, line=8, col=24>
+<id=RIGHT_PAREN, testes/test6.tig, line=8, col=28>
+<id=IDENTIFIER, text=in, testes/test6.tig, line=10, col=1>
+<id=IDENTIFIER, text=do_nothing1, testes/test6.tig, line=11, col=5>
+<id=LEFT_PAREN, testes/test6.tig, line=11, col=16>
+<id=INTEGER_LITERAL, text=0, testes/test6.tig, line=11, col=17>
+<id=COMMA, testes/test6.tig, line=11, col=18>
+<id=STRING_LITERAL, text=str2, testes/test6.tig, line=11, col=20>
+<id=RIGHT_PAREN, testes/test6.tig, line=11, col=25>
+<id=END, testes/test6.tig, line=12, col=1>
+<id=END_OF_FILE, testes/test6.tig, line=14, col=1>

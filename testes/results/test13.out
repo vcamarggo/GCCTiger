@@ -1,0 +1,4 @@
+<id=INTEGER_LITERAL, text=3, testes/test13.tig, line=3, col=1>
+<id=GREATER, testes/test13.tig, line=3, col=3>
+<id=STRING_LITERAL, text=df, testes/test13.tig, line=3, col=5>
+<id=END_OF_FILE, testes/test13.tig, line=4, col=1>

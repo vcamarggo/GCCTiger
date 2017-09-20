@@ -1,0 +1,34 @@
+<id=LET, testes/test22.tig, line=3, col=1>
+<id=TYPE, testes/test22.tig, line=4, col=5>
+<id=IDENTIFIER, text=rectype, testes/test22.tig, line=4, col=10>
+<id=EQUAL, testes/test22.tig, line=4, col=18>
+<id=LEFT_BRACKET, testes/test22.tig, line=4, col=20>
+<id=IDENTIFIER, text=name, testes/test22.tig, line=4, col=21>
+<id=COLON, testes/test22.tig, line=4, col=25>
+<id=STRING, testes/test22.tig, line=4, col=26>
+<id=COMMA, testes/test22.tig, line=4, col=33>
+<id=IDENTIFIER, text=id, testes/test22.tig, line=4, col=35>
+<id=COLON, testes/test22.tig, line=4, col=37>
+<id=IDENTIFIER, text=int, testes/test22.tig, line=4, col=38>
+<id=RIGHT_BRACKET, testes/test22.tig, line=4, col=41>
+<id=VAR, testes/test22.tig, line=5, col=5>
+<id=IDENTIFIER, text=rec1, testes/test22.tig, line=5, col=9>
+<id=ASSIG, testes/test22.tig, line=5, col=14>
+<id=IDENTIFIER, text=rectype, testes/test22.tig, line=5, col=17>
+<id=LEFT_BRACKET, testes/test22.tig, line=5, col=25>
+<id=IDENTIFIER, text=name, testes/test22.tig, line=5, col=26>
+<id=EQUAL, testes/test22.tig, line=5, col=30>
+<id=STRING_LITERAL, text=Name, testes/test22.tig, line=5, col=31>
+<id=COMMA, testes/test22.tig, line=5, col=36>
+<id=IDENTIFIER, text=id, testes/test22.tig, line=5, col=38>
+<id=EQUAL, testes/test22.tig, line=5, col=40>
+<id=INTEGER_LITERAL, text=0, testes/test22.tig, line=5, col=41>
+<id=RIGHT_BRACKET, testes/test22.tig, line=5, col=42>
+<id=IDENTIFIER, text=in, testes/test22.tig, line=6, col=1>
+<id=IDENTIFIER, text=rec1, testes/test22.tig, line=7, col=5>
+<id=DOT, testes/test22.tig, line=7, col=9>
+<id=IDENTIFIER, text=nam, testes/test22.tig, line=7, col=10>
+<id=ASSIG, testes/test22.tig, line=7, col=14>
+<id=STRING_LITERAL, text=asd, testes/test22.tig, line=7, col=17>
+<id=END, testes/test22.tig, line=8, col=1>
+<id=END_OF_FILE, testes/test22.tig, line=9, col=1>

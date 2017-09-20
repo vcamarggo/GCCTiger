@@ -1,0 +1,5 @@
+<id=IF, testes/test15.tig, line=3, col=1>
+<id=INTEGER_LITERAL, text=20, testes/test15.tig, line=3, col=4>
+<id=THEN, testes/test15.tig, line=3, col=7>
+<id=INTEGER_LITERAL, text=3, testes/test15.tig, line=3, col=12>
+<id=END_OF_FILE, testes/test15.tig, line=4, col=1>

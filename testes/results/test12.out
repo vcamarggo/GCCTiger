@@ -1,0 +1,25 @@
+<id=LET, testes/test12.tig, line=3, col=1>
+<id=VAR, testes/test12.tig, line=4, col=5>
+<id=IDENTIFIER, text=a, testes/test12.tig, line=4, col=9>
+<id=ASSIG, testes/test12.tig, line=4, col=10>
+<id=INTEGER_LITERAL, text=0, testes/test12.tig, line=4, col=13>
+<id=IDENTIFIER, text=in, testes/test12.tig, line=5, col=1>
+<id=FOR, testes/test12.tig, line=6, col=5>
+<id=IDENTIFIER, text=i, testes/test12.tig, line=6, col=9>
+<id=ASSIG, testes/test12.tig, line=6, col=10>
+<id=INTEGER_LITERAL, text=0, testes/test12.tig, line=6, col=12>
+<id=TO, testes/test12.tig, line=6, col=14>
+<id=INTEGER_LITERAL, text=100, testes/test12.tig, line=6, col=17>
+<id=DO, testes/test12.tig, line=6, col=21>
+<id=LEFT_PAREN, testes/test12.tig, line=6, col=24>
+<id=IDENTIFIER, text=a, testes/test12.tig, line=6, col=25>
+<id=ASSIG, testes/test12.tig, line=6, col=26>
+<id=IDENTIFIER, text=a, testes/test12.tig, line=6, col=28>
+<id=PLUS, testes/test12.tig, line=6, col=29>
+<id=INTEGER_LITERAL, text=1, testes/test12.tig, line=6, col=30>
+<id=SEMICOLON, testes/test12.tig, line=6, col=31>
+<id=LEFT_PAREN, testes/test12.tig, line=6, col=32>
+<id=RIGHT_PAREN, testes/test12.tig, line=6, col=33>
+<id=RIGHT_PAREN, testes/test12.tig, line=6, col=34>
+<id=END, testes/test12.tig, line=7, col=1>
+<id=END_OF_FILE, testes/test12.tig, line=8, col=1>

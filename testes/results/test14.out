@@ -1,0 +1,52 @@
+<id=LET, testes/test14.tig, line=3, col=1>
+<id=TYPE, testes/test14.tig, line=5, col=5>
+<id=IDENTIFIER, text=arrtype, testes/test14.tig, line=5, col=10>
+<id=EQUAL, testes/test14.tig, line=5, col=18>
+<id=ARRAY, testes/test14.tig, line=5, col=20>
+<id=OF, testes/test14.tig, line=5, col=26>
+<id=IDENTIFIER, text=int, testes/test14.tig, line=5, col=29>
+<id=TYPE, testes/test14.tig, line=6, col=5>
+<id=IDENTIFIER, text=rectype, testes/test14.tig, line=6, col=10>
+<id=EQUAL, testes/test14.tig, line=6, col=18>
+<id=LEFT_BRACKET, testes/test14.tig, line=6, col=20>
+<id=IDENTIFIER, text=name, testes/test14.tig, line=6, col=21>
+<id=COLON, testes/test14.tig, line=6, col=25>
+<id=STRING, testes/test14.tig, line=6, col=26>
+<id=COMMA, testes/test14.tig, line=6, col=32>
+<id=IDENTIFIER, text=id, testes/test14.tig, line=6, col=34>
+<id=COLON, testes/test14.tig, line=6, col=36>
+<id=IDENTIFIER, text=int, testes/test14.tig, line=6, col=38>
+<id=RIGHT_BRACKET, testes/test14.tig, line=6, col=41>
+<id=VAR, testes/test14.tig, line=8, col=5>
+<id=IDENTIFIER, text=rec, testes/test14.tig, line=8, col=9>
+<id=ASSIG, testes/test14.tig, line=8, col=13>
+<id=IDENTIFIER, text=rectype, testes/test14.tig, line=8, col=16>
+<id=LEFT_BRACKET, testes/test14.tig, line=8, col=24>
+<id=IDENTIFIER, text=name, testes/test14.tig, line=8, col=25>
+<id=EQUAL, testes/test14.tig, line=8, col=29>
+<id=STRING_LITERAL, text=aname, testes/test14.tig, line=8, col=30>
+<id=COMMA, testes/test14.tig, line=8, col=36>
+<id=IDENTIFIER, text=id, testes/test14.tig, line=8, col=38>
+<id=EQUAL, testes/test14.tig, line=8, col=40>
+<id=INTEGER_LITERAL, text=0, testes/test14.tig, line=8, col=41>
+<id=RIGHT_BRACKET, testes/test14.tig, line=8, col=42>
+<id=VAR, testes/test14.tig, line=9, col=5>
+<id=IDENTIFIER, text=arr, testes/test14.tig, line=9, col=9>
+<id=ASSIG, testes/test14.tig, line=9, col=13>
+<id=IDENTIFIER, text=arrtype, testes/test14.tig, line=9, col=16>
+<id=LEFT_SQUARE, testes/test14.tig, line=9, col=24>
+<id=INTEGER_LITERAL, text=3, testes/test14.tig, line=9, col=25>
+<id=RIGHT_SQUARE, testes/test14.tig, line=9, col=26>
+<id=OF, testes/test14.tig, line=9, col=28>
+<id=INTEGER_LITERAL, text=0, testes/test14.tig, line=9, col=31>
+<id=IDENTIFIER, text=in, testes/test14.tig, line=11, col=1>
+<id=IF, testes/test14.tig, line=12, col=5>
+<id=IDENTIFIER, text=rec, testes/test14.tig, line=12, col=8>
+<id=DIFFERENT, testes/test14.tig, line=12, col=12>
+<id=IDENTIFIER, text=arr, testes/test14.tig, line=12, col=15>
+<id=THEN, testes/test14.tig, line=12, col=19>
+<id=INTEGER_LITERAL, text=3, testes/test14.tig, line=12, col=24>
+<id=ELSE, testes/test14.tig, line=12, col=26>
+<id=INTEGER_LITERAL, text=4, testes/test14.tig, line=12, col=31>
+<id=END, testes/test14.tig, line=13, col=1>
+<id=END_OF_FILE, testes/test14.tig, line=14, col=1>

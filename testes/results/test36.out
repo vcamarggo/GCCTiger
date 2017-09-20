@@ -1,0 +1,27 @@
+<id=LET, testes/test36.tig, line=2, col=1>
+<id=FUNCTION, testes/test36.tig, line=3, col=5>
+<id=IDENTIFIER, text=g, testes/test36.tig, line=3, col=14>
+<id=LEFT_PAREN, testes/test36.tig, line=3, col=16>
+<id=IDENTIFIER, text=a, testes/test36.tig, line=3, col=17>
+<id=COLON, testes/test36.tig, line=3, col=18>
+<id=IDENTIFIER, text=int, testes/test36.tig, line=3, col=19>
+<id=COMMA, testes/test36.tig, line=3, col=23>
+<id=IDENTIFIER, text=b, testes/test36.tig, line=3, col=25>
+<id=COLON, testes/test36.tig, line=3, col=26>
+<id=STRING, testes/test36.tig, line=3, col=27>
+<id=RIGHT_PAREN, testes/test36.tig, line=3, col=33>
+<id=COLON, testes/test36.tig, line=3, col=34>
+<id=IDENTIFIER, text=int, testes/test36.tig, line=3, col=35>
+<id=EQUAL, testes/test36.tig, line=3, col=39>
+<id=IDENTIFIER, text=a, testes/test36.tig, line=3, col=41>
+<id=IDENTIFIER, text=in, testes/test36.tig, line=4, col=1>
+<id=IDENTIFIER, text=g, testes/test36.tig, line=5, col=5>
+<id=LEFT_PAREN, testes/test36.tig, line=5, col=6>
+<id=INTEGER_LITERAL, text=3, testes/test36.tig, line=5, col=7>
+<id=COMMA, testes/test36.tig, line=5, col=8>
+<id=STRING_LITERAL, text=one, testes/test36.tig, line=5, col=9>
+<id=COMMA, testes/test36.tig, line=5, col=13>
+<id=INTEGER_LITERAL, text=5, testes/test36.tig, line=5, col=14>
+<id=RIGHT_PAREN, testes/test36.tig, line=5, col=15>
+<id=END, testes/test36.tig, line=6, col=1>
+<id=END_OF_FILE, testes/test36.tig, line=7, col=1>

@@ -1,0 +1,38 @@
+<id=LET, testes/test3.tig, line=2, col=1>
+<id=TYPE, testes/test3.tig, line=3, col=5>
+<id=IDENTIFIER, text=rectype, testes/test3.tig, line=3, col=11>
+<id=EQUAL, testes/test3.tig, line=3, col=19>
+<id=LEFT_BRACKET, testes/test3.tig, line=3, col=21>
+<id=IDENTIFIER, text=name, testes/test3.tig, line=3, col=22>
+<id=COLON, testes/test3.tig, line=3, col=26>
+<id=STRING, testes/test3.tig, line=3, col=27>
+<id=COMMA, testes/test3.tig, line=3, col=33>
+<id=IDENTIFIER, text=age, testes/test3.tig, line=3, col=35>
+<id=COLON, testes/test3.tig, line=3, col=38>
+<id=IDENTIFIER, text=int, testes/test3.tig, line=3, col=39>
+<id=RIGHT_BRACKET, testes/test3.tig, line=3, col=42>
+<id=VAR, testes/test3.tig, line=4, col=5>
+<id=IDENTIFIER, text=rec1, testes/test3.tig, line=4, col=9>
+<id=COLON, testes/test3.tig, line=4, col=13>
+<id=IDENTIFIER, text=rectype, testes/test3.tig, line=4, col=14>
+<id=ASSIG, testes/test3.tig, line=4, col=22>
+<id=IDENTIFIER, text=rectype, testes/test3.tig, line=4, col=25>
+<id=LEFT_BRACKET, testes/test3.tig, line=4, col=33>
+<id=IDENTIFIER, text=name, testes/test3.tig, line=4, col=34>
+<id=EQUAL, testes/test3.tig, line=4, col=38>
+<id=STRING_LITERAL, text=Nobody, testes/test3.tig, line=4, col=39>
+<id=COMMA, testes/test3.tig, line=4, col=46>
+<id=IDENTIFIER, text=age, testes/test3.tig, line=4, col=48>
+<id=EQUAL, testes/test3.tig, line=4, col=51>
+<id=INTEGER_LITERAL, text=1000, testes/test3.tig, line=4, col=52>
+<id=RIGHT_BRACKET, testes/test3.tig, line=4, col=56>
+<id=IDENTIFIER, text=in, testes/test3.tig, line=5, col=1>
+<id=IDENTIFIER, text=rec1, testes/test3.tig, line=6, col=5>
+<id=DOT, testes/test3.tig, line=6, col=9>
+<id=IDENTIFIER, text=name, testes/test3.tig, line=6, col=10>
+<id=ASSIG, testes/test3.tig, line=6, col=15>
+<id=STRING_LITERAL, text=Somebody, testes/test3.tig, line=6, col=18>
+<id=SEMICOLON, testes/test3.tig, line=6, col=27>
+<id=IDENTIFIER, text=rec1, testes/test3.tig, line=7, col=5>
+<id=END, testes/test3.tig, line=8, col=1>
+<id=END_OF_FILE, testes/test3.tig, line=9, col=1>

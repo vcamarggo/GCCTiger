@@ -1,0 +1,44 @@
+<id=LET, testes/test28.tig, line=3, col=1>
+<id=TYPE, testes/test28.tig, line=4, col=5>
+<id=IDENTIFIER, text=rectype1, testes/test28.tig, line=4, col=10>
+<id=EQUAL, testes/test28.tig, line=4, col=19>
+<id=LEFT_BRACKET, testes/test28.tig, line=4, col=21>
+<id=IDENTIFIER, text=name, testes/test28.tig, line=4, col=22>
+<id=COLON, testes/test28.tig, line=4, col=26>
+<id=STRING, testes/test28.tig, line=4, col=27>
+<id=COMMA, testes/test28.tig, line=4, col=34>
+<id=IDENTIFIER, text=id, testes/test28.tig, line=4, col=36>
+<id=COLON, testes/test28.tig, line=4, col=38>
+<id=IDENTIFIER, text=int, testes/test28.tig, line=4, col=39>
+<id=RIGHT_BRACKET, testes/test28.tig, line=4, col=42>
+<id=TYPE, testes/test28.tig, line=5, col=5>
+<id=IDENTIFIER, text=rectype2, testes/test28.tig, line=5, col=10>
+<id=EQUAL, testes/test28.tig, line=5, col=19>
+<id=LEFT_BRACKET, testes/test28.tig, line=5, col=21>
+<id=IDENTIFIER, text=name, testes/test28.tig, line=5, col=22>
+<id=COLON, testes/test28.tig, line=5, col=26>
+<id=STRING, testes/test28.tig, line=5, col=27>
+<id=COMMA, testes/test28.tig, line=5, col=34>
+<id=IDENTIFIER, text=id, testes/test28.tig, line=5, col=36>
+<id=COLON, testes/test28.tig, line=5, col=38>
+<id=IDENTIFIER, text=int, testes/test28.tig, line=5, col=39>
+<id=RIGHT_BRACKET, testes/test28.tig, line=5, col=42>
+<id=VAR, testes/test28.tig, line=7, col=5>
+<id=IDENTIFIER, text=rec1, testes/test28.tig, line=7, col=9>
+<id=COLON, testes/test28.tig, line=7, col=13>
+<id=IDENTIFIER, text=rectype1, testes/test28.tig, line=7, col=15>
+<id=ASSIG, testes/test28.tig, line=7, col=24>
+<id=IDENTIFIER, text=rectype2, testes/test28.tig, line=7, col=27>
+<id=LEFT_BRACKET, testes/test28.tig, line=7, col=36>
+<id=IDENTIFIER, text=name, testes/test28.tig, line=7, col=37>
+<id=EQUAL, testes/test28.tig, line=7, col=41>
+<id=STRING_LITERAL, text=Name, testes/test28.tig, line=7, col=42>
+<id=COMMA, testes/test28.tig, line=7, col=47>
+<id=IDENTIFIER, text=id, testes/test28.tig, line=7, col=49>
+<id=EQUAL, testes/test28.tig, line=7, col=51>
+<id=INTEGER_LITERAL, text=0, testes/test28.tig, line=7, col=52>
+<id=RIGHT_BRACKET, testes/test28.tig, line=7, col=53>
+<id=IDENTIFIER, text=in, testes/test28.tig, line=8, col=1>
+<id=IDENTIFIER, text=rec1, testes/test28.tig, line=9, col=5>
+<id=END, testes/test28.tig, line=10, col=1>
+<id=END_OF_FILE, testes/test28.tig, line=11, col=1>

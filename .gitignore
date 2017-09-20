@@ -1,0 +1,4 @@
+gcc-build/
+gcc-install/
+gcc-src/*
+!gcc-src/gcc/tiger/

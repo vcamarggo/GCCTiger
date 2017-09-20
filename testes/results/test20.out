@@ -1,0 +1,14 @@
+<id=WHILE, testes/test20.tig, line=3, col=1>
+<id=INTEGER_LITERAL, text=10, testes/test20.tig, line=3, col=7>
+<id=GREATER, testes/test20.tig, line=3, col=10>
+<id=INTEGER_LITERAL, text=5, testes/test20.tig, line=3, col=12>
+<id=DO, testes/test20.tig, line=3, col=14>
+<id=LEFT_PAREN, testes/test20.tig, line=3, col=17>
+<id=IDENTIFIER, text=i, testes/test20.tig, line=3, col=18>
+<id=PLUS, testes/test20.tig, line=3, col=19>
+<id=INTEGER_LITERAL, text=1, testes/test20.tig, line=3, col=20>
+<id=SEMICOLON, testes/test20.tig, line=3, col=21>
+<id=LEFT_PAREN, testes/test20.tig, line=3, col=22>
+<id=RIGHT_PAREN, testes/test20.tig, line=3, col=23>
+<id=RIGHT_PAREN, testes/test20.tig, line=3, col=24>
+<id=END_OF_FILE, testes/test20.tig, line=4, col=1>

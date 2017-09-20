@@ -1,0 +1,410 @@
+<id=LET, testes/merge.tig, line=1, col=1>
+<id=TYPE, testes/merge.tig, line=3, col=2>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=3, col=7>
+<id=EQUAL, testes/merge.tig, line=3, col=11>
+<id=LEFT_BRACKET, testes/merge.tig, line=3, col=13>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=3, col=14>
+<id=COLON, testes/merge.tig, line=3, col=18>
+<id=IDENTIFIER, text=int, testes/merge.tig, line=3, col=20>
+<id=RIGHT_BRACKET, testes/merge.tig, line=3, col=23>
+<id=VAR, testes/merge.tig, line=4, col=2>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=4, col=6>
+<id=ASSIG, testes/merge.tig, line=4, col=13>
+<id=IDENTIFIER, text=getchar, testes/merge.tig, line=4, col=16>
+<id=LEFT_PAREN, testes/merge.tig, line=4, col=23>
+<id=RIGHT_PAREN, testes/merge.tig, line=4, col=24>
+<id=FUNCTION, testes/merge.tig, line=6, col=1>
+<id=IDENTIFIER, text=readint, testes/merge.tig, line=6, col=10>
+<id=LEFT_PAREN, testes/merge.tig, line=6, col=17>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=6, col=18>
+<id=COLON, testes/merge.tig, line=6, col=21>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=6, col=23>
+<id=RIGHT_PAREN, testes/merge.tig, line=6, col=26>
+<id=COLON, testes/merge.tig, line=6, col=28>
+<id=IDENTIFIER, text=int, testes/merge.tig, line=6, col=30>
+<id=EQUAL, testes/merge.tig, line=6, col=34>
+<id=LET, testes/merge.tig, line=7, col=2>
+<id=VAR, testes/merge.tig, line=7, col=6>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=7, col=10>
+<id=ASSIG, testes/merge.tig, line=7, col=12>
+<id=INTEGER_LITERAL, text=0, testes/merge.tig, line=7, col=15>
+<id=FUNCTION, testes/merge.tig, line=8, col=6>
+<id=IDENTIFIER, text=isdigit, testes/merge.tig, line=8, col=15>
+<id=LEFT_PAREN, testes/merge.tig, line=8, col=22>
+<id=IDENTIFIER, text=s, testes/merge.tig, line=8, col=23>
+<id=COLON, testes/merge.tig, line=8, col=25>
+<id=STRING, testes/merge.tig, line=8, col=27>
+<id=RIGHT_PAREN, testes/merge.tig, line=8, col=33>
+<id=COLON, testes/merge.tig, line=8, col=35>
+<id=IDENTIFIER, text=int, testes/merge.tig, line=8, col=37>
+<id=EQUAL, testes/merge.tig, line=8, col=41>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=9, col=11>
+<id=LEFT_PAREN, testes/merge.tig, line=9, col=14>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=9, col=15>
+<id=RIGHT_PAREN, testes/merge.tig, line=9, col=21>
+<id=GREATER_OR_EQUAL, testes/merge.tig, line=9, col=22>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=9, col=24>
+<id=LEFT_PAREN, testes/merge.tig, line=9, col=27>
+<id=STRING_LITERAL, text=0, testes/merge.tig, line=9, col=28>
+<id=RIGHT_PAREN, testes/merge.tig, line=9, col=30>
+<id=AND, testes/merge.tig, line=9, col=32>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=9, col=34>
+<id=LEFT_PAREN, testes/merge.tig, line=9, col=37>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=9, col=38>
+<id=RIGHT_PAREN, testes/merge.tig, line=9, col=44>
+<id=LOWER_OR_EQUAL, testes/merge.tig, line=9, col=45>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=9, col=47>
+<id=LEFT_PAREN, testes/merge.tig, line=9, col=50>
+<id=STRING_LITERAL, text=9, testes/merge.tig, line=9, col=51>
+<id=RIGHT_PAREN, testes/merge.tig, line=9, col=53>
+<id=FUNCTION, testes/merge.tig, line=10, col=6>
+<id=IDENTIFIER, text=skipto, testes/merge.tig, line=10, col=15>
+<id=LEFT_PAREN, testes/merge.tig, line=10, col=21>
+<id=RIGHT_PAREN, testes/merge.tig, line=10, col=22>
+<id=EQUAL, testes/merge.tig, line=10, col=24>
+<id=WHILE, testes/merge.tig, line=11, col=8>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=11, col=14>
+<id=EQUAL, testes/merge.tig, line=11, col=20>
+<id=STRING_LITERAL, text= , testes/merge.tig, line=11, col=21>
+<id=OR, testes/merge.tig, line=11, col=24>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=11, col=26>
+<id=EQUAL, testes/merge.tig, line=11, col=32>
+<id=STRING_LITERAL, text=\n, testes/merge.tig, line=11, col=33>
+<id=DO, testes/merge.tig, line=12, col=10>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=12, col=13>
+<id=ASSIG, testes/merge.tig, line=12, col=20>
+<id=IDENTIFIER, text=getchar, testes/merge.tig, line=12, col=23>
+<id=LEFT_PAREN, testes/merge.tig, line=12, col=30>
+<id=RIGHT_PAREN, testes/merge.tig, line=12, col=31>
+<id=IDENTIFIER, text=in, testes/merge.tig, line=13, col=3>
+<id=IDENTIFIER, text=skipto, testes/merge.tig, line=13, col=6>
+<id=LEFT_PAREN, testes/merge.tig, line=13, col=12>
+<id=RIGHT_PAREN, testes/merge.tig, line=13, col=13>
+<id=SEMICOLON, testes/merge.tig, line=13, col=14>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=14, col=6>
+<id=DOT, testes/merge.tig, line=14, col=9>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=14, col=10>
+<id=ASSIG, testes/merge.tig, line=14, col=14>
+<id=IDENTIFIER, text=isdigit, testes/merge.tig, line=14, col=17>
+<id=LEFT_PAREN, testes/merge.tig, line=14, col=24>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=14, col=25>
+<id=RIGHT_PAREN, testes/merge.tig, line=14, col=31>
+<id=SEMICOLON, testes/merge.tig, line=14, col=32>
+<id=WHILE, testes/merge.tig, line=15, col=6>
+<id=IDENTIFIER, text=isdigit, testes/merge.tig, line=15, col=12>
+<id=LEFT_PAREN, testes/merge.tig, line=15, col=19>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=15, col=20>
+<id=RIGHT_PAREN, testes/merge.tig, line=15, col=26>
+<id=DO, testes/merge.tig, line=16, col=8>
+<id=LEFT_PAREN, testes/merge.tig, line=16, col=11>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=16, col=12>
+<id=ASSIG, testes/merge.tig, line=16, col=14>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=16, col=17>
+<id=ASTERISK, testes/merge.tig, line=16, col=18>
+<id=INTEGER_LITERAL, text=10, testes/merge.tig, line=16, col=19>
+<id=PLUS, testes/merge.tig, line=16, col=21>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=16, col=22>
+<id=LEFT_PAREN, testes/merge.tig, line=16, col=25>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=16, col=26>
+<id=RIGHT_PAREN, testes/merge.tig, line=16, col=32>
+<id=MINUS, testes/merge.tig, line=16, col=33>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=16, col=34>
+<id=LEFT_PAREN, testes/merge.tig, line=16, col=37>
+<id=STRING_LITERAL, text=0, testes/merge.tig, line=16, col=38>
+<id=RIGHT_PAREN, testes/merge.tig, line=16, col=40>
+<id=SEMICOLON, testes/merge.tig, line=16, col=41>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=16, col=43>
+<id=ASSIG, testes/merge.tig, line=16, col=50>
+<id=IDENTIFIER, text=getchar, testes/merge.tig, line=16, col=53>
+<id=LEFT_PAREN, testes/merge.tig, line=16, col=60>
+<id=RIGHT_PAREN, testes/merge.tig, line=16, col=61>
+<id=RIGHT_PAREN, testes/merge.tig, line=16, col=62>
+<id=SEMICOLON, testes/merge.tig, line=16, col=63>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=17, col=6>
+<id=END, testes/merge.tig, line=18, col=2>
+<id=TYPE, testes/merge.tig, line=20, col=2>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=20, col=7>
+<id=EQUAL, testes/merge.tig, line=20, col=12>
+<id=LEFT_BRACKET, testes/merge.tig, line=20, col=14>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=20, col=15>
+<id=COLON, testes/merge.tig, line=20, col=20>
+<id=IDENTIFIER, text=int, testes/merge.tig, line=20, col=22>
+<id=COMMA, testes/merge.tig, line=20, col=25>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=20, col=27>
+<id=COLON, testes/merge.tig, line=20, col=31>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=20, col=33>
+<id=RIGHT_BRACKET, testes/merge.tig, line=20, col=37>
+<id=FUNCTION, testes/merge.tig, line=22, col=2>
+<id=IDENTIFIER, text=readlist, testes/merge.tig, line=22, col=11>
+<id=LEFT_PAREN, testes/merge.tig, line=22, col=19>
+<id=RIGHT_PAREN, testes/merge.tig, line=22, col=20>
+<id=COLON, testes/merge.tig, line=22, col=22>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=22, col=24>
+<id=EQUAL, testes/merge.tig, line=22, col=29>
+<id=LET, testes/merge.tig, line=23, col=5>
+<id=VAR, testes/merge.tig, line=23, col=9>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=23, col=13>
+<id=ASSIG, testes/merge.tig, line=23, col=17>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=23, col=20>
+<id=LEFT_BRACKET, testes/merge.tig, line=23, col=23>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=23, col=24>
+<id=EQUAL, testes/merge.tig, line=23, col=27>
+<id=INTEGER_LITERAL, text=0, testes/merge.tig, line=23, col=28>
+<id=RIGHT_BRACKET, testes/merge.tig, line=23, col=29>
+<id=VAR, testes/merge.tig, line=24, col=9>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=24, col=13>
+<id=ASSIG, testes/merge.tig, line=24, col=15>
+<id=IDENTIFIER, text=readint, testes/merge.tig, line=24, col=18>
+<id=LEFT_PAREN, testes/merge.tig, line=24, col=25>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=24, col=26>
+<id=RIGHT_PAREN, testes/merge.tig, line=24, col=29>
+<id=IDENTIFIER, text=in, testes/merge.tig, line=25, col=6>
+<id=IF, testes/merge.tig, line=25, col=9>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=25, col=12>
+<id=DOT, testes/merge.tig, line=25, col=15>
+<id=IDENTIFIER, text=any, testes/merge.tig, line=25, col=16>
+<id=THEN, testes/merge.tig, line=26, col=10>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=26, col=15>
+<id=LEFT_BRACKET, testes/merge.tig, line=26, col=19>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=26, col=20>
+<id=EQUAL, testes/merge.tig, line=26, col=25>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=26, col=26>
+<id=COMMA, testes/merge.tig, line=26, col=27>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=26, col=28>
+<id=EQUAL, testes/merge.tig, line=26, col=32>
+<id=IDENTIFIER, text=readlist, testes/merge.tig, line=26, col=33>
+<id=LEFT_PAREN, testes/merge.tig, line=26, col=41>
+<id=RIGHT_PAREN, testes/merge.tig, line=26, col=42>
+<id=RIGHT_BRACKET, testes/merge.tig, line=26, col=43>
+<id=ELSE, testes/merge.tig, line=27, col=10>
+<id=NIL, testes/merge.tig, line=27, col=15>
+<id=END, testes/merge.tig, line=28, col=5>
+<id=FUNCTION, testes/merge.tig, line=30, col=2>
+<id=IDENTIFIER, text=merge, testes/merge.tig, line=30, col=11>
+<id=LEFT_PAREN, testes/merge.tig, line=30, col=16>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=30, col=17>
+<id=COLON, testes/merge.tig, line=30, col=18>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=30, col=20>
+<id=COMMA, testes/merge.tig, line=30, col=24>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=30, col=26>
+<id=COLON, testes/merge.tig, line=30, col=27>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=30, col=29>
+<id=RIGHT_PAREN, testes/merge.tig, line=30, col=33>
+<id=COLON, testes/merge.tig, line=30, col=35>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=30, col=37>
+<id=EQUAL, testes/merge.tig, line=30, col=42>
+<id=IF, testes/merge.tig, line=31, col=4>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=31, col=7>
+<id=EQUAL, testes/merge.tig, line=31, col=8>
+<id=NIL, testes/merge.tig, line=31, col=9>
+<id=THEN, testes/merge.tig, line=31, col=13>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=31, col=18>
+<id=ELSE, testes/merge.tig, line=32, col=4>
+<id=IF, testes/merge.tig, line=32, col=9>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=32, col=12>
+<id=EQUAL, testes/merge.tig, line=32, col=13>
+<id=NIL, testes/merge.tig, line=32, col=14>
+<id=THEN, testes/merge.tig, line=32, col=18>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=32, col=23>
+<id=ELSE, testes/merge.tig, line=33, col=4>
+<id=IF, testes/merge.tig, line=33, col=9>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=33, col=12>
+<id=DOT, testes/merge.tig, line=33, col=13>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=33, col=14>
+<id=LOWER, testes/merge.tig, line=33, col=20>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=33, col=22>
+<id=DOT, testes/merge.tig, line=33, col=23>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=33, col=24>
+<id=THEN, testes/merge.tig, line=34, col=7>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=34, col=12>
+<id=LEFT_BRACKET, testes/merge.tig, line=34, col=16>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=34, col=17>
+<id=EQUAL, testes/merge.tig, line=34, col=22>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=34, col=23>
+<id=DOT, testes/merge.tig, line=34, col=24>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=34, col=25>
+<id=COMMA, testes/merge.tig, line=34, col=30>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=34, col=31>
+<id=EQUAL, testes/merge.tig, line=34, col=35>
+<id=IDENTIFIER, text=merge, testes/merge.tig, line=34, col=36>
+<id=LEFT_PAREN, testes/merge.tig, line=34, col=41>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=34, col=42>
+<id=DOT, testes/merge.tig, line=34, col=43>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=34, col=44>
+<id=COMMA, testes/merge.tig, line=34, col=48>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=34, col=49>
+<id=RIGHT_PAREN, testes/merge.tig, line=34, col=50>
+<id=RIGHT_BRACKET, testes/merge.tig, line=34, col=51>
+<id=ELSE, testes/merge.tig, line=35, col=7>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=35, col=12>
+<id=LEFT_BRACKET, testes/merge.tig, line=35, col=16>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=35, col=17>
+<id=EQUAL, testes/merge.tig, line=35, col=22>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=35, col=23>
+<id=DOT, testes/merge.tig, line=35, col=24>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=35, col=25>
+<id=COMMA, testes/merge.tig, line=35, col=30>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=35, col=31>
+<id=EQUAL, testes/merge.tig, line=35, col=35>
+<id=IDENTIFIER, text=merge, testes/merge.tig, line=35, col=36>
+<id=LEFT_PAREN, testes/merge.tig, line=35, col=41>
+<id=IDENTIFIER, text=a, testes/merge.tig, line=35, col=42>
+<id=COMMA, testes/merge.tig, line=35, col=43>
+<id=IDENTIFIER, text=b, testes/merge.tig, line=35, col=44>
+<id=DOT, testes/merge.tig, line=35, col=45>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=35, col=46>
+<id=RIGHT_PAREN, testes/merge.tig, line=35, col=50>
+<id=RIGHT_BRACKET, testes/merge.tig, line=35, col=51>
+<id=FUNCTION, testes/merge.tig, line=37, col=2>
+<id=IDENTIFIER, text=printint, testes/merge.tig, line=37, col=11>
+<id=LEFT_PAREN, testes/merge.tig, line=37, col=19>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=37, col=20>
+<id=COLON, testes/merge.tig, line=37, col=21>
+<id=IDENTIFIER, text=int, testes/merge.tig, line=37, col=23>
+<id=RIGHT_PAREN, testes/merge.tig, line=37, col=26>
+<id=EQUAL, testes/merge.tig, line=37, col=28>
+<id=LET, testes/merge.tig, line=38, col=3>
+<id=FUNCTION, testes/merge.tig, line=38, col=7>
+<id=IDENTIFIER, text=f, testes/merge.tig, line=38, col=16>
+<id=LEFT_PAREN, testes/merge.tig, line=38, col=17>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=38, col=18>
+<id=COLON, testes/merge.tig, line=38, col=19>
+<id=IDENTIFIER, text=int, testes/merge.tig, line=38, col=20>
+<id=RIGHT_PAREN, testes/merge.tig, line=38, col=23>
+<id=EQUAL, testes/merge.tig, line=38, col=25>
+<id=IF, testes/merge.tig, line=38, col=27>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=38, col=30>
+<id=GREATER, testes/merge.tig, line=38, col=31>
+<id=INTEGER_LITERAL, text=0, testes/merge.tig, line=38, col=32>
+<id=THEN, testes/merge.tig, line=39, col=10>
+<id=LEFT_PAREN, testes/merge.tig, line=39, col=15>
+<id=IDENTIFIER, text=f, testes/merge.tig, line=39, col=16>
+<id=LEFT_PAREN, testes/merge.tig, line=39, col=17>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=39, col=18>
+<id=SLASH, testes/merge.tig, line=39, col=19>
+<id=INTEGER_LITERAL, text=10, testes/merge.tig, line=39, col=20>
+<id=RIGHT_PAREN, testes/merge.tig, line=39, col=22>
+<id=SEMICOLON, testes/merge.tig, line=39, col=23>
+<id=IDENTIFIER, text=print, testes/merge.tig, line=39, col=25>
+<id=LEFT_PAREN, testes/merge.tig, line=39, col=30>
+<id=IDENTIFIER, text=chr, testes/merge.tig, line=39, col=31>
+<id=LEFT_PAREN, testes/merge.tig, line=39, col=34>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=39, col=35>
+<id=MINUS, testes/merge.tig, line=39, col=36>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=39, col=37>
+<id=SLASH, testes/merge.tig, line=39, col=38>
+<id=INTEGER_LITERAL, text=10, testes/merge.tig, line=39, col=39>
+<id=ASTERISK, testes/merge.tig, line=39, col=41>
+<id=INTEGER_LITERAL, text=10, testes/merge.tig, line=39, col=42>
+<id=PLUS, testes/merge.tig, line=39, col=44>
+<id=IDENTIFIER, text=ord, testes/merge.tig, line=39, col=45>
+<id=LEFT_PAREN, testes/merge.tig, line=39, col=48>
+<id=STRING_LITERAL, text=0, testes/merge.tig, line=39, col=49>
+<id=RIGHT_PAREN, testes/merge.tig, line=39, col=51>
+<id=RIGHT_PAREN, testes/merge.tig, line=39, col=52>
+<id=RIGHT_PAREN, testes/merge.tig, line=39, col=53>
+<id=RIGHT_PAREN, testes/merge.tig, line=39, col=54>
+<id=IDENTIFIER, text=in, testes/merge.tig, line=40, col=4>
+<id=IF, testes/merge.tig, line=40, col=7>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=40, col=10>
+<id=LOWER, testes/merge.tig, line=40, col=11>
+<id=INTEGER_LITERAL, text=0, testes/merge.tig, line=40, col=12>
+<id=THEN, testes/merge.tig, line=40, col=14>
+<id=LEFT_PAREN, testes/merge.tig, line=40, col=19>
+<id=IDENTIFIER, text=print, testes/merge.tig, line=40, col=20>
+<id=LEFT_PAREN, testes/merge.tig, line=40, col=25>
+<id=STRING_LITERAL, text=-, testes/merge.tig, line=40, col=26>
+<id=RIGHT_PAREN, testes/merge.tig, line=40, col=28>
+<id=SEMICOLON, testes/merge.tig, line=40, col=29>
+<id=IDENTIFIER, text=f, testes/merge.tig, line=40, col=31>
+<id=LEFT_PAREN, testes/merge.tig, line=40, col=32>
+<id=MINUS, testes/merge.tig, line=40, col=33>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=40, col=34>
+<id=RIGHT_PAREN, testes/merge.tig, line=40, col=35>
+<id=RIGHT_PAREN, testes/merge.tig, line=40, col=36>
+<id=ELSE, testes/merge.tig, line=41, col=7>
+<id=IF, testes/merge.tig, line=41, col=12>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=41, col=15>
+<id=GREATER, testes/merge.tig, line=41, col=16>
+<id=INTEGER_LITERAL, text=0, testes/merge.tig, line=41, col=17>
+<id=THEN, testes/merge.tig, line=41, col=19>
+<id=IDENTIFIER, text=f, testes/merge.tig, line=41, col=24>
+<id=LEFT_PAREN, testes/merge.tig, line=41, col=25>
+<id=IDENTIFIER, text=i, testes/merge.tig, line=41, col=26>
+<id=RIGHT_PAREN, testes/merge.tig, line=41, col=27>
+<id=ELSE, testes/merge.tig, line=42, col=7>
+<id=IDENTIFIER, text=print, testes/merge.tig, line=42, col=12>
+<id=LEFT_PAREN, testes/merge.tig, line=42, col=17>
+<id=STRING_LITERAL, text=0, testes/merge.tig, line=42, col=18>
+<id=RIGHT_PAREN, testes/merge.tig, line=42, col=20>
+<id=END, testes/merge.tig, line=43, col=3>
+<id=FUNCTION, testes/merge.tig, line=45, col=2>
+<id=IDENTIFIER, text=printlist, testes/merge.tig, line=45, col=11>
+<id=LEFT_PAREN, testes/merge.tig, line=45, col=20>
+<id=IDENTIFIER, text=l, testes/merge.tig, line=45, col=21>
+<id=COLON, testes/merge.tig, line=45, col=22>
+<id=IDENTIFIER, text=list, testes/merge.tig, line=45, col=24>
+<id=RIGHT_PAREN, testes/merge.tig, line=45, col=28>
+<id=EQUAL, testes/merge.tig, line=45, col=30>
+<id=IF, testes/merge.tig, line=46, col=4>
+<id=IDENTIFIER, text=l, testes/merge.tig, line=46, col=7>
+<id=EQUAL, testes/merge.tig, line=46, col=8>
+<id=NIL, testes/merge.tig, line=46, col=9>
+<id=THEN, testes/merge.tig, line=46, col=13>
+<id=IDENTIFIER, text=print, testes/merge.tig, line=46, col=18>
+<id=LEFT_PAREN, testes/merge.tig, line=46, col=23>
+<id=STRING_LITERAL, text=\n, testes/merge.tig, line=46, col=24>
+<id=RIGHT_PAREN, testes/merge.tig, line=46, col=27>
+<id=ELSE, testes/merge.tig, line=47, col=4>
+<id=LEFT_PAREN, testes/merge.tig, line=47, col=9>
+<id=IDENTIFIER, text=printint, testes/merge.tig, line=47, col=10>
+<id=LEFT_PAREN, testes/merge.tig, line=47, col=18>
+<id=IDENTIFIER, text=l, testes/merge.tig, line=47, col=19>
+<id=DOT, testes/merge.tig, line=47, col=20>
+<id=IDENTIFIER, text=first, testes/merge.tig, line=47, col=21>
+<id=RIGHT_PAREN, testes/merge.tig, line=47, col=26>
+<id=SEMICOLON, testes/merge.tig, line=47, col=27>
+<id=IDENTIFIER, text=print, testes/merge.tig, line=47, col=29>
+<id=LEFT_PAREN, testes/merge.tig, line=47, col=34>
+<id=STRING_LITERAL, text= , testes/merge.tig, line=47, col=35>
+<id=RIGHT_PAREN, testes/merge.tig, line=47, col=37>
+<id=SEMICOLON, testes/merge.tig, line=47, col=38>
+<id=IDENTIFIER, text=printlist, testes/merge.tig, line=47, col=40>
+<id=LEFT_PAREN, testes/merge.tig, line=47, col=49>
+<id=IDENTIFIER, text=l, testes/merge.tig, line=47, col=50>
+<id=DOT, testes/merge.tig, line=47, col=51>
+<id=IDENTIFIER, text=rest, testes/merge.tig, line=47, col=52>
+<id=RIGHT_PAREN, testes/merge.tig, line=47, col=56>
+<id=RIGHT_PAREN, testes/merge.tig, line=47, col=57>
+<id=VAR, testes/merge.tig, line=49, col=4>
+<id=IDENTIFIER, text=list1, testes/merge.tig, line=49, col=8>
+<id=ASSIG, testes/merge.tig, line=49, col=14>
+<id=IDENTIFIER, text=readlist, testes/merge.tig, line=49, col=17>
+<id=LEFT_PAREN, testes/merge.tig, line=49, col=25>
+<id=RIGHT_PAREN, testes/merge.tig, line=49, col=26>
+<id=VAR, testes/merge.tig, line=50, col=4>
+<id=IDENTIFIER, text=list2, testes/merge.tig, line=50, col=8>
+<id=ASSIG, testes/merge.tig, line=50, col=14>
+<id=LEFT_PAREN, testes/merge.tig, line=50, col=17>
+<id=IDENTIFIER, text=buffer, testes/merge.tig, line=50, col=18>
+<id=ASSIG, testes/merge.tig, line=50, col=24>
+<id=IDENTIFIER, text=getchar, testes/merge.tig, line=50, col=26>
+<id=LEFT_PAREN, testes/merge.tig, line=50, col=33>
+<id=RIGHT_PAREN, testes/merge.tig, line=50, col=34>
+<id=SEMICOLON, testes/merge.tig, line=50, col=35>
+<id=IDENTIFIER, text=readlist, testes/merge.tig, line=50, col=37>
+<id=LEFT_PAREN, testes/merge.tig, line=50, col=45>
+<id=RIGHT_PAREN, testes/merge.tig, line=50, col=46>
+<id=RIGHT_PAREN, testes/merge.tig, line=50, col=47>
+<id=IDENTIFIER, text=in, testes/merge.tig, line=54, col=2>
+<id=IDENTIFIER, text=printlist, testes/merge.tig, line=54, col=5>
+<id=LEFT_PAREN, testes/merge.tig, line=54, col=14>
+<id=IDENTIFIER, text=merge, testes/merge.tig, line=54, col=15>
+<id=LEFT_PAREN, testes/merge.tig, line=54, col=20>
+<id=IDENTIFIER, text=list1, testes/merge.tig, line=54, col=21>
+<id=COMMA, testes/merge.tig, line=54, col=26>
+<id=IDENTIFIER, text=list2, testes/merge.tig, line=54, col=27>
+<id=RIGHT_PAREN, testes/merge.tig, line=54, col=32>
+<id=RIGHT_PAREN, testes/merge.tig, line=54, col=33>
+<id=END, testes/merge.tig, line=55, col=1>
+<id=END_OF_FILE, testes/merge.tig, line=57, col=1>

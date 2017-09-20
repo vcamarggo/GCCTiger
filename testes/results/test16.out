@@ -1,0 +1,21 @@
+<id=LET, testes/test16.tig, line=2, col=1>
+<id=TYPE, testes/test16.tig, line=4, col=1>
+<id=IDENTIFIER, text=a, testes/test16.tig, line=4, col=6>
+<id=EQUAL, testes/test16.tig, line=4, col=7>
+<id=IDENTIFIER, text=c, testes/test16.tig, line=4, col=8>
+<id=TYPE, testes/test16.tig, line=5, col=1>
+<id=IDENTIFIER, text=b, testes/test16.tig, line=5, col=6>
+<id=EQUAL, testes/test16.tig, line=5, col=7>
+<id=IDENTIFIER, text=a, testes/test16.tig, line=5, col=8>
+<id=TYPE, testes/test16.tig, line=6, col=1>
+<id=IDENTIFIER, text=c, testes/test16.tig, line=6, col=6>
+<id=EQUAL, testes/test16.tig, line=6, col=7>
+<id=IDENTIFIER, text=d, testes/test16.tig, line=6, col=8>
+<id=TYPE, testes/test16.tig, line=7, col=1>
+<id=IDENTIFIER, text=d, testes/test16.tig, line=7, col=6>
+<id=EQUAL, testes/test16.tig, line=7, col=7>
+<id=IDENTIFIER, text=a, testes/test16.tig, line=7, col=8>
+<id=IDENTIFIER, text=in, testes/test16.tig, line=9, col=1>
+<id=STRING_LITERAL, text=, testes/test16.tig, line=10, col=2>
+<id=END, testes/test16.tig, line=11, col=1>
+<id=END_OF_FILE, testes/test16.tig, line=12, col=1>

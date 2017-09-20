@@ -1,0 +1,201 @@
+<id=LET, testes/test42.tig, line=2, col=1>
+<id=TYPE, testes/test42.tig, line=4, col=1>
+<id=IDENTIFIER, text=arrtype1, testes/test42.tig, line=4, col=6>
+<id=EQUAL, testes/test42.tig, line=4, col=15>
+<id=ARRAY, testes/test42.tig, line=4, col=17>
+<id=OF, testes/test42.tig, line=4, col=23>
+<id=IDENTIFIER, text=int, testes/test42.tig, line=4, col=26>
+<id=TYPE, testes/test42.tig, line=5, col=1>
+<id=IDENTIFIER, text=rectype1, testes/test42.tig, line=5, col=6>
+<id=EQUAL, testes/test42.tig, line=5, col=15>
+<id=LEFT_BRACKET, testes/test42.tig, line=5, col=17>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=5, col=18>
+<id=COLON, testes/test42.tig, line=5, col=22>
+<id=STRING, testes/test42.tig, line=5, col=23>
+<id=COMMA, testes/test42.tig, line=5, col=29>
+<id=IDENTIFIER, text=address, testes/test42.tig, line=5, col=31>
+<id=COLON, testes/test42.tig, line=5, col=38>
+<id=STRING, testes/test42.tig, line=5, col=39>
+<id=COMMA, testes/test42.tig, line=5, col=45>
+<id=IDENTIFIER, text=id, testes/test42.tig, line=5, col=47>
+<id=COLON, testes/test42.tig, line=5, col=49>
+<id=IDENTIFIER, text=int, testes/test42.tig, line=5, col=51>
+<id=COMMA, testes/test42.tig, line=5, col=55>
+<id=IDENTIFIER, text=age, testes/test42.tig, line=5, col=57>
+<id=COLON, testes/test42.tig, line=5, col=60>
+<id=IDENTIFIER, text=int, testes/test42.tig, line=5, col=62>
+<id=RIGHT_BRACKET, testes/test42.tig, line=5, col=65>
+<id=TYPE, testes/test42.tig, line=6, col=1>
+<id=IDENTIFIER, text=arrtype2, testes/test42.tig, line=6, col=6>
+<id=EQUAL, testes/test42.tig, line=6, col=15>
+<id=ARRAY, testes/test42.tig, line=6, col=17>
+<id=OF, testes/test42.tig, line=6, col=23>
+<id=IDENTIFIER, text=rectype1, testes/test42.tig, line=6, col=26>
+<id=TYPE, testes/test42.tig, line=7, col=1>
+<id=IDENTIFIER, text=rectype2, testes/test42.tig, line=7, col=6>
+<id=EQUAL, testes/test42.tig, line=7, col=15>
+<id=LEFT_BRACKET, testes/test42.tig, line=7, col=17>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=7, col=18>
+<id=COLON, testes/test42.tig, line=7, col=23>
+<id=STRING, testes/test42.tig, line=7, col=25>
+<id=COMMA, testes/test42.tig, line=7, col=31>
+<id=IDENTIFIER, text=dates, testes/test42.tig, line=7, col=33>
+<id=COLON, testes/test42.tig, line=7, col=38>
+<id=IDENTIFIER, text=arrtype1, testes/test42.tig, line=7, col=40>
+<id=RIGHT_BRACKET, testes/test42.tig, line=7, col=48>
+<id=TYPE, testes/test42.tig, line=9, col=1>
+<id=IDENTIFIER, text=arrtype3, testes/test42.tig, line=9, col=6>
+<id=EQUAL, testes/test42.tig, line=9, col=15>
+<id=ARRAY, testes/test42.tig, line=9, col=17>
+<id=OF, testes/test42.tig, line=9, col=23>
+<id=STRING, testes/test42.tig, line=9, col=26>
+<id=VAR, testes/test42.tig, line=11, col=1>
+<id=IDENTIFIER, text=arr1, testes/test42.tig, line=11, col=5>
+<id=ASSIG, testes/test42.tig, line=11, col=10>
+<id=IDENTIFIER, text=arrtype1, testes/test42.tig, line=11, col=13>
+<id=LEFT_SQUARE, testes/test42.tig, line=11, col=22>
+<id=INTEGER_LITERAL, text=10, testes/test42.tig, line=11, col=23>
+<id=RIGHT_SQUARE, testes/test42.tig, line=11, col=25>
+<id=OF, testes/test42.tig, line=11, col=27>
+<id=INTEGER_LITERAL, text=0, testes/test42.tig, line=11, col=30>
+<id=VAR, testes/test42.tig, line=12, col=1>
+<id=IDENTIFIER, text=arr2, testes/test42.tig, line=12, col=5>
+<id=ASSIG, testes/test42.tig, line=12, col=11>
+<id=IDENTIFIER, text=arrtype2, testes/test42.tig, line=12, col=14>
+<id=LEFT_SQUARE, testes/test42.tig, line=12, col=23>
+<id=INTEGER_LITERAL, text=5, testes/test42.tig, line=12, col=24>
+<id=RIGHT_SQUARE, testes/test42.tig, line=12, col=25>
+<id=OF, testes/test42.tig, line=12, col=27>
+<id=IDENTIFIER, text=rectype1, testes/test42.tig, line=12, col=30>
+<id=LEFT_BRACKET, testes/test42.tig, line=12, col=39>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=12, col=40>
+<id=EQUAL, testes/test42.tig, line=12, col=44>
+<id=STRING_LITERAL, text=aname, testes/test42.tig, line=12, col=45>
+<id=COMMA, testes/test42.tig, line=12, col=51>
+<id=IDENTIFIER, text=address, testes/test42.tig, line=12, col=53>
+<id=EQUAL, testes/test42.tig, line=12, col=60>
+<id=STRING_LITERAL, text=somewhere, testes/test42.tig, line=12, col=61>
+<id=COMMA, testes/test42.tig, line=12, col=71>
+<id=IDENTIFIER, text=id, testes/test42.tig, line=12, col=73>
+<id=EQUAL, testes/test42.tig, line=12, col=75>
+<id=INTEGER_LITERAL, text=0, testes/test42.tig, line=12, col=76>
+<id=COMMA, testes/test42.tig, line=12, col=77>
+<id=IDENTIFIER, text=age, testes/test42.tig, line=12, col=79>
+<id=EQUAL, testes/test42.tig, line=12, col=82>
+<id=INTEGER_LITERAL, text=0, testes/test42.tig, line=12, col=83>
+<id=RIGHT_BRACKET, testes/test42.tig, line=12, col=84>
+<id=VAR, testes/test42.tig, line=13, col=1>
+<id=IDENTIFIER, text=arr3, testes/test42.tig, line=13, col=5>
+<id=COLON, testes/test42.tig, line=13, col=9>
+<id=IDENTIFIER, text=arrtype3, testes/test42.tig, line=13, col=10>
+<id=ASSIG, testes/test42.tig, line=13, col=19>
+<id=IDENTIFIER, text=arrtype3, testes/test42.tig, line=13, col=22>
+<id=LEFT_SQUARE, testes/test42.tig, line=13, col=31>
+<id=INTEGER_LITERAL, text=100, testes/test42.tig, line=13, col=32>
+<id=RIGHT_SQUARE, testes/test42.tig, line=13, col=35>
+<id=OF, testes/test42.tig, line=13, col=37>
+<id=STRING_LITERAL, text=, testes/test42.tig, line=13, col=40>
+<id=VAR, testes/test42.tig, line=15, col=1>
+<id=IDENTIFIER, text=rec1, testes/test42.tig, line=15, col=5>
+<id=ASSIG, testes/test42.tig, line=15, col=10>
+<id=IDENTIFIER, text=rectype1, testes/test42.tig, line=15, col=13>
+<id=LEFT_BRACKET, testes/test42.tig, line=15, col=22>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=15, col=23>
+<id=EQUAL, testes/test42.tig, line=15, col=27>
+<id=STRING_LITERAL, text=Kapoios, testes/test42.tig, line=15, col=28>
+<id=COMMA, testes/test42.tig, line=15, col=36>
+<id=IDENTIFIER, text=address, testes/test42.tig, line=15, col=38>
+<id=EQUAL, testes/test42.tig, line=15, col=45>
+<id=STRING_LITERAL, text=Kapou, testes/test42.tig, line=15, col=46>
+<id=COMMA, testes/test42.tig, line=15, col=52>
+<id=IDENTIFIER, text=id, testes/test42.tig, line=15, col=54>
+<id=EQUAL, testes/test42.tig, line=15, col=56>
+<id=INTEGER_LITERAL, text=02432, testes/test42.tig, line=15, col=57>
+<id=COMMA, testes/test42.tig, line=15, col=62>
+<id=IDENTIFIER, text=age, testes/test42.tig, line=15, col=64>
+<id=EQUAL, testes/test42.tig, line=15, col=67>
+<id=INTEGER_LITERAL, text=44, testes/test42.tig, line=15, col=68>
+<id=RIGHT_BRACKET, testes/test42.tig, line=15, col=70>
+<id=VAR, testes/test42.tig, line=16, col=1>
+<id=IDENTIFIER, text=rec2, testes/test42.tig, line=16, col=5>
+<id=ASSIG, testes/test42.tig, line=16, col=10>
+<id=IDENTIFIER, text=rectype2, testes/test42.tig, line=16, col=13>
+<id=LEFT_BRACKET, testes/test42.tig, line=16, col=22>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=16, col=23>
+<id=EQUAL, testes/test42.tig, line=16, col=27>
+<id=STRING_LITERAL, text=Allos, testes/test42.tig, line=16, col=28>
+<id=COMMA, testes/test42.tig, line=16, col=34>
+<id=IDENTIFIER, text=dates, testes/test42.tig, line=16, col=36>
+<id=EQUAL, testes/test42.tig, line=16, col=41>
+<id=IDENTIFIER, text=arrtype1, testes/test42.tig, line=16, col=43>
+<id=LEFT_SQUARE, testes/test42.tig, line=16, col=52>
+<id=INTEGER_LITERAL, text=3, testes/test42.tig, line=16, col=53>
+<id=RIGHT_SQUARE, testes/test42.tig, line=16, col=54>
+<id=OF, testes/test42.tig, line=16, col=56>
+<id=INTEGER_LITERAL, text=1900, testes/test42.tig, line=16, col=59>
+<id=RIGHT_BRACKET, testes/test42.tig, line=16, col=63>
+<id=IDENTIFIER, text=in, testes/test42.tig, line=18, col=1>
+<id=IDENTIFIER, text=arr1, testes/test42.tig, line=20, col=1>
+<id=LEFT_SQUARE, testes/test42.tig, line=20, col=5>
+<id=INTEGER_LITERAL, text=0, testes/test42.tig, line=20, col=6>
+<id=RIGHT_SQUARE, testes/test42.tig, line=20, col=7>
+<id=ASSIG, testes/test42.tig, line=20, col=9>
+<id=INTEGER_LITERAL, text=1, testes/test42.tig, line=20, col=12>
+<id=SEMICOLON, testes/test42.tig, line=20, col=13>
+<id=IDENTIFIER, text=arr1, testes/test42.tig, line=21, col=1>
+<id=LEFT_SQUARE, testes/test42.tig, line=21, col=5>
+<id=INTEGER_LITERAL, text=9, testes/test42.tig, line=21, col=6>
+<id=RIGHT_SQUARE, testes/test42.tig, line=21, col=7>
+<id=ASSIG, testes/test42.tig, line=21, col=9>
+<id=INTEGER_LITERAL, text=3, testes/test42.tig, line=21, col=12>
+<id=SEMICOLON, testes/test42.tig, line=21, col=13>
+<id=IDENTIFIER, text=arr2, testes/test42.tig, line=22, col=1>
+<id=LEFT_SQUARE, testes/test42.tig, line=22, col=5>
+<id=INTEGER_LITERAL, text=3, testes/test42.tig, line=22, col=6>
+<id=RIGHT_SQUARE, testes/test42.tig, line=22, col=7>
+<id=DOT, testes/test42.tig, line=22, col=8>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=22, col=9>
+<id=ASSIG, testes/test42.tig, line=22, col=14>
+<id=STRING_LITERAL, text=kati, testes/test42.tig, line=22, col=17>
+<id=SEMICOLON, testes/test42.tig, line=22, col=22>
+<id=IDENTIFIER, text=arr2, testes/test42.tig, line=23, col=1>
+<id=LEFT_SQUARE, testes/test42.tig, line=23, col=5>
+<id=INTEGER_LITERAL, text=1, testes/test42.tig, line=23, col=6>
+<id=RIGHT_SQUARE, testes/test42.tig, line=23, col=7>
+<id=DOT, testes/test42.tig, line=23, col=8>
+<id=IDENTIFIER, text=age, testes/test42.tig, line=23, col=9>
+<id=ASSIG, testes/test42.tig, line=23, col=13>
+<id=INTEGER_LITERAL, text=23, testes/test42.tig, line=23, col=16>
+<id=SEMICOLON, testes/test42.tig, line=23, col=18>
+<id=IDENTIFIER, text=arr3, testes/test42.tig, line=24, col=1>
+<id=LEFT_SQUARE, testes/test42.tig, line=24, col=5>
+<id=INTEGER_LITERAL, text=34, testes/test42.tig, line=24, col=6>
+<id=RIGHT_SQUARE, testes/test42.tig, line=24, col=8>
+<id=ASSIG, testes/test42.tig, line=24, col=10>
+<id=STRING_LITERAL, text=sfd, testes/test42.tig, line=24, col=13>
+<id=SEMICOLON, testes/test42.tig, line=24, col=17>
+<id=IDENTIFIER, text=rec1, testes/test42.tig, line=26, col=1>
+<id=DOT, testes/test42.tig, line=26, col=5>
+<id=IDENTIFIER, text=name, testes/test42.tig, line=26, col=6>
+<id=ASSIG, testes/test42.tig, line=26, col=11>
+<id=STRING_LITERAL, text=sdf, testes/test42.tig, line=26, col=14>
+<id=SEMICOLON, testes/test42.tig, line=26, col=18>
+<id=IDENTIFIER, text=rec2, testes/test42.tig, line=27, col=1>
+<id=DOT, testes/test42.tig, line=27, col=5>
+<id=IDENTIFIER, text=dates, testes/test42.tig, line=27, col=6>
+<id=LEFT_SQUARE, testes/test42.tig, line=27, col=11>
+<id=INTEGER_LITERAL, text=0, testes/test42.tig, line=27, col=12>
+<id=RIGHT_SQUARE, testes/test42.tig, line=27, col=13>
+<id=ASSIG, testes/test42.tig, line=27, col=15>
+<id=INTEGER_LITERAL, text=2323, testes/test42.tig, line=27, col=18>
+<id=SEMICOLON, testes/test42.tig, line=27, col=22>
+<id=IDENTIFIER, text=rec2, testes/test42.tig, line=28, col=1>
+<id=DOT, testes/test42.tig, line=28, col=5>
+<id=IDENTIFIER, text=dates, testes/test42.tig, line=28, col=6>
+<id=LEFT_SQUARE, testes/test42.tig, line=28, col=11>
+<id=INTEGER_LITERAL, text=2, testes/test42.tig, line=28, col=12>
+<id=RIGHT_SQUARE, testes/test42.tig, line=28, col=13>
+<id=ASSIG, testes/test42.tig, line=28, col=15>
+<id=INTEGER_LITERAL, text=2323, testes/test42.tig, line=28, col=18>
+<id=END, testes/test42.tig, line=30, col=1>
+<id=END_OF_FILE, testes/test42.tig, line=31, col=1>
