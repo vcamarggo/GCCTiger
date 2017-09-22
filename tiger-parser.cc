@@ -437,18 +437,20 @@ Parser::parse_variable_declaration ()
   if (skip_token (Tiger::COLON))
     {
 	skip_after_colon();
-	if(!skip_token(parse_type()){
-	  return Ttree:error();
-	}
-    }
-  
-  if (!skip_token(Tiger::ASSIGN))
-    {
-      skip_after_assig();
-      return Tree::error ();
+	Tree type_tree = parse_type ();
     }
 
-  Tree type_tree = parse_type ();
+  if (type_tree.is_error ())
+    {
+      skip_after_semicolon();
+      return Tree::error ();
+    }
+  
+  if (!skip_token(Tiger::ASSIG))
+    {
+      skip_after_semicolon();
+      return Tree::error ();
+    }
 
   if (type_tree.is_error ())
     {
