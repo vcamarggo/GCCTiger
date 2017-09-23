@@ -1,3 +1,4 @@
+/**/
 let 
 
  type any = {any : int}

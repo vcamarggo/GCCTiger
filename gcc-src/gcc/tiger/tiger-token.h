@@ -45,8 +45,8 @@ namespace Tiger
   TIGER_TOKEN (AND, "&")                                                        \
   TIGER_TOKEN (OR, "|")                                                         \
   TIGER_TOKEN (DOT, ".")                                                        \
-  TIGER_TOKEN (LEFT_BRACKET, "{")                                                         \
-  TIGER_TOKEN (RIGHT_BRACKET, "}")                                                         \
+  TIGER_TOKEN (LEFT_BRACKET, "{")                                               \
+  TIGER_TOKEN (RIGHT_BRACKET, "}")                                              \
                                                                                 \
   TIGER_TOKEN_KEYWORD (ARRAY, "array")                                          \
   TIGER_TOKEN_KEYWORD (BREAK, "break")                                          \
@@ -61,7 +61,8 @@ namespace Tiger
   TIGER_TOKEN_KEYWORD (LET, "let")                                              \
   TIGER_TOKEN_KEYWORD (NIL, "nil")                                              \
   TIGER_TOKEN_KEYWORD (OF, "of")                                                \
-  TIGER_TOKEN_KEYWORD (STRING, "string")                                                \
+  TIGER_TOKEN_KEYWORD (REAL, "real")                                            \
+  TIGER_TOKEN_KEYWORD (STRING, "string")                                        \
   TIGER_TOKEN_KEYWORD (THEN, "then")                                            \
   TIGER_TOKEN_KEYWORD (TO, "to")                                                \
   TIGER_TOKEN_KEYWORD (TYPE, "type")                                            \

@@ -130,7 +130,7 @@ public:
   void
   append (Tree t)
   {
-    append_to_statement_list (t.get_tree (), &list);
+    append_to_expression_list (t.get_tree (), &list);
   }
 
   tree
