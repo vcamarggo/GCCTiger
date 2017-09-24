@@ -48,7 +48,7 @@ private:
   Tree coerce_binary_arithmetic (const_TokenPtr tok, Tree *left, Tree *right);
   bool check_logical_operands (const_TokenPtr tok, Tree left, Tree right);
 
-  Tree get_printf_addr ();
+  Tree get_print_addr ();
   Tree get_puts_addr ();
 
   Tree get_scanf_addr ();
@@ -112,7 +112,7 @@ private:
 #undef BINARY_HANDLER
 
 public:
-  Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), printf_fn (), scanf_fn ()
+  Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), print_fn (), scanf_fn ()
   {
   }
 
@@ -147,7 +147,7 @@ private:
   tree main_fndecl;
 
   Tree puts_fn;
-  Tree printf_fn;
+  Tree print_fn;
   Tree scanf_fn;
 
   std::vector<TreeExpList> stack_exp_list;
@@ -364,6 +364,37 @@ Parser::get_current_exp_list ()
 }
 
 Tree
+Parser::parse_let_exp()
+{
+  // variable_declaration -> "var" identifier ":" type ";"
+  if (!skip_token (Tiger::LET))
+    {
+      skip_after_semicolon ();
+      return Tree::error ();
+    }
+	//***
+	parse_decs_seq()
+  
+	Tree in_exp;
+   if (!skip_token (Tiger::IN)){
+      skip_after_semicolon ();
+      return Tree::error ();
+    }
+	  enter_scope ();
+      parse_exp_seq (&Parser::done_end);
+      TreeSymbolMapping in_tree_scope = leave_scope ();
+      in_exp = in_tree_scope.bind_expr;
+	
+	 if (!skip_token (Tiger::END))
+    {
+      skip_after_semicolon ();
+      return Tree::error ();
+    }
+	
+	 return build_let_exp (decs, in_exp);
+}
+
+Tree
 Parser::parse_variable_declaration ()
 {
   // variable_declaration -> "var" identifier ":" type ";"
@@ -384,13 +415,14 @@ Parser::parse_variable_declaration ()
     {
 	skip_after_colon();
 	Tree type_tree = parse_type ();
-    }
-
-  if (type_tree.is_error ())
+    
+	  if (type_tree.is_error ())
     {
       skip_after_end_of_line();
       return Tree::error ();
     }
+	
+	}
   
   if (!skip_token(Tiger::ASSIGN))
     {
@@ -422,7 +454,6 @@ Parser::parse_variable_declaration ()
 
   return exp;
 }
-
 
 // deixar mais pra frente ***
 Tree
@@ -501,13 +532,6 @@ is_array_type (Tree type)
   return type.get_tree_code () == ARRAY_TYPE;
 }
 
-bool
-is_record_type (Tree type)
-{
-  gcc_assert (TYPE_P (type.get_tree ()));
-  return type.get_tree_code () == RECORD_TYPE;
-}
-
 }
 
 const char *
@@ -577,46 +601,6 @@ Parser::parse_field_declaration (std::vector<std::string> &field_names)
   TREE_ADDRESSABLE (field_decl.get_tree ()) = 1;
 
   return field_decl;
-}
-
-Tree
-Parser::parse_record ()
-{
-  // "record" field-decl* "end"
-  const_TokenPtr record_tok = expect_token (Tiger::RECORD);
-  if (record_tok == NULL)
-    {
-      skip_after_end_of_line ();
-      return Tree::error ();
-    }
-
-  Tree record_type = make_node(RECORD_TYPE);
-  Tree field_list, field_last;
-  std::vector<std::string> field_names;
-
-  const_TokenPtr next = lexer.peek_token ();
-  while (next->get_id () != Tiger::END)
-    {
-      Tree field_decl = parse_field_declaration (field_names);
-
-      if (!field_decl.is_error ())
-	{
-	  DECL_CONTEXT (field_decl.get_tree ()) = record_type.get_tree();
-	  if (field_list.is_null ())
-	    field_list = field_decl;
-	  if (!field_last.is_null ())
-	    TREE_CHAIN (field_last.get_tree ()) = field_decl.get_tree ();
-	  field_last = field_decl;
-	}
-      next = lexer.peek_token ();
-    }
-
-  skip_token (Tiger::END);
-
-  TYPE_FIELDS (record_type.get_tree ()) = field_list.get_tree();
-  layout_type (record_type.get_tree ());
-
-  return record_type;
 }
 
 Tree
@@ -923,20 +907,12 @@ Parser::parse_if_exp ()
       parse_exp_seq (&Parser::done_end);
       TreeSymbolMapping else_tree_scope = leave_scope ();
       else_exp = else_tree_scope.bind_expr;
-
-      // Consume 'end'
-      skip_token (Tiger::END);
-    }
-  else if (tok->get_id () == Tiger::END)
-    {
-      // Consume 'end'
-      skip_token (Tiger::END);
-    }
-  else
-    {
-      unexpected_token (tok);
-      return Tree::error ();
-    }
+	//testar else exp
+		if(then_exp.get_type() != else_exp.get_type()){
+			skip_after_end ();
+			return Tree::error ();
+		}
+	  }
 
   return build_if_exp (expr, then_exp, else_exp);
 }
@@ -1112,8 +1088,6 @@ Parser::parse_for_exp ()
   TreeSymbolMapping for_body_tree_scope = leave_scope ();
   Tree for_body_exp = for_body_tree_scope.bind_expr;
 
-  skip_token (Tiger::END);
-
   // Induction var
   SymbolPtr ind_var
     = query_integer_variable (identifier->get_str (), identifier->get_locus ());
@@ -1170,9 +1144,9 @@ Parser::get_puts_addr ()
 }
 
 Tree
-Parser::get_printf_addr ()
+Parser::get_print_addr ()
 {
-  if (printf_fn.is_null ())
+  if (print_fn.is_null ())
     {
       tree fndecl_type_param[] = {
 	build_pointer_type (
@@ -1183,20 +1157,20 @@ Parser::get_printf_addr ()
 	= build_varargs_function_type_array (integer_type_node, 1,
 					     fndecl_type_param);
 
-      tree printf_fn_decl = build_fn_decl ("printf", fndecl_type);
-      DECL_EXTERNAL (printf_fn_decl) = 1;
+      tree print_fn_decl = build_fn_decl ("print", fndecl_type);
+      DECL_EXTERNAL (print_fn_decl) = 1;
 
-      printf_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), printf_fn_decl);
+      print_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), print_fn_decl);
     }
 
-  return printf_fn;
+  return print_fn;
 }
 
 Tree
-Parser::parse_expression ()
+Parser::parse_exp ()
 {
-  return parse_expression (/* right_binding_power */ 0);
+  return parse_exp (/* right_binding_power */ 0);
 }
 
 
@@ -1372,12 +1346,10 @@ Parser::null_denotation (const_TokenPtr tok)
 	  }
 	return Tree (expr, tok->get_locus ());
       }
-	  //***
-    case Tiger::LET:
+	 case Tiger::LET:
       return parse_let_exp ();
     case Tiger::IF:
       return parse_if_exp();
-	  //***
     case Tiger::FOR:
       return parse_for_exp();
     case Tiger::WHILE:
@@ -1652,6 +1624,7 @@ Parser::binary_logical_or (const_TokenPtr tok, Tree left)
 		     left, right);
 }
 
+//***
 Tree
 Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
 {
@@ -1681,12 +1654,12 @@ Parser::binary_field_ref (const const_TokenPtr tok, Tree left)
     {
       return Tree::error ();
     }
-
-  if (!is_record_type (left.get_type ()))
-    {
-      error_at (left.get_locus (), "does not have record type");
-      return Tree::error ();
-    }
+	
+  //if (!is_record_type (left.get_type ()))
+  //  {
+  //    error_at (left.get_locus (), "does not have record type");
+  //    return Tree::error ();
+  //  }
 
   Tree field_decl = TYPE_FIELDS (left.get_type ().get_tree ());
   while (!field_decl.is_null ())
