@@ -121,11 +121,11 @@ build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, Tree t3,
 }
 
 // Adapter for TREE_LIST
-struct TreeStmtList
+struct TreeExpList
 {
 public:
-  TreeStmtList () : list (alloc_stmt_list ()) {}
-  TreeStmtList (Tree t) : list (t.get_tree ()) {}
+  TreeExpList () : list (alloc_exp_list ()) {}
+  TreeExpList (Tree t) : list (t.get_tree ()) {}
 
   void
   append (Tree t)
