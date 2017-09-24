@@ -104,6 +104,7 @@ Lexer::build_token ()
       location_t loc = get_current_location ();
       int current_char = peek_input ();
       skip_input ();
+	  int comment = 0;
 
       if (current_char == EOF)
 	{
@@ -133,16 +134,30 @@ Lexer::build_token ()
 	// ***************
 	case '/':
           if (peek_input () == '*') {
+			comment++;
             while(peek_input() != EOF) {
                 skip_input();
                 current_column++;
-                if(peek_input() == '*'){
+				if(peek_input() == '/'){
+					skip_input();
+					current_column++;
+				if(peek_input() == '*'){
+					skip_input();
+					current_column++;
+					comment++;
+					}
+				}
+				if(peek_input() == '*'){
                     skip_input();
                     current_column++;
                     if(peek_input() == '/'){
-                        current_column+=2;
-			skip_input();
-                        break;
+                        current_column++;
+						skip_input();
+						comment--;
+						if(comment==0){
+							current_column++;
+							break;
+						}
                     }
                 }  
             }
@@ -158,7 +173,7 @@ Lexer::build_token ()
 	      skip_input ();
 	      current_column += 2;
 
-	      return Token::make (ASSIG, loc);
+	      return Token::make (ASSIGN, loc);
 	    }
 	  else
 	    {

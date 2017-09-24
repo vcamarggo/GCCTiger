@@ -132,7 +132,7 @@ public:
   Tree parse_while_exp ();
   Tree parse_for_exp();
   Tree parse_function_exp();
-  Tree parse_let_expresssion();
+  Tree parse_let_exp();
 
   Tree parse_exp ();
   Tree parse_exp_naming_variable();
@@ -392,7 +392,7 @@ Parser::parse_variable_declaration ()
       return Tree::error ();
     }
   
-  if (!skip_token(Tiger::ASSIG))
+  if (!skip_token(Tiger::ASSIGN))
     {
       skip_after_end_of_line();
       return Tree::error ();
@@ -793,8 +793,8 @@ Parser::parse_assignment_exp ()
   if (variable.is_error ())
     return Tree::error ();
 
-  const_TokenPtr assig_tok = expect_token (Tiger::ASSIG);
-  if (assig_tok == NULL)
+  const_TokenPtr assign_tok = expect_token (Tiger::ASSIGN);
+  if (assign_tok == NULL)
     {
       skip_after_end_of_line ();
       return Tree::error ();
@@ -817,10 +817,10 @@ Parser::parse_assignment_exp ()
       return Tree::error ();
     }
 
-  Tree assig_expr = build_tree (MODIFY_EXPR, assig_tok->get_locus (),
+  Tree assign_expr = build_tree (MODIFY_EXPR, assign_tok->get_locus (),
 				void_type_node, variable, expr);
 
-  return assig_expr;
+  return assign_expr;
 }
 
 Tree
@@ -1002,7 +1002,7 @@ Parser::parse_while_exp ()
     }
 
   Tree expr = parse_boolean_exp ();
-  if (!skip_token (Tiger::THEN))
+  if (!skip_token (Tiger::DO))
     {
       skip_after_end ();
       return Tree::error ();
@@ -1084,7 +1084,7 @@ Parser::parse_for_exp ()
       return Tree::error ();
     }
 
-  if (!skip_token (Tiger::ASSIG))
+  if (!skip_token (Tiger::ASSIGN))
     {
       skip_after_end ();
       return Tree::error ();
@@ -1372,10 +1372,12 @@ Parser::null_denotation (const_TokenPtr tok)
 	  }
 	return Tree (expr, tok->get_locus ());
       }
-	  case Tiger::LET:
+	  //***
+    case Tiger::LET:
       return parse_let_exp ();
     case Tiger::IF:
       return parse_if_exp();
+	  //***
     case Tiger::FOR:
       return parse_for_exp();
     case Tiger::WHILE:
