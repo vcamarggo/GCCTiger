@@ -1,4 +1,4 @@
-#include <iostream>
+f#include <iostream>
 #include <memory>
 
 #include "tiger/tiger-parser.h"
@@ -124,7 +124,7 @@ public:
   Tree parse_type_declaration ();
 
   Tree parse_type ();
-  Tree parse_record ();
+  //Tree parse_record ();
   Tree parse_field_declaration (std::vector<std::string> &field_names);
 
   Tree parse_assignment_exp ();
@@ -132,7 +132,7 @@ public:
   Tree parse_while_exp ();
   Tree parse_for_exp();
   Tree parse_function_exp();
-  Tree parse_let_exp();
+  //Tree parse_let_exp();
 
   Tree parse_exp ();
   Tree parse_exp_naming_variable();
@@ -363,6 +363,7 @@ Parser::get_current_exp_list ()
   return stack_exp_list.back ();
 }
 
+/*
 Tree
 Parser::parse_let_exp()
 {
@@ -372,8 +373,8 @@ Parser::parse_let_exp()
       skip_after_semicolon ();
       return Tree::error ();
     }
-	//***
-	parse_decs_seq()
+	
+	parse_descriptor_seq();
   
 	Tree in_exp;
    if (!skip_token (Tiger::IN)){
@@ -390,9 +391,17 @@ Parser::parse_let_exp()
       skip_after_semicolon ();
       return Tree::error ();
     }
-	
-	 return build_let_exp (decs, in_exp);
-}
+	//***
+	 return build_let_exp (parse_descriptor_seq, in_exp);
+}*/
+
+/*Tree
+Parser::parse_descriptor_seq(){
+	while (!skip_token (Tiger::IN))
+    {
+		//***
+    }
+}*/
 
 Tree
 Parser::parse_variable_declaration ()
@@ -430,6 +439,7 @@ Parser::parse_variable_declaration ()
       return Tree::error ();
     }
 
+	//aqui temos que inserir o escopo
   if (scope.get_current_mapping ().get (identifier->get_str ()))
     {
       error_at (identifier->get_locus (),
@@ -638,9 +648,9 @@ Parser::parse_type ()
           type = TREE_TYPE (s->get_tree_decl ().get_tree ());
       }
       break;
-    case Tiger::RECORD:
+    /*case Tiger::RECORD:
       type = parse_record ();
-      break;
+      break;*/
     default:
       unexpected_token (t);
       return Tree::error ();
@@ -1346,8 +1356,8 @@ Parser::null_denotation (const_TokenPtr tok)
 	  }
 	return Tree (expr, tok->get_locus ());
       }
-	 case Tiger::LET:
-      return parse_let_exp ();
+	 //case Tiger::LET:
+     // return parse_let_exp ();
     case Tiger::IF:
       return parse_if_exp();
     case Tiger::FOR:
@@ -1624,7 +1634,7 @@ Parser::binary_logical_or (const_TokenPtr tok, Tree left)
 		     left, right);
 }
 
-//***
+/*
 Tree
 Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
 {
@@ -1644,9 +1654,9 @@ Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
   Tree element_type = TREE_TYPE(left.get_type().get_tree());
 
   return build_tree (ARRAY_REF, tok->get_locus (), element_type, left, right, Tree(), Tree());
-}
+}*/
 
-Tree
+/*Tree
 Parser::binary_field_ref (const const_TokenPtr tok, Tree left)
 {
   const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
@@ -1684,7 +1694,7 @@ Parser::binary_field_ref (const const_TokenPtr tok, Tree left)
   return build_tree (COMPONENT_REF, tok->get_locus (),
 		     TREE_TYPE (field_decl.get_tree ()), left, field_decl,
 		     Tree ());
-}
+}*/
 
 // This is invoked when a token (likely an operand) is found at a (likely
 // infix) non-prefix position
@@ -1779,19 +1789,19 @@ Parser::parse_lhs_assignment_exp ()
 // ------------------------------------------------------
 // ------------------------------------------------------
 
-static void tiny_parse_file (const char *filename);
+static void tiger_parse_file (const char *filename);
 
 void
-tiny_parse_files (int num_files, const char **files)
+tiger_parse_files (int num_files, const char **files)
 {
   for (int i = 0; i < num_files; i++)
     {
-      tiny_parse_file (files[i]);
+      tiger_parse_file (files[i]);
     }
 }
 
 static void
-tiny_parse_file (const char *filename)
+tiger_parse_file (const char *filename)
 {
   // FIXME: handle stdin "-"
   FILE *file = fopen (filename, "r");
