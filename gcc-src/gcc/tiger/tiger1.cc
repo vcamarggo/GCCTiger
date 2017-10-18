@@ -86,6 +86,9 @@ tiger_langhook_type_for_mode (enum machine_mode mode, int unsignedp)
   if (mode == TYPE_MODE (double_type_node))
     return double_type_node;
 
+  if (mode == TYPE_MODE (real_type_node))
+    return real_type_node;
+
   if (mode == TYPE_MODE (intQI_type_node))
     return unsignedp ? unsigned_intQI_type_node : intQI_type_node;
   if (mode == TYPE_MODE (intHI_type_node))

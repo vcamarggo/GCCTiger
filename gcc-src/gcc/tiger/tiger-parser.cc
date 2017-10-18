@@ -1,4 +1,4 @@
-f#include <iostream>
+#include <iostream>
 #include <memory>
 
 #include "tiger/tiger-parser.h"
@@ -139,6 +139,7 @@ public:
   Tree parse_lhs_assignment_exp();
   Tree parse_boolean_exp ();
   Tree parse_integer_exp ();
+  Tree parse_real_exp ();
 
 private:
   Lexer &lexer;
@@ -1283,8 +1284,6 @@ Parser::left_binding_power (const_TokenPtr token)
       return LBP_LOGICAL_OR;
     case Tiger::AND:
       return LBP_LOGICAL_AND;
-    case Tiger::NOT:
-      return LBP_UNARY_MINUS;
     // Anything that cannot appear after a left operand
     // is considered a terminator
     default:
