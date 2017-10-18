@@ -1,96 +1,96 @@
-GCCTINY_INSTALL_NAME := $(shell echo gcctiny|sed '$(program_transform_name)')
-GCCTINY_TARGET_INSTALL_NAME := $(target_noncanonical)-$(shell echo gcctiny|sed '$(program_transform_name)')
+GCCTIGER_INSTALL_NAME := $(shell echo gcctiger|sed '$(program_transform_name)')
+GCCTIGER_TARGET_INSTALL_NAME := $(target_noncanonical)-$(shell echo gcctiger|sed '$(program_transform_name)')
 
-tiny: tiny1$(exeext)
+tiger: tiger1$(exeext)
 
-.PHONY: tiny
+.PHONY: tiger
 
 # Driver
 
-GCCTINY_OBJS = \
+GCCTIGER_OBJS = \
    $(GCC_OBJS) \
-   tiny/tinyspec.o \
+   tiger/tigerspec.o \
    $(END)
 
-gcctiny$(exeext): $(GCCTINY_OBJS) $(EXTRA_GCC_OBJS) libcommon-target.a $(LIBDEPS)
+gcctiger$(exeext): $(GCCTIGER_OBJS) $(EXTRA_GCC_OBJS) libcommon-target.a $(LIBDEPS)
 	+$(LINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) -o $@ \
-	  $(GCCTINY_OBJS) $(EXTRA_GCC_OBJS) libcommon-target.a \
+	  $(GCCTIGER_OBJS) $(EXTRA_GCC_OBJS) libcommon-target.a \
 	  $(EXTRA_GCC_LIBS) $(LIBS)
 
 # The compiler proper
 
-tiny_OBJS = \
-    tiny/tiny1.o \
-    tiny/tiny-parser.o \
-    tiny/tiny-token.o \
-    tiny/tiny-lexer.o \
-    tiny/tiny-symbol.o \
-    tiny/tiny-symbol-mapping.o \
-    tiny/tiny-scope.o \
-    tiny/tiny-convert.o \
+tiger_OBJS = \
+    tiger/tiger1.o \
+    tiger/tiger-parser.o \
+    tiger/tiger-token.o \
+    tiger/tiger-lexer.o \
+    tiger/tiger-symbol.o \
+    tiger/tiger-symbol-mapping.o \
+    tiger/tiger-scope.o \
+    tiger/tiger-convert.o \
     $(END)
 
-tiny1$(exeext): attribs.o $(tiny_OBJS) $(BACKEND) $(LIBDEPS)
+tiger1$(exeext): attribs.o $(tiger_OBJS) $(BACKEND) $(LIBDEPS)
 	+$(LLINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) -o $@ \
-	      attribs.o $(tiny_OBJS) $(BACKEND) $(LIBS) $(BACKENDLIBS)
+	      attribs.o $(tiger_OBJS) $(BACKEND) $(LIBS) $(BACKENDLIBS)
 
 # FIXME
-tiny.all.cross:
+tiger.all.cross:
 
-tiny.start.encap: gcctiny$(exeext)
+tiger.start.encap: gcctiger$(exeext)
 
-tiny.rest.encap:
+tiger.rest.encap:
 
 # FIXME
-tiny.install-common: installdirs
-	-rm -f $(DESTDIR)$(bindir)/$(GCCTINY_INSTALL_NAME)$(exeext)
-	$(INSTALL_PROGRAM) gcctiny$(exeext) $(DESTDIR)$(bindir)/$(GCCTINY_INSTALL_NAME)$(exeext)
-	rm -f $(DESTDIR)$(bindir)/$(GCCTINY_TARGET_INSTALL_NAME)$(exeext); \
+tiger.install-common: installdirs
+	-rm -f $(DESTDIR)$(bindir)/$(GCCTIGER_INSTALL_NAME)$(exeext)
+	$(INSTALL_PROGRAM) gcctiger$(exeext) $(DESTDIR)$(bindir)/$(GCCTIGER_INSTALL_NAME)$(exeext)
+	rm -f $(DESTDIR)$(bindir)/$(GCCTIGER_TARGET_INSTALL_NAME)$(exeext); \
 	( cd $(DESTDIR)$(bindir) && \
-      $(LN) $(GCCTINY_INSTALL_NAME)$(exeext) $(GCCTINY_TARGET_INSTALL_NAME)$(exeext) ); \
+      $(LN) $(GCCTIGER_INSTALL_NAME)$(exeext) $(GCCTIGER_TARGET_INSTALL_NAME)$(exeext) ); \
 
-tiny.install-man:
+tiger.install-man:
 
-tiny.install-info:
+tiger.install-info:
 
-tiny.install-pdf:
+tiger.install-pdf:
 
-tiny.install-plugin:
+tiger.install-plugin:
 
-tiny.install-html:
+tiger.install-html:
 
-tiny.info:
+tiger.info:
 
-tiny.dvi:
+tiger.dvi:
 
-tiny.pdf:
+tiger.pdf:
 
-tiny.html:
+tiger.html:
 
-tiny.uninstall:
-	-rm -f gcctiny$(exeext) tiny1$(exeext)
-	-rm -f $(tiny_OBJS)
+tiger.uninstall:
+	-rm -f gcctiger$(exeext) tiger1$(exeext)
+	-rm -f $(tiger_OBJS)
 
-tiny.man:
+tiger.man:
 
-tiny.mostlyclean:
+tiger.mostlyclean:
 
-tiny.clean:
+tiger.clean:
 
-tiny.distclean:
+tiger.distclean:
 
-tiny.maintainer-clean:
+tiger.maintainer-clean:
 
-# The main makefile has already created stage?/tiny.
-tiny.stage1: stage1-start
-	-mv tiny/*$(objext) stage1/tiny
-tiny.stage2: stage2-start
-	-mv tiny/*$(objext) stage2/tiny
-tiny.stage3: stage3-start
-	-mv tiny/*$(objext) stage3/tiny
-tiny.stage4: stage4-start
-	-mv tiny/*$(objext) stage4/tiny
-tiny.stageprofile: stageprofile-start
-	-mv tiny/*$(objext) stageprofile/tiny
-tiny.stagefeedback: stagefeedback-start
-	-mv tiny/*$(objext) stagefeedback/tiny
+# The main makefile has already created stage?/tiger.
+tiger.stage1: stage1-start
+	-mv tiger/*$(objext) stage1/tiger
+tiger.stage2: stage2-start
+	-mv tiger/*$(objext) stage2/tiger
+tiger.stage3: stage3-start
+	-mv tiger/*$(objext) stage3/tiger
+tiger.stage4: stage4-start
+	-mv tiger/*$(objext) stage4/tiger
+tiger.stageprofile: stageprofile-start
+	-mv tiger/*$(objext) stageprofile/tiger
+tiger.stagefeedback: stagefeedback-start
+	-mv tiger/*$(objext) stagefeedback/tiger
