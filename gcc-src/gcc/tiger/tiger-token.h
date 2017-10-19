@@ -21,7 +21,7 @@ namespace Tiger
   TIGER_TOKEN (FIRST_TOKEN, "<first-token-marker>")                             \
   TIGER_TOKEN (END_OF_FILE, "end of file")                                      \
   TIGER_TOKEN (END_OF_LINE, "end of line")                                      \
-  TIGER_TOKEN (ASSIGN, ":=")                                                     \
+  TIGER_TOKEN (ASSIGN, ":=")                                                    \
   TIGER_TOKEN (ASTERISK, "*")                                                   \
   TIGER_TOKEN (COLON, ":")                                                      \
   TIGER_TOKEN (COMMA, ",")                                                      \
@@ -54,21 +54,23 @@ namespace Tiger
   TIGER_TOKEN_KEYWORD (DO, "do")                                                \
   TIGER_TOKEN_KEYWORD (ELSE, "else")                                            \
   TIGER_TOKEN_KEYWORD (END, "end")                                              \
+  TIGER_TOKEN_KEYWORD (FLOAT, "real")                                           \
   TIGER_TOKEN_KEYWORD (FOR, "for")                                              \
   TIGER_TOKEN_KEYWORD (FUNCTION, "function")                                    \
   TIGER_TOKEN_KEYWORD (IF, "if")                                                \
-  TIGER_TOKEN_KEYWORD (INT, "int")                                              \
   TIGER_TOKEN_KEYWORD (IN, "in")                                                \
+  TIGER_TOKEN_KEYWORD (INT, "int")                                              \
   TIGER_TOKEN_KEYWORD (LET, "let")                                              \
   TIGER_TOKEN_KEYWORD (NIL, "nil")                                              \
   TIGER_TOKEN_KEYWORD (OF, "of")                                                \
-  TIGER_TOKEN_KEYWORD (REAL, "real")                                            \
+  TIGER_TOKEN_KEYWORD (READ, "read")                                            \
   TIGER_TOKEN_KEYWORD (STRING, "string")                                        \
   TIGER_TOKEN_KEYWORD (THEN, "then")                                            \
   TIGER_TOKEN_KEYWORD (TO, "to")                                                \
   TIGER_TOKEN_KEYWORD (TYPE, "type")                                            \
   TIGER_TOKEN_KEYWORD (VAR, "var")                                              \
   TIGER_TOKEN_KEYWORD (WHILE, "while")                                          \
+  TIGER_TOKEN_KEYWORD (WRITE, "write")                                          \
                                                                                \
   TIGER_TOKEN (LAST_TOKEN, "<last-token-marker>")
 

@@ -80,14 +80,11 @@ tiger_langhook_parse_file (void)
 static tree
 tiger_langhook_type_for_mode (enum machine_mode mode, int unsignedp)
 {
-  if (mode == TYPE_MODE (float_type_node))
+   if (mode == TYPE_MODE (float_type_node))
     return float_type_node;
 
   if (mode == TYPE_MODE (double_type_node))
     return double_type_node;
-
-  if (mode == TYPE_MODE (real_type_node))
-    return real_type_node;
 
   if (mode == TYPE_MODE (intQI_type_node))
     return unsignedp ? unsigned_intQI_type_node : intQI_type_node;
@@ -112,7 +109,7 @@ tiger_langhook_type_for_mode (enum machine_mode mode, int unsignedp)
 
   if (COMPLEX_MODE_P (mode))
     {
-      if (mode == TYPE_MODE (complex_float_type_node))
+       if (mode == TYPE_MODE (complex_float_type_node))
 	return complex_float_type_node;
       if (mode == TYPE_MODE (complex_double_type_node))
 	return complex_double_type_node;

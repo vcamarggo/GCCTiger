@@ -8,6 +8,7 @@
 #include "coretypes.h"
 #include "tree.h"
 
+#include <string>
 #include <tr1/memory>
 
 namespace Tiger
@@ -28,28 +29,24 @@ public:
     gcc_assert (name.size () > 0);
   }
 
-  SymbolKind
-  get_kind () const
+  SymbolKind get_kind () const
   {
     return kind;
   }
 
-  std::string
-  get_name () const
+  std::string get_name () const
   {
     return name;
   }
 
-  void
-  set_tree_decl (Tree decl_)
+  void set_tree_decl (Tree decl_)
   {
     gcc_assert ((kind == VARIABLE && decl_.get_tree_code() == VAR_DECL)
                     || (kind == TYPENAME && decl_.get_tree_code() == TYPE_DECL));
     decl = decl_;
   }
 
-  Tree
-  get_tree_decl () const
+  Tree get_tree_decl () const
   {
     return decl;
   }

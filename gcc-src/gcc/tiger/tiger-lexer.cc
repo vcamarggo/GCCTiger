@@ -8,6 +8,10 @@
 
 #include <cstdlib>
 #include <algorithm>
+#include <iostream>
+using namespace std;
+//remover 11 e 12
+
 
 namespace Tiger
 {
@@ -87,10 +91,11 @@ Lexer::classify_keyword (const std::string &str)
 {
   const std::string *last = keyword_index + num_keywords;
   const std::string *idx = std::lower_bound (keyword_index, last, str);
-
-  if (idx == last || str != *idx)
+	//cout << "resultado " << idx - keyword_index; 	
+	//num_key - idx 8   if ta com problema
+  if (idx == last || str != *idx){
     return IDENTIFIER;
-  else
+}  else
     {
       return keyword_keys[idx - keyword_index];
     }
@@ -134,34 +139,35 @@ Lexer::build_token ()
 	// ***************
 	case '/':
           if (peek_input () == '*') {
-			comment++;
+	      comment++;
+              skip_input();
+              current_column++;
             while(peek_input() != EOF) {
-                skip_input();
+		if(peek_input() == '/'){
+			skip_input();
+			current_column++;
+			if(peek_input() == '*'){
+				skip_input();
+				current_column++;
+				comment++;
+			}
+		}else if(peek_input() == '*'){
+		    skip_input();
+		    current_column++;
+		    if(peek_input() == '/'){
+			current_column++;
+			skip_input();
+			comment--;
+			if(comment==0){
+				current_column++;
+				break;
+			}
+    		    }
+                }
                 current_column++;
-				if(peek_input() == '/'){
-					skip_input();
-					current_column++;
-				if(peek_input() == '*'){
-					skip_input();
-					current_column++;
-					comment++;
-					}
-				}
-				if(peek_input() == '*'){
-                    skip_input();
-                    current_column++;
-                    if(peek_input() == '/'){
-                        current_column++;
-						skip_input();
-						comment--;
-						if(comment==0){
-							current_column++;
-							break;
-						}
-                    }
-                }  
-            }
-        }
+                skip_input();
+	     }
+	  }
           else{
 	      current_column++;
 	      return Token::make (SLASH, loc);

@@ -124,13 +124,13 @@ build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, Tree t3,
 struct TreeExpList
 {
 public:
-  TreeExpList () : list (alloc_exp_list ()) {}
+  TreeExpList () : list (alloc_stmt_list ()) {}
   TreeExpList (Tree t) : list (t.get_tree ()) {}
 
   void
   append (Tree t)
   {
-    append_to_expression_list (t.get_tree (), &list);
+    append_to_statement_list (t.get_tree (), &list);
   }
 
   tree
