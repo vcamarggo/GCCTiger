@@ -24,14 +24,14 @@
 #include "print-tree.h"
 #include "stor-layout.h"
 #include "fold-const.h"
-
+#include <iostream>
+using namespace std;
 namespace Tiger
 {
 
 struct Parser
 {
 private:
-  void skip_after_end_of_line ();
   void skip_after_end ();
   void skip_after_colon ();
   void skip_after_semicolon ();
@@ -160,21 +160,6 @@ private:
   std::vector<BlockChain> stack_block_chain;
 };
 
-/* OK */
-void
-Parser::skip_after_end_of_line ()
-{
-  const_TokenPtr t = lexer.peek_token ();
-
-  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END_OF_LINE && t->get_id () != Tiger::SEMICOLON)
-    {
-      lexer.skip_token ();
-      t = lexer.peek_token ();
-    }
-
-  if (t->get_id () == Tiger::END_OF_LINE || t->get_id () == Tiger::SEMICOLON)
-    lexer.skip_token ();
-}
 
 /* OK */
 void
@@ -182,7 +167,7 @@ Parser::skip_after_colon ()
 {
   const_TokenPtr t = lexer.peek_token ();
 
-  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END_OF_LINE && t->get_id () != Tiger::COLON)
+  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::COLON)
     {
       lexer.skip_token ();
       t = lexer.peek_token ();
@@ -269,7 +254,9 @@ Parser::parse_program ()
   main_fndecl = build_fn_decl ("main", main_fndecl_type);
 
   // Enter top level scope
+  
   enter_scope ();
+ 
   // program -> exp*
   parse_exp_seq (&Parser::done_end_of_file);
   // Append "return 0;"
@@ -317,7 +304,7 @@ bool
 Parser::done_end ()
 {
   const_TokenPtr t = lexer.peek_token ();
-  return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE  || t->get_id () == Tiger::RIGHT_PAREN);
+  return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE);
 }
 
 bool
@@ -835,7 +822,6 @@ Parser::parse_assignment_exp ()
   const_TokenPtr assign_tok = expect_token (Tiger::ASSIGN);
   if (assign_tok == NULL)
     {
-      skip_after_end_of_line ();
       return Tree::error ();
     }
 
@@ -935,11 +921,6 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 Tree
 Parser::parse_if_exp ()
 {
-  if (!skip_token (Tiger::IF))
-    {
-      skip_after_end ();
-      return Tree::error ();
-    }
 
   Tree expr = parse_boolean_exp ();
 
@@ -1026,18 +1007,8 @@ Parser::build_while_exp (Tree bool_expr, Tree while_body)
 Tree
 Parser::parse_while_exp ()
 {
-  if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      skip_after_end ();
-      return Tree::error ();
-    }
 
   Tree expr = parse_boolean_exp ();
-  if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      skip_after_end ();
-      return Tree::error ();
-    }
 
   if (!skip_token (Tiger::DO))
     {
@@ -1045,23 +1016,11 @@ Parser::parse_while_exp ()
       return Tree::error ();
     }
 
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      skip_after_end ();
-      return Tree::error ();
-    }
   enter_scope ();
   parse_exp_seq (&Parser::done_end);
   TreeSymbolMapping while_body_tree_scope = leave_scope ();
 
   Tree while_body_exp = while_body_tree_scope.bind_expr;
-
-  if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      skip_after_end ();
-      return Tree::error ();
-    }
-
 
   return build_while_exp (expr, while_body_exp);
 }
@@ -1364,7 +1323,7 @@ Parser::parse_write_function ()
 }
 
 Tree
-Parser::parse_exp ()
+Parser::parse_exp () 
 {
   return parse_exp (/* right_binding_power */ 0);
 }
@@ -1376,13 +1335,7 @@ Parser::parse_exp (int right_binding_power)
 {
   const_TokenPtr current_token = lexer.peek_token ();
   lexer.skip_token ();
-  if(current_token->get_id () == Tiger::END_OF_LINE){
-	current_token = lexer.peek_token ();
-  	lexer.skip_token ();
-  } else if (current_token->get_id () == Tiger::END_OF_FILE){
-	return Tree::error ();
-  }
-
+ 
   Tree expr = null_denotation (current_token);
 	//trabalhar aqui
   if (expr.is_error ())

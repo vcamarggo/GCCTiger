@@ -89,17 +89,14 @@ const int num_keywords = sizeof (keyword_index) / sizeof (*keyword_index);
 TokenId
 Lexer::classify_keyword (const std::string &str)
 {
-  const std::string *last = keyword_index + num_keywords;
-  const std::string *idx = std::lower_bound (keyword_index, last, str);
-	//cout << "resultado " << idx - keyword_index; 	
-	//num_key - idx 8   if ta com problema
-  if (idx == last || str != *idx){
-    return IDENTIFIER;
-}  else
-    {
-      return keyword_keys[idx - keyword_index];
-    }
+	for(int i = 0; i< num_keywords;i++){
+		if (keyword_index[i].find(str, 0) != std::string::npos){
+		    return keyword_keys[i];
+		 }
+	}
+	return IDENTIFIER;
 }
+
 
 TokenPtr
 Lexer::build_token ()
@@ -125,7 +122,7 @@ Lexer::build_token ()
 	  current_line++;
 	  current_column = 1;
 	  linemap_line_start (::line_table, current_line, max_column_hint);
-	  return Token::make (END_OF_LINE, loc);
+	  continue;
 	case ' ':
 	  current_column++;
 	  continue;

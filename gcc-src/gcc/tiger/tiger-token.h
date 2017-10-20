@@ -20,7 +20,6 @@ namespace Tiger
 #define TIGER_TOKEN_LIST                                                        \
   TIGER_TOKEN (FIRST_TOKEN, "<first-token-marker>")                             \
   TIGER_TOKEN (END_OF_FILE, "end of file")                                      \
-  TIGER_TOKEN (END_OF_LINE, "end of line")                                      \
   TIGER_TOKEN (ASSIGN, ":=")                                                    \
   TIGER_TOKEN (ASTERISK, "*")                                                   \
   TIGER_TOKEN (COLON, ":")                                                      \
