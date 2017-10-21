@@ -79,7 +79,7 @@ private:
   SymbolPtr query_variable (const std::string &name, location_t loc);
   SymbolPtr query_integer_variable (const std::string &name, location_t loc);
 
-  void parse_exp_seq (bool (Parser::*done) ());
+  Tree parse_exp_seq (bool (Parser::*done) ());
 
   bool done_end ();
   bool done_end_or_else ();
@@ -315,15 +315,18 @@ Parser::done_end_or_else ()
 	  || t->get_id () == Tiger::END_OF_FILE);
 }
 
-void
+Tree
 Parser::parse_exp_seq (bool (Parser::*done) ())
 {
   // Parse exps until done and append to the current exp list;
+  Tree lastTree;
   while (!(this->*done) ())
     {
       Tree exp = parse_exp ();
+      lastTree = exp;
       get_current_exp_list ().append (exp);
     }
+ return lastTree;
 }
 
 void
@@ -365,7 +368,7 @@ Parser::leave_scope ()
   for (tree it = subblocks.first.get_tree (); it != NULL_TREE;
        it = BLOCK_CHAIN (it))
     BLOCK_SUPERCONTEXT (it) = new_block;
-
+        
   tree bind_expr
     = build3 (BIND_EXPR, void_type_node, var_decl_chain.first.get_tree (),
 	      current_exp_list.get_tree (), new_block);
@@ -575,11 +578,7 @@ Parser::print_type (Tree type)
 {
   gcc_assert (TYPE_P (type.get_tree ()));
 
-  if (type == void_type_node)
-    {
-      return "void";
-    }
-  else if (type == integer_type_node)
+  if (type == integer_type_node)
     {
       return "int";
     }
@@ -598,6 +597,10 @@ Parser::print_type (Tree type)
   else if (type == boolean_type_node)
     {
       return "boolean";
+    }
+  if (type == void_type_node)
+    {
+      return "void";
     }
   else
     {
@@ -921,17 +924,18 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 Tree
 Parser::parse_if_exp ()
 {
-
+	
   Tree expr = parse_boolean_exp ();
-
+  
   skip_token (Tiger::THEN);
-
   enter_scope ();
-  parse_exp_seq (&Parser::done_end_or_else);
+  
+  cout << "Type da expressao " << print_type (parse_exp_seq (&Parser::done_end_or_else).get_type());
+  //Trabalhar aqui e passar o type para dentro do leave scope
 
   TreeSymbolMapping then_tree_scope = leave_scope ();
   Tree then_exp = then_tree_scope.bind_expr;
-
+  
   Tree else_exp;
   const_TokenPtr tok = lexer.peek_token ();
   if (tok->get_id () == Tiger::ELSE)
@@ -943,7 +947,7 @@ Parser::parse_if_exp ()
       parse_exp_seq (&Parser::done_end);
       TreeSymbolMapping else_tree_scope = leave_scope ();
       else_exp = else_tree_scope.bind_expr;
-	//testar else exp
+		//testar else exp	
 		if(then_exp.get_type() != else_exp.get_type()){
 			skip_after_end ();
 			return Tree::error ();
@@ -1008,7 +1012,7 @@ Tree
 Parser::parse_while_exp ()
 {
 
-  Tree expr = parse_boolean_exp ();
+  Tree conditional_expr = parse_boolean_exp ();
 
   if (!skip_token (Tiger::DO))
     {
@@ -1022,7 +1026,7 @@ Parser::parse_while_exp ()
 
   Tree while_body_exp = while_body_tree_scope.bind_expr;
 
-  return build_while_exp (expr, while_body_exp);
+  return build_while_exp (conditional_expr, while_body_exp);
 }
 
 Tree
@@ -1337,7 +1341,6 @@ Parser::parse_exp (int right_binding_power)
   lexer.skip_token ();
  
   Tree expr = null_denotation (current_token);
-	//trabalhar aqui
   if (expr.is_error ())
     return Tree::error ();
 
