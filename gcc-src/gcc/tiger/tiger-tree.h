@@ -124,6 +124,14 @@ build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2)
 }
 
 inline Tree
+build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, std::string tipo)
+{
+  Tree temp = build2_loc (loc, tc, type.get_tree (), t1.get_tree (), t2.get_tree ());
+  temp.set_exp_type(tipo);
+  return temp;
+}
+
+inline Tree
 build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, Tree t3)
 {
   return build3_loc (loc, tc, type.get_tree (), t1.get_tree (), t2.get_tree (),

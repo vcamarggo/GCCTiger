@@ -1,4 +1,4 @@
-/* error : types of then - else differ */
+/* OK */
 
 if (5>4) then 13 
 else if (6>4) 

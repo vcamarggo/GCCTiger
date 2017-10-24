@@ -915,13 +915,13 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
     }
 
   // FIXME - location
-  // talvez fazer o teste (if-else) aqui
   Tree endif_label_expr = build_tree (LABEL_EXPR, UNKNOWN_LOCATION,
 				      void_type_node, endif_label_decl, else_part.get_exp_type());	
   exp_list.append (endif_label_expr);
 
-   cout << "\n chegou com build com endif_label_expr do tipo: "<< endif_label_expr.get_exp_type();
-  return exp_list.get_tree ();
+   Tree retTree = exp_list.get_tree ();
+   retTree.set_exp_type(else_part.get_exp_type());
+  return retTree;
 }
 
 Tree
@@ -936,7 +936,7 @@ Parser::parse_if_exp ()
   TreeSymbolMapping then_tree_scope = leave_scope ();
   Tree then_exp = then_tree_scope.bind_expr;
   then_exp.set_exp_type (typeThen);
-
+  
   Tree else_exp;
   string typeElse;
   const_TokenPtr tok = lexer.peek_token ();
@@ -948,23 +948,19 @@ Parser::parse_if_exp ()
       const_TokenPtr last_of_expr = lexer.peek_token ();
 
       enter_scope ();
-      typeElse = parse_exp_seq (&Parser::done_end);
+      typeElse = parse_exp_seq (&Parser::done_end_or_else);
       TreeSymbolMapping else_tree_scope = leave_scope ();
       else_exp = else_tree_scope.bind_expr;
-
       else_exp.set_exp_type (typeElse);
 
-        cout << "\nelse_exp: " << else_exp.get_exp_type();
-		//testar else exp	
 		if(else_exp.get_exp_type() != then_exp.get_exp_type()){
 			error_at (last_of_expr->get_locus (),
-			"if type %s and else type %s differs",
+			"then exp type %s and else exp type %s differs",
 			then_exp.get_exp_type().c_str(), else_exp.get_exp_type().c_str());			
 			skip_after_end ();
 			return Tree::error ();
 		}
 	  }
- 
   return build_if_exp (expr, then_exp, else_exp);
 }
 
@@ -1016,6 +1012,10 @@ Parser::build_while_exp (Tree bool_expr, Tree while_body)
 		  end_of_while_label_decl);
   exp_list.append (end_of_while_label_expr);
 
+   Tree retTree = exp_list.get_tree ();
+   retTree.set_exp_type(while_body.get_exp_type());
+  return retTree;
+
   return exp_list.get_tree ();
 }
 
@@ -1032,11 +1032,12 @@ Parser::parse_while_exp ()
     }
 
   enter_scope ();
-  parse_exp_seq (&Parser::done_end);
+  string typeWhile = parse_exp_seq (&Parser::done_end);
   TreeSymbolMapping while_body_tree_scope = leave_scope ();
-
+  
   Tree while_body_exp = while_body_tree_scope.bind_expr;
-
+  while_body_exp.set_exp_type(typeWhile);
+  
   return build_while_exp (conditional_expr, while_body_exp);
 }
 
@@ -1496,7 +1497,8 @@ Parser::null_denotation (const_TokenPtr tok)
 		    tok->get_token_description ());
 	else
 	  lexer.skip_token ();
-	return Tree (expr, tok->get_locus ());
+
+	return Tree (expr, tok->get_locus (), expr.get_exp_type());
       }
     case Tiger::PLUS:
       {
@@ -1510,7 +1512,7 @@ Parser::null_denotation (const_TokenPtr tok)
 		      "operand of unary plus must be int or real but it is %s",
 		      print_type (expr.get_type ()));
 	    return Tree::error ();
-	  }
+	  } 
 	return Tree (expr, tok->get_locus ());
       }
 	 //case Tiger::LET:
@@ -1555,7 +1557,7 @@ Parser::null_denotation (const_TokenPtr tok)
 }
 
 Tree
-Parser::coerce_binary_arithmetic (const_TokenPtr tok, Tree *left, Tree *right)
+Parser::coerce_binary_arithmetic(const_TokenPtr tok, Tree *left, Tree *right)
 {
   Tree left_type = left->get_type ();
   Tree right_type = right->get_type ();
@@ -1594,7 +1596,7 @@ Parser::get_binary_handler (TokenId id)
 }
 
 Tree
-Parser::binary_plus (const_TokenPtr tok, Tree left)
+Parser::binary_plus(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_PLUS);
   if (right.is_error ())
@@ -1604,11 +1606,11 @@ Parser::binary_plus (const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (PLUS_EXPR, tok->get_locus (), tree_type, left, right);
+  return build_tree (PLUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
 }
 
 Tree
-Parser::binary_minus (const_TokenPtr tok, Tree left)
+Parser::binary_minus(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_MINUS);
   if (right.is_error ())
@@ -1618,11 +1620,11 @@ Parser::binary_minus (const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (MINUS_EXPR, tok->get_locus (), tree_type, left, right);
+  return build_tree (MINUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
 }
 
 Tree
-Parser::binary_mult (const_TokenPtr tok, Tree left)
+Parser::binary_mult(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_MUL);
   if (right.is_error ())
@@ -1632,11 +1634,11 @@ Parser::binary_mult (const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (MULT_EXPR, tok->get_locus (), tree_type, left, right);
+  return build_tree (MULT_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
 }
 
 Tree
-Parser::binary_div (const_TokenPtr tok, Tree left)
+Parser::binary_div(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_DIV);
   if (right.is_error ())
@@ -1647,7 +1649,7 @@ Parser::binary_div (const_TokenPtr tok, Tree left)
     {
       // Integer division (truncating, like in C)
       return build_tree (TRUNC_DIV_EXPR, tok->get_locus (), integer_type_node,
-			 left, right);
+			 left, right, print_type(left.get_type()));
     }
   else
     {
@@ -1658,13 +1660,13 @@ Parser::binary_div (const_TokenPtr tok, Tree left)
 
       gcc_assert (tree_type == float_type_node);
 
-      return build_tree (RDIV_EXPR, tok->get_locus (), tree_type, left, right);
+      return build_tree (RDIV_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
     }
 }
 
 
 Tree
-Parser::binary_equal (const_TokenPtr tok, Tree left)
+Parser::binary_equal(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_EQUAL);
   if (right.is_error ())
@@ -1675,11 +1677,11 @@ Parser::binary_equal (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (EQ_EXPR, tok->get_locus (), integer_type_node, left,
-		     right);
+		     right, "int");
 }
 
 Tree
-Parser::binary_different (const_TokenPtr tok, Tree left)
+Parser::binary_different(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_DIFFERENT);
   if (right.is_error ())
@@ -1690,11 +1692,11 @@ Parser::binary_different (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (NE_EXPR, tok->get_locus (), integer_type_node, left,
-		     right);
+		     right, "int");
 }
 
 Tree
-Parser::binary_lower_than (const_TokenPtr tok, Tree left)
+Parser::binary_lower_than(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_LOWER_THAN);
   if (right.is_error ())
@@ -1705,11 +1707,11 @@ Parser::binary_lower_than (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (LT_EXPR, tok->get_locus (), integer_type_node, left,
-		     right);
+		     right, "int");
 }
 
 Tree
-Parser::binary_lower_equal (const_TokenPtr tok, Tree left)
+Parser::binary_lower_equal(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_LOWER_EQUAL);
   if (right.is_error ())
@@ -1720,11 +1722,11 @@ Parser::binary_lower_equal (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (LE_EXPR, tok->get_locus (), integer_type_node, left,
-		     right);
+		     right, "int");
 }
 
 Tree
-Parser::binary_greater_than (const_TokenPtr tok, Tree left)
+Parser::binary_greater_than(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_GREATER_THAN);
   if (right.is_error ())
@@ -1735,11 +1737,11 @@ Parser::binary_greater_than (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (GT_EXPR, tok->get_locus (), integer_type_node, left,
-		     right);
+		     right, "int");
 }
 
 Tree
-Parser::binary_greater_equal (const_TokenPtr tok, Tree left)
+Parser::binary_greater_equal(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_GREATER_EQUAL);
   if (right.is_error ())
@@ -1750,11 +1752,11 @@ Parser::binary_greater_equal (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (GE_EXPR, tok->get_locus (), integer_type_node, left,
-		     right);
+		     right, "int");
 }
 
 bool
-Parser::check_logical_operands (const_TokenPtr tok, Tree left, Tree right)
+Parser::check_logical_operands(const_TokenPtr tok, Tree left, Tree right)
 {
   if (left.get_type () != integer_type_node
       || right.get_type () != integer_type_node)
@@ -1771,7 +1773,7 @@ Parser::check_logical_operands (const_TokenPtr tok, Tree left, Tree right)
 }
 
 Tree
-Parser::binary_logical_and (const_TokenPtr tok, Tree left)
+Parser::binary_logical_and(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_LOGICAL_AND);
   if (right.is_error ())
@@ -1781,11 +1783,11 @@ Parser::binary_logical_and (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (TRUTH_ANDIF_EXPR, tok->get_locus (), integer_type_node,
-		     left, right);
+		     left, right, "int");
 }
 
 Tree
-Parser::binary_logical_or (const_TokenPtr tok, Tree left)
+Parser::binary_logical_or(const_TokenPtr tok, Tree left)
 {
   Tree right = parse_exp (LBP_LOGICAL_OR);
   if (right.is_error ())
@@ -1795,11 +1797,11 @@ Parser::binary_logical_or (const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (TRUTH_ORIF_EXPR, tok->get_locus (), integer_type_node,
-		     left, right);
+		     left, right, "int");
 }
 
 Tree
-Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
+Parser::binary_array_ref(const const_TokenPtr tok, Tree left)
 {
   Tree right = parse_integer_exp ();
   if (right.is_error ())
@@ -1820,7 +1822,7 @@ Parser::binary_array_ref (const const_TokenPtr tok, Tree left)
 }
 
 Tree
-Parser::binary_field_ref (const const_TokenPtr tok, Tree left)
+Parser::binary_field_ref(const const_TokenPtr tok, Tree left)
 {
   const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
@@ -1862,7 +1864,7 @@ Parser::binary_field_ref (const const_TokenPtr tok, Tree left)
 // This is invoked when a token (likely an operand) is found at a (likely
 // infix) non-prefix position
 Tree
-Parser::left_denotation (const_TokenPtr tok, Tree left)
+Parser::left_denotation(const_TokenPtr tok, Tree left)
 {
   BinaryHandler binary_handler = get_binary_handler (tok->get_id ());
   if (binary_handler == NULL)
@@ -1875,7 +1877,7 @@ Parser::left_denotation (const_TokenPtr tok, Tree left)
 }
 
 Tree
-Parser::parse_boolean_exp ()
+Parser::parse_boolean_exp()
 {
   Tree expr = parse_exp ();
   if (expr.is_error ())
@@ -1891,7 +1893,7 @@ Parser::parse_boolean_exp ()
 }
 
 Tree
-Parser::parse_integer_exp ()
+Parser::parse_integer_exp()
 {
   Tree expr = parse_exp ();
   if (expr.is_error ())
@@ -1908,7 +1910,7 @@ Parser::parse_integer_exp ()
 }
 
 Tree
-Parser::parse_exp_naming_variable ()
+Parser::parse_exp_naming_variable()
 {
   Tree expr = parse_exp ();
   if (expr.is_error ())
@@ -1925,7 +1927,7 @@ Parser::parse_exp_naming_variable ()
 }
 
 Tree
-Parser::parse_lhs_assignment_exp ()
+Parser::parse_lhs_assignment_exp()
 {
   return parse_exp_naming_variable();
 }
