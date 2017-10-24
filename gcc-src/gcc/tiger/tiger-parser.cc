@@ -79,7 +79,7 @@ private:
   SymbolPtr query_variable (const std::string &name, location_t loc);
   SymbolPtr query_integer_variable (const std::string &name, location_t loc);
 
-  Tree parse_exp_seq (bool (Parser::*done) ());
+  string parse_exp_seq (bool (Parser::*done) ());
 
   bool done_end ();
   bool done_end_or_else ();
@@ -315,18 +315,18 @@ Parser::done_end_or_else ()
 	  || t->get_id () == Tiger::END_OF_FILE);
 }
 
-Tree
+string
 Parser::parse_exp_seq (bool (Parser::*done) ())
 {
   // Parse exps until done and append to the current exp list;
-  Tree lastTree;
+  string lastTreeType;
   while (!(this->*done) ())
     {
       Tree exp = parse_exp ();
-      lastTree = exp;
+      lastTreeType = exp.get_exp_type ();
       get_current_exp_list ().append (exp);
     }
- return lastTree;
+ return lastTreeType;
 }
 
 void
@@ -865,6 +865,7 @@ Parser::build_label_decl (const char *name, location_t loc)
 Tree
 Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 {
+
   if (bool_expr.is_error ())
     return Tree::error ();
 
@@ -877,14 +878,14 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
   Tree endif_label_decl = build_label_decl ("end_if", then_part.get_locus ());
 
   Tree goto_then = build_tree (GOTO_EXPR, bool_expr.get_locus (),
-			       void_type_node, then_label_decl);
+			       void_type_node, then_label_decl, "build goto then");
   Tree goto_endif = build_tree (GOTO_EXPR, bool_expr.get_locus (),
-				void_type_node, endif_label_decl);
+				void_type_node, endif_label_decl, "build goto endif");
 
   Tree goto_else_or_endif;
   if (!else_part.is_null ())
     goto_else_or_endif = build_tree (GOTO_EXPR, bool_expr.get_locus (),
-				     void_type_node, else_label_decl);
+				     void_type_node, else_label_decl, "build goto else or endif");
   else
     goto_else_or_endif = goto_endif;
 
@@ -892,11 +893,11 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 
   Tree cond_expr
     = build_tree (COND_EXPR, bool_expr.get_locus (), void_type_node, bool_expr,
-		  goto_then, goto_else_or_endif);
+		  goto_then, goto_else_or_endif, "build cond expr");
   exp_list.append (cond_expr);
 
   Tree then_label_expr = build_tree (LABEL_EXPR, then_part.get_locus (),
-				     void_type_node, then_label_decl);
+				     void_type_node, then_label_decl, "build then");
   exp_list.append (then_label_expr);
 
   exp_list.append (then_part);
@@ -907,17 +908,19 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
       exp_list.append (goto_endif);
 
       Tree else_label_expr = build_tree (LABEL_EXPR, else_part.get_locus (),
-					 void_type_node, else_label_decl);
+					 void_type_node, else_label_decl, "build else label");
       exp_list.append (else_label_expr);
 
       exp_list.append (else_part);
     }
 
   // FIXME - location
+  // talvez fazer o teste (if-else) aqui
   Tree endif_label_expr = build_tree (LABEL_EXPR, UNKNOWN_LOCATION,
-				      void_type_node, endif_label_decl);
+				      void_type_node, endif_label_decl, else_part.get_exp_type());	
   exp_list.append (endif_label_expr);
 
+   cout << "\n chegou com build com endif_label_expr do tipo: "<< endif_label_expr.get_exp_type();
   return exp_list.get_tree ();
 }
 
@@ -926,34 +929,42 @@ Parser::parse_if_exp ()
 {
 	
   Tree expr = parse_boolean_exp ();
-  
+
   skip_token (Tiger::THEN);
   enter_scope ();
-  
-  cout << "Type da expressao " << print_type (parse_exp_seq (&Parser::done_end_or_else).get_type());
-  //Trabalhar aqui e passar o type para dentro do leave scope
-
+  string typeThen = parse_exp_seq (&Parser::done_end_or_else);
   TreeSymbolMapping then_tree_scope = leave_scope ();
   Tree then_exp = then_tree_scope.bind_expr;
-  
+  then_exp.set_exp_type (typeThen);
+
   Tree else_exp;
+  string typeElse;
   const_TokenPtr tok = lexer.peek_token ();
   if (tok->get_id () == Tiger::ELSE)
     {
       // Consume 'else'
       skip_token (Tiger::ELSE);
+      
+      const_TokenPtr last_of_expr = lexer.peek_token ();
 
       enter_scope ();
-      parse_exp_seq (&Parser::done_end);
+      typeElse = parse_exp_seq (&Parser::done_end);
       TreeSymbolMapping else_tree_scope = leave_scope ();
       else_exp = else_tree_scope.bind_expr;
+
+      else_exp.set_exp_type (typeElse);
+
+        cout << "\nelse_exp: " << else_exp.get_exp_type();
 		//testar else exp	
-		if(then_exp.get_type() != else_exp.get_type()){
+		if(else_exp.get_exp_type() != then_exp.get_exp_type()){
+			error_at (last_of_expr->get_locus (),
+			"if type %s and else type %s differs",
+			then_exp.get_exp_type().c_str(), else_exp.get_exp_type().c_str());			
 			skip_after_end ();
 			return Tree::error ();
 		}
 	  }
-
+ 
   return build_if_exp (expr, then_exp, else_exp);
 }
 
@@ -1456,7 +1467,7 @@ Parser::null_denotation (const_TokenPtr tok)
       // FIXME : check ranges
       return Tree (build_int_cst_type (integer_type_node,
 				       atoi (tok->get_str ().c_str ())),
-		   tok->get_locus ());
+		   tok->get_locus (), "int");
       break;
      case Tiger::REAL_LITERAL:
       {
@@ -1473,7 +1484,7 @@ Parser::null_denotation (const_TokenPtr tok)
 	std::string str = tok->get_str ();
 	const char *c_str = str.c_str ();
 	return Tree (build_string_literal (::strlen (c_str) + 1, c_str),
-		     tok->get_locus ());
+		     tok->get_locus (), "string");
       }
       break;
     case Tiger::LEFT_PAREN:
