@@ -926,8 +926,8 @@ Parser::parse_if_exp()
   Tree expr = parse_boolean_exp ();
 
   skip_token (Tiger::THEN);
-  const_TokenPtr tok = lexer.peek_token ();
-
+  
+  const_TokenPtr tokThen = lexer.peek_token ();
   enter_scope ();
   string typeThen = parse_exp_seq (&Parser::done_end_or_else);
   TreeSymbolMapping then_tree_scope = leave_scope ();
@@ -936,6 +936,7 @@ Parser::parse_if_exp()
   
   Tree else_exp;
   string typeElse;
+  const_TokenPtr tok = lexer.peek_token ();
   if (tok->get_id () == Tiger::ELSE)
     {
       // Consume 'else'
@@ -957,8 +958,7 @@ Parser::parse_if_exp()
 			return Tree::error ();
 		}
    } else if (then_exp.get_exp_type() != "void") {
-			cout << then_exp.get_exp_type() << endl;
-			error_at (tok->get_locus (),
+			error_at (tokThen->get_locus (),
 			"then body must no return value, but it returned %s type",
 			then_exp.get_exp_type().c_str());			
 			skip_after_end ();
@@ -1260,10 +1260,8 @@ Parser::parse_write_function()
   // write_statement -> "write" expression ";"
 
 
-  skip_token (Tiger::LEFT_PAREN);
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
-  skip_token (Tiger::RIGHT_PAREN);
   
   if (expr.is_error ())
     return Tree::error ();
@@ -1289,7 +1287,7 @@ Parser::parse_write_function()
 }
 
 Tree
-Parser::parse_exp () 
+Parser::parse_exp() 
 {
   return parse_exp (/* right_binding_power */ 0);
 }
@@ -1355,7 +1353,7 @@ enum binding_powers
 
 // This implements priorities
 int
-Parser::left_binding_power (const_TokenPtr token)
+Parser::left_binding_power(const_TokenPtr token)
 {
   switch (token->get_id ())
     {
