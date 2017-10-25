@@ -1,2 +1,0 @@
-/* error : body of while not unit  - acho que esse nao era pra dar erro*/
-while(10 > 5) do (5+6)
