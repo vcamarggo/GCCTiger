@@ -1,0 +1,15 @@
+/* OK */
+
+let
+var a : string := "X eh maior"
+var b : string := "Y eh maior"
+var x : int := 1
+var y : int := 2
+in
+x := 3
+y := x
+if (x = y) then
+write "sao iguais"
+else
+write "sao diferentes"
+end

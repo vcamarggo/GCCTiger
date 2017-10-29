@@ -90,7 +90,7 @@ TokenId
 Lexer::classify_keyword (const std::string &str)
 {
 	for(int i = 0; i< num_keywords;i++){
-		if (keyword_index[i].find(str, 0) != std::string::npos){
+		if (keyword_index[i] == str){
 		    return keyword_keys[i];
 		 }
 	}
