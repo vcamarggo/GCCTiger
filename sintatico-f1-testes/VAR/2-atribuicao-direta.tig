@@ -1,0 +1,7 @@
+/* OK */
+
+let
+var a := "X eh maior"
+in
+print (a)
+end

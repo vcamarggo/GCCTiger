@@ -63,6 +63,7 @@ private:
 			    Tree for_body_exp_list);
 
   const char *print_type (Tree type);
+  Tree retrieve_type (string type);
 
   TreeExpList &get_current_exp_list ();
 
@@ -543,12 +544,13 @@ Parser::parse_variable_declaration()
 
   sym = query_variable (identifier->get_str (), identifier->get_locus ());
 
+  
   Tree decl;
   if(typeNulo){
      
   decl = build_decl (identifier->get_locus (), VAR_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
-			  expr.get_tree ());
+			  retrieve_type(expr.get_exp_type ()).get_tree ());
   } else {
     decl = build_decl (identifier->get_locus (), VAR_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
@@ -648,14 +650,14 @@ is_array_type (Tree type)
 }
 
 bool
-is_record_type (Tree type)
+is_record_type(Tree type)
 {
   gcc_assert (TYPE_P (type.get_tree ()));
   return type.get_tree_code () == RECORD_TYPE;
 }
 
 const char *
-Parser::print_type (Tree type)
+Parser::print_type(Tree type)
 {
   gcc_assert (TYPE_P (type.get_tree ()));
 
@@ -665,7 +667,7 @@ Parser::print_type (Tree type)
     }
   else if (type == float_type_node)
     {
-      return "real";
+      return "float";
     }
   else if (is_string_type (type))
     {
@@ -675,10 +677,6 @@ Parser::print_type (Tree type)
     {
       return "array";
     }
-  else if (type == boolean_type_node)
-    {
-      return "boolean";
-    }
   if (type == void_type_node)
     {
       return "void";
@@ -687,6 +685,29 @@ Parser::print_type (Tree type)
     {
       return "<<unknown-type>>";
     }
+}
+
+Tree
+Parser::retrieve_type(string type)
+{
+  cout <<"tipo da exp " << type <<endl;
+  if (type == "int" )
+    {
+      return integer_type_node;
+    }
+  else if (type == "float")
+    {
+      return float_type_node;
+    }
+  else if (type == "string")
+    {
+      return build_pointer_type (char_type_node);
+    }
+  else if (type == "void")
+    {
+      return void_type_node;
+    }
+   return NULL;
 }
 
 /*
@@ -1552,7 +1573,7 @@ Parser::null_denotation(const_TokenPtr tok)
 			   TYPE_MODE (float_type_node));
 
 	return Tree (build_real (float_type_node, real_value),
-		     tok->get_locus ());
+		     tok->get_locus (), "float");
       }
       break;
     case Tiger::STRING_LITERAL:
@@ -1560,7 +1581,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	std::string str = tok->get_str ();
 	const char *c_str = str.c_str ();
 	return Tree (build_string_literal (::strlen (c_str) + 1, c_str),
-		     tok->get_locus (), "string");
+		     tok->get_locus (), "string");//teste
       }
       break;
     case Tiger::LEFT_PAREN:
@@ -1998,7 +2019,6 @@ Parser::parse_exp_naming_variable()
   Tree expr = parse_exp ();
   if (expr.is_error ())
     return expr;
-  cout << "a parte que falei pra mudar";
   // talvez mudar aqui
   if (expr.get_tree_code () != MODIFY_EXPR && expr.get_tree_code () != ARRAY_REF
       && expr.get_tree_code () != COMPONENT_REF)
