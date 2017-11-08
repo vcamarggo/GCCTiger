@@ -1,0 +1,7 @@
+let
+var a : string := "1"
+var i := 20
+in
+i := ord(a)
+if i < 10  then print ("funcionou") else print ("nao funcionou")
+end

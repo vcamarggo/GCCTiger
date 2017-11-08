@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int *iniciaArray(int size, int init)
 {int i;
@@ -18,18 +19,13 @@ int *allocaRegistro(int size)
 
 struct string {int length; unsigned char chars[1];};
 
-int stringIgual(struct string *s, struct string *t)
-{int i;
- if (s==t) return 1;
- if (s->length!=t->length) return 0;
- for(i=0;i<s->length;i++) if (s->chars[i]!=t->chars[i]) return 0;
- return 1;
+int stringIgual(char *s, char *t)
+{ return strcmp(s,t);
 }
 
-void printa(struct string *s)
-{int i; unsigned char *p=s->chars;
- if(s->length > 256){puts(s);}else
- for(i=0;i<s->length;i++,p++) putchar(*p);
+void printa(char *s)
+{
+puts(s);
 }
 
 void limpaOut()
@@ -48,11 +44,13 @@ void principal()
    }
 }
 
-int chartoint(struct string *s)
+int chartoint(char *s)
 {
- principal();
- if (s->length==0) return -1;
- else return s->chars[0];
+  if(s== NULL || strlen(s) == 0){
+     return -1;
+  }
+  else
+     return atoi(s);
 }
 
 struct string *inttochar(int i)
@@ -63,10 +61,9 @@ struct string *inttochar(int i)
  return consts+i;
 }
 
-int tamanho(struct string *s)
+int tamanho(char *s)
 { 
- if(s->length > 256){return strlen(s);}else
- return s->length;
+ return strlen(s);
 }
 
 struct string *subpalavra(struct string *s, int first, int n)
@@ -108,10 +105,12 @@ int not(int i)
 #undef getchar
 
 
-struct string *pegachar()
-{ principal();
-int i=getc(stdin);
- if (i==EOF) return &empty;
- else return consts+i;
+char *pegachar()
+{
+char *str;
+str = (char *) malloc (sizeof(char)*2);
+scanf( "%1s",str);
+str[1] = '\0';
+return str;
 }
 

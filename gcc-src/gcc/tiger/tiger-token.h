@@ -70,6 +70,7 @@ namespace Tiger
   TIGER_TOKEN_KEYWORD (ORD, "ord")                                              \
   TIGER_TOKEN_KEYWORD (READ, "getchar")                                         \
   TIGER_TOKEN_KEYWORD (SIZE, "size")                                            \
+  TIGER_TOKEN_KEYWORD (STRCMP, "strcmp")                                        \
   TIGER_TOKEN_KEYWORD (STRING, "string")                                        \
   TIGER_TOKEN_KEYWORD (SUBSTRING, "substring")                                  \
   TIGER_TOKEN_KEYWORD (THEN, "then")                                            \

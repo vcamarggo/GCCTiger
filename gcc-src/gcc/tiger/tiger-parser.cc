@@ -60,6 +60,7 @@ private:
   Tree get_chr_addr ();
   Tree get_size_addr ();
   Tree get_substring_addr ();
+  Tree get_strcmp_addr ();
   Tree get_concat_addr ();
   Tree get_not_addr ();
   Tree get_exit_addr ();
@@ -128,7 +129,7 @@ private:
 
 public:
   Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), getchar_fn (), flush_fn (),
-  ord_fn (), chr_fn (), size_fn (), substring_fn (), not_fn (), concat_fn (), exit_fn()
+  ord_fn (), chr_fn (), size_fn (), substring_fn (), strcmp_fn (), not_fn (), concat_fn (), exit_fn()
   {
   }
 
@@ -157,6 +158,7 @@ public:
   Tree parse_chr_function ();
   Tree parse_size_function ();
   Tree parse_substring_function ();
+  Tree parse_strcmp_function ();
   Tree parse_not_function ();
   Tree parse_concat_function ();
   Tree parse_exit_function ();
@@ -179,6 +181,7 @@ private:
   Tree chr_fn;
   Tree size_fn;
   Tree substring_fn;
+  Tree strcmp_fn;
   Tree not_fn;
   Tree concat_fn;
   Tree exit_fn;
@@ -720,7 +723,6 @@ Parser::print_type(Tree type)
 Tree
 Parser::retrieve_type(string type)
 {
-  cout <<"tipo da exp " << type <<endl;
   if (type == "int" )
     {
       return integer_type_node;
@@ -1410,11 +1412,10 @@ Parser::parse_exit_function ()
 }
 
 
-
 Tree
-Parser::get_size_addr ()
+Parser::get_strcmp_addr ()
 {
-  if (getchar_fn.is_null ())
+  if (strcmp_fn.is_null ())
     {
       tree fndecl_type_param[] = {
 	build_pointer_type (
@@ -1425,14 +1426,94 @@ Parser::get_size_addr ()
 	= build_varargs_function_type_array (integer_type_node, 1,
 					     fndecl_type_param);
 
-      tree getchar_fn_decl = build_fn_decl ("tamanho", fndecl_type);
-      DECL_EXTERNAL (getchar_fn_decl) = 1;
+      tree strcmp_fn_decl = build_fn_decl ("stringIgual", fndecl_type);
+      DECL_EXTERNAL (strcmp_fn_decl) = 1;
 
-      getchar_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), getchar_fn_decl);
+      strcmp_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), strcmp_fn_decl);
     }
 
-  return getchar_fn;
+  return strcmp_fn;
+}
+
+Tree
+Parser::parse_strcmp_function ()
+{
+ 
+ if (!skip_token (Tiger::LEFT_PAREN))
+    {
+      return Tree::error ();
+    }
+  const_TokenPtr first_of_expr = lexer.peek_token ();
+  Tree expr1 = parse_exp ();
+  
+   if (expr1.is_error ())
+    return Tree::error ();
+
+
+   if (!skip_token (Tiger::COMMA))
+    {
+      return Tree::error ();
+    }
+
+  const_TokenPtr second_of_expr = lexer.peek_token ();
+   Tree expr2 = parse_exp ();
+  
+   if (expr2.is_error ())
+    return Tree::error ();
+
+   if (!skip_token (Tiger::RIGHT_PAREN))
+    {
+      return Tree::error ();
+    }
+
+  if (!is_string_type (expr1.get_type ())){
+     error_at (first_of_expr->get_locus (),
+		"type string is expected at first strcmp operand, but value is of type %s",
+		print_type (expr1.get_type ()));
+      return Tree::error ();
+  } else if(!is_string_type (expr2.get_type ())){
+     error_at (second_of_expr->get_locus (),
+		"type string is expected at second strcmp operand, but value is of type %s",
+		print_type (expr2.get_type ()));
+      return Tree::error ();
+    } else {
+      tree args[] = {expr1.get_tree (), expr2.get_tree ()};
+
+      Tree strcmp_fn = get_strcmp_addr ();
+
+      tree stmt
+	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
+				strcmp_fn.get_tree (), 2, args);
+      return stmt;
+    }
+  
+  gcc_unreachable ();
+}
+
+
+Tree
+Parser::get_size_addr ()
+{
+  if (size_fn.is_null ())
+    {
+      tree fndecl_type_param[] = {
+	build_pointer_type (
+	  build_qualified_type (char_type_node,
+				TYPE_QUAL_CONST)) /* const char* */
+      };
+      tree fndecl_type
+	= build_varargs_function_type_array (integer_type_node, 1,
+					     fndecl_type_param);
+
+      tree size_fn_decl = build_fn_decl ("tamanho", fndecl_type);
+      DECL_EXTERNAL (size_fn_decl) = 1;
+
+      size_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), size_fn_decl);
+    }
+
+  return size_fn;
 }
 
 Tree
@@ -1466,6 +1547,69 @@ Parser::parse_size_function ()
     } else {
       error_at (first_of_expr->get_locus (),
 		"type string is expected size operand, but value is of type %s",
+		print_type (expr.get_type ()));
+      return Tree::error ();
+    }
+  
+  gcc_unreachable ();
+}
+
+Tree
+Parser::get_ord_addr ()
+{
+  if (ord_fn.is_null ())
+    {
+      tree fndecl_type_param[] = {
+	build_pointer_type (
+	  build_qualified_type (char_type_node,
+				TYPE_QUAL_CONST)) /* const char* */
+      };
+      tree fndecl_type
+	= build_varargs_function_type_array (build_pointer_type (char_type_node), 1,
+					     fndecl_type_param);
+
+      tree ord_fn_decl = build_fn_decl ("chartoint", fndecl_type);
+      DECL_EXTERNAL (ord_fn_decl) = 1;
+
+      ord_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), ord_fn_decl);
+    }
+
+  return ord_fn;
+}
+
+
+Tree
+Parser::parse_ord_function()
+{
+
+ if (!skip_token (Tiger::LEFT_PAREN))
+    {
+      return Tree::error ();
+    }
+  const_TokenPtr first_of_expr = lexer.peek_token ();
+  Tree expr = parse_exp ();
+  
+   if (expr.is_error ())
+    return Tree::error ();
+
+   if (!skip_token (Tiger::RIGHT_PAREN))
+    {
+      return Tree::error ();
+    }
+
+  if (is_string_type (expr.get_type ())){
+      tree args[] = {expr.get_tree ()};
+
+      Tree ord_fn = get_ord_addr ();
+
+      tree stmt
+	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
+				ord_fn.get_tree (), 1, args);
+      return stmt;
+    } else {
+      error_at (first_of_expr->get_locus (),
+		"type string is expected ord operand, but value is of type %s",
 		print_type (expr.get_type ()));
       return Tree::error ();
     }
@@ -1786,6 +1930,20 @@ Parser::null_denotation(const_TokenPtr tok)
       {
       Tree retTree = parse_write_function ();
       retTree.set_exp_type("void");
+      return retTree;
+      }
+      break;
+  case Tiger::ORD:
+      {
+      Tree retTree = parse_ord_function ();
+      retTree.set_exp_type("int");
+      return retTree;
+      }
+      break;
+  case Tiger::STRCMP:
+      {
+      Tree retTree = parse_strcmp_function ();
+      retTree.set_exp_type("int");
       return retTree;
       }
       break;
