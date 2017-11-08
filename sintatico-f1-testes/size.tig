@@ -1,0 +1,5 @@
+let
+var a : string := "abcde"
+in
+if size (a) = 5 then print ("eh cinco") else print ("eh diferente")
+end

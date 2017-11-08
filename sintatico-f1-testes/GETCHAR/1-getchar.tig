@@ -1,2 +1,2 @@
 /* ok getchar */
-getchar()
+print (getchar())

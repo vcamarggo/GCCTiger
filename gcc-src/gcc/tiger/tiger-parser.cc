@@ -8,6 +8,7 @@
 #include "tiger/tiger-symbol-mapping.h"
 #include "tiger/tiger-scope.h"
 
+
 #include "config.h"
 #include "system.h"
 #include "coretypes.h"
@@ -54,6 +55,14 @@ private:
 
   Tree get_puts_addr ();
   Tree get_getchar_addr ();
+  Tree get_flush_addr ();
+  Tree get_ord_addr ();
+  Tree get_chr_addr ();
+  Tree get_size_addr ();
+  Tree get_substring_addr ();
+  Tree get_concat_addr ();
+  Tree get_not_addr ();
+  Tree get_exit_addr ();
 
   Tree build_label_decl (const char *name, location_t loc);
   Tree build_let_exp (Tree let_exp);
@@ -118,7 +127,8 @@ private:
 #undef BINARY_HANDLER
 
 public:
-  Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), printf_fn (), getchar_fn ()
+  Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), getchar_fn (), flush_fn (),
+  ord_fn (), chr_fn (), size_fn (), substring_fn (), not_fn (), concat_fn (), exit_fn()
   {
   }
 
@@ -138,9 +148,18 @@ public:
   Tree parse_for_exp();
   Tree parse_function_exp();
   Tree parse_let_exp();
+
   Tree parse_function ();
   Tree parse_write_function ();
   Tree parse_read_function ();
+  Tree parse_flush_function ();
+  Tree parse_ord_function ();
+  Tree parse_chr_function ();
+  Tree parse_size_function ();
+  Tree parse_substring_function ();
+  Tree parse_not_function ();
+  Tree parse_concat_function ();
+  Tree parse_exit_function ();
 
   Tree parse_exp ();
   Tree parse_exp_naming_variable();
@@ -154,8 +173,15 @@ private:
   tree main_fndecl;
 
   Tree puts_fn;
-  Tree printf_fn;
   Tree getchar_fn;
+  Tree flush_fn;
+  Tree ord_fn;
+  Tree chr_fn;
+  Tree size_fn;
+  Tree substring_fn;
+  Tree not_fn;
+  Tree concat_fn;
+  Tree exit_fn;
 
   std::vector<TreeExpList> stack_exp_list;
   std::vector<TreeChain> stack_var_decl_chain;
@@ -277,23 +303,23 @@ Parser::unexpected_token(const_TokenPtr t)
 void
 Parser::parse_program()
 {
-  // Built type of main "int (int, char**)"
+  /* Built type of main "int (int, char**)"*/
   tree main_fndecl_type_param[] = {
     integer_type_node,					     /* int */
     build_pointer_type (build_pointer_type (char_type_node)) /* char** */
   };
   tree main_fndecl_type
     = build_function_type_array (integer_type_node, 2, main_fndecl_type_param);
-  // Create function declaration "int main(int, char**)"
+  /* Create function declaration "int main(int, char**)"*/
   main_fndecl = build_fn_decl ("main", main_fndecl_type);
 
-  // Enter top level scope
+  /* Enter top level scope*/
   
   enter_scope ();
  
-  // program -> exp*
+  /* program -> exp**/
   parse_exp_seq (&Parser::done_end_of_file);
-  // Append "return 0;"
+  /* Append "return 0;"*/
   tree resdecl
     = build_decl (UNKNOWN_LOCATION, RESULT_DECL, NULL_TREE, integer_type_node);
   DECL_CONTEXT (resdecl) = main_fndecl;
@@ -304,11 +330,11 @@ Parser::parse_program()
   tree return_exp = build1 (RETURN_EXPR, void_type_node, set_result);
 
   get_current_exp_list ().append (return_exp);
-  // Leave top level scope, get its binding exp and its main block
+  /* Leave top level scope, get its binding exp and its main block*/
   TreeSymbolMapping main_tree_scope = leave_scope ();
   Tree main_block = main_tree_scope.block;
 
-  // Finish main function
+  /* Finish main function*/
   BLOCK_SUPERCONTEXT (main_block.get_tree ()) = main_fndecl;
   DECL_INITIAL (main_fndecl) = main_block.get_tree ();
   DECL_SAVED_TREE (main_fndecl) = main_tree_scope.bind_expr.get_tree ();
@@ -316,10 +342,10 @@ Parser::parse_program()
   DECL_EXTERNAL (main_fndecl) = 0;
   DECL_PRESERVE_P (main_fndecl) = 1;
 
-  // Convert from GENERIC to GIMPLE
+  /* Convert from GENERIC to GIMPLE*/
   gimplify_function_tree (main_fndecl);
 
-  // Insert it into the graph
+  /* Insert it into the graph*/
   cgraph_node::finalize_function (main_fndecl, true);
 
   main_fndecl = NULL_TREE;
@@ -372,7 +398,7 @@ Parser::parse_exp_seq(bool (Parser::*done) ())
 void
 Parser::parse_descriptor_seq(bool (Parser::*done) ())
 {
-  // Parse exps until done and append to the current exp list;
+  /* Parse exps until done and append to the current exp list; */
   const_TokenPtr t = lexer.peek_token ();
   while (!(this->*done) ())
     {
@@ -413,13 +439,13 @@ Parser::leave_scope ()
 		   subblocks.first.get_tree (),
 		   /* supercontext */ NULL_TREE, /* chain */ NULL_TREE);
 
-  // Add the new block to the current chain of blocks (if any)
+  /* Add the new block to the current chain of blocks (if any) */
   if (!stack_block_chain.empty ())
     {
       stack_block_chain.back ().append (new_block);
     }
 
-  // Set the subblocks to have the new block as their parent
+  /* Set the subblocks to have the new block as their parent */
   for (tree it = subblocks.first.get_tree (); it != NULL_TREE;
        it = BLOCK_CHAIN (it))
     BLOCK_SUPERCONTEXT (it) = new_block;
@@ -447,7 +473,7 @@ Parser::get_current_exp_list ()
 Tree
 Parser::parse_let_exp()
 {
-  // variable_declaration -> "var" identifier ":" type ";"
+  /* variable_declaration -> "var" identifier ":" type ";" */
 	
 
   enter_scope ();
@@ -488,10 +514,10 @@ Parser::build_let_exp (Tree let_exp)
 Tree
 Parser::parse_variable_declaration()
 {
-  // variable_declaration -> "var" identifier ":" type ";"
+  /* variable_declaration -> "var" identifier ":" type ";"*/
   if (!skip_token (Tiger::VAR))
     {
-      //skip after var
+      /*skip after var*/
       skip_after_end_var ();
       return Tree::error ();
     }
@@ -681,6 +707,10 @@ Parser::print_type(Tree type)
     {
       return "void";
     }
+  if (type == char_type_node)
+    {
+      return "char mas n deveria ser";
+    }
   else
     {
       return "<<unknown-type>>";
@@ -753,13 +783,13 @@ Parser::parse_field_declaration (std::vector<std::string> &field_names)
 Tree
 Parser::parse_type()
 {
-  // type -> "int"
-  //      | "float"
-  //      | "bool"
-  //      | IDENTIFIER
-  //      | type '[' expr ']'
-  //      | type '(' expr : expr ')'
-  //      | "record" field-decl* "end"
+  /* type -> "int"
+        | "float"
+        | "bool"
+        | IDENTIFIER
+        | type '[' expr ']'
+        | type '(' expr : expr ')'
+        | "record" field-decl* "end"*/
 
   const_TokenPtr t = lexer.peek_token ();
 
@@ -1010,7 +1040,7 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 
   if (!else_part.is_null ())
     {
-      // Make sure after then part has been executed we go to the end if
+      /* Make sure after then part has been executed we go to the end if*/
       exp_list.append (goto_endif);
 
       Tree else_label_expr = build_tree (LABEL_EXPR, else_part.get_locus (),
@@ -1020,7 +1050,7 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
       exp_list.append (else_part);
     }
 
-  // FIXME - location
+  /* FIXME - location*/
   Tree endif_label_expr = build_tree (LABEL_EXPR, UNKNOWN_LOCATION,
 				      void_type_node, endif_label_decl, else_part.get_exp_type());	
   exp_list.append (endif_label_expr);
@@ -1319,7 +1349,70 @@ Parser::parse_for_exp()
 }
 
 Tree
-Parser::get_getchar_addr ()
+Parser::get_exit_addr ()
+{
+  if (exit_fn.is_null ())
+    {
+      tree fndecl_type_param[] = {
+	build_pointer_type (
+	  build_qualified_type (char_type_node,
+				TYPE_QUAL_CONST)) /* const char* */
+      };
+      tree fndecl_type
+	= build_function_type_array (void_type_node, 1, fndecl_type_param);
+
+      tree exit_fn_decl = build_fn_decl ("exit", fndecl_type);//revisar include
+      DECL_EXTERNAL (exit_fn_decl) = 1;
+
+      exit_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), exit_fn_decl);
+    }
+
+  return exit_fn;
+}
+
+Tree
+Parser::parse_exit_function ()
+{
+  
+ if (!skip_token (Tiger::LEFT_PAREN))
+    {
+      return Tree::error ();
+    }
+  const_TokenPtr first_of_expr = lexer.peek_token ();
+  Tree expr = parse_exp ();
+  
+   if (expr.is_error ())
+    return Tree::error ();
+
+   if (!skip_token (Tiger::RIGHT_PAREN))
+    {
+      return Tree::error ();
+    }
+
+   if (expr.get_type () == integer_type_node){
+      tree args[] = {expr.get_tree ()};
+
+      Tree exit_fn = get_exit_addr ();
+
+      tree stmt
+	= build_call_array_loc (first_of_expr->get_locus (), void_type_node,
+				exit_fn.get_tree (), 1, args);
+      return stmt;
+    } else {
+      error_at (first_of_expr->get_locus (),
+		"type int is expected exit operand, but value is of type %s",
+		print_type (expr.get_type ()));
+      return Tree::error ();
+    }
+  
+  gcc_unreachable ();
+}
+
+
+
+Tree
+Parser::get_size_addr ()
 {
   if (getchar_fn.is_null ())
     {
@@ -1332,7 +1425,7 @@ Parser::get_getchar_addr ()
 	= build_varargs_function_type_array (integer_type_node, 1,
 					     fndecl_type_param);
 
-      tree getchar_fn_decl = build_fn_decl ("getchar", fndecl_type);
+      tree getchar_fn_decl = build_fn_decl ("tamanho", fndecl_type);
       DECL_EXTERNAL (getchar_fn_decl) = 1;
 
       getchar_fn
@@ -1343,7 +1436,70 @@ Parser::get_getchar_addr ()
 }
 
 Tree
-Parser::parse_read_function () // tem que arrumar
+Parser::parse_size_function ()
+{
+ 
+ if (!skip_token (Tiger::LEFT_PAREN))
+    {
+      return Tree::error ();
+    }
+  const_TokenPtr first_of_expr = lexer.peek_token ();
+  Tree expr = parse_exp ();
+  
+   if (expr.is_error ())
+    return Tree::error ();
+
+   if (!skip_token (Tiger::RIGHT_PAREN))
+    {
+      return Tree::error ();
+    }
+
+  if (is_string_type (expr.get_type ())){
+      tree args[] = {expr.get_tree ()};
+
+      Tree size_fn = get_size_addr ();
+
+      tree stmt
+	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
+				size_fn.get_tree (), 1, args);
+      return stmt;
+    } else {
+      error_at (first_of_expr->get_locus (),
+		"type string is expected size operand, but value is of type %s",
+		print_type (expr.get_type ()));
+      return Tree::error ();
+    }
+  
+  gcc_unreachable ();
+}
+
+
+Tree
+Parser::get_getchar_addr ()
+{
+  if (getchar_fn.is_null ())
+    {
+      tree fndecl_type_param[] = {
+	build_pointer_type (
+	  build_qualified_type (char_type_node,
+				TYPE_QUAL_CONST)) /* const char* */
+      };
+      tree fndecl_type
+	= build_varargs_function_type_array (build_pointer_type (char_type_node), 0,
+					     fndecl_type_param);
+
+      tree getchar_fn_decl = build_fn_decl ("pegachar", fndecl_type);
+      DECL_EXTERNAL (getchar_fn_decl) = 1;
+
+      getchar_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), getchar_fn_decl);
+    }
+
+  return getchar_fn;
+}
+
+Tree
+Parser::parse_read_function ()
 {
   const_TokenPtr first_of_expr = lexer.peek_token ();
   if (!skip_token (Tiger::LEFT_PAREN))
@@ -1361,8 +1517,8 @@ Parser::parse_read_function () // tem que arrumar
   Tree getchar_fn = get_getchar_addr ();
 
   tree stmt
-    = build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-			    getchar_fn.get_tree (), 2, args);
+    = build_call_array_loc (first_of_expr->get_locus (), build_pointer_type (char_type_node),
+			    getchar_fn.get_tree (), 0, args);
 
   return stmt;
 }
@@ -1378,9 +1534,9 @@ Parser::get_puts_addr ()
 				TYPE_QUAL_CONST)) /* const char* */
       };
       tree fndecl_type
-	= build_function_type_array (integer_type_node, 1, fndecl_type_param);
+	= build_function_type_array (void_type_node, 1, fndecl_type_param);
 
-      tree puts_fn_decl = build_fn_decl ("puts", fndecl_type);
+      tree puts_fn_decl = build_fn_decl ("printa", fndecl_type);//revisar include
       DECL_EXTERNAL (puts_fn_decl) = 1;
 
       puts_fn
@@ -1418,7 +1574,7 @@ Parser::parse_write_function()
       Tree puts_fn = get_puts_addr ();
 
       tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
+	= build_call_array_loc (first_of_expr->get_locus (), void_type_node,
 				puts_fn.get_tree (), 1, args);
       return stmt;
     } else {
@@ -1581,7 +1737,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	std::string str = tok->get_str ();
 	const char *c_str = str.c_str ();
 	return Tree (build_string_literal (::strlen (c_str) + 1, c_str),
-		     tok->get_locus (), "string");//teste
+		     tok->get_locus (), "string");
       }
       break;
     case Tiger::LEFT_PAREN:
@@ -1622,7 +1778,7 @@ Parser::null_denotation(const_TokenPtr tok)
     case Tiger::READ:
       {
       Tree retTree = parse_read_function ();
-      retTree.set_exp_type("void");
+      retTree.set_exp_type("string");
       return retTree;
       }
       break;
@@ -1630,6 +1786,20 @@ Parser::null_denotation(const_TokenPtr tok)
       {
       Tree retTree = parse_write_function ();
       retTree.set_exp_type("void");
+      return retTree;
+      }
+      break;
+   case Tiger::EXIT:
+      {
+      Tree retTree = parse_exit_function ();
+      retTree.set_exp_type("void");
+      return retTree;
+      }
+      break;
+   case Tiger::SIZE:
+      {
+      Tree retTree = parse_size_function ();
+      retTree.set_exp_type("int");
       return retTree;
       }
       break;

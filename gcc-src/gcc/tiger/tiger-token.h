@@ -50,12 +50,14 @@ namespace Tiger
                                                                                 \
   TIGER_TOKEN_KEYWORD (ARRAY, "array")                                          \
   TIGER_TOKEN_KEYWORD (BREAK, "break")                                          \
-  TIGER_TOKEN_KEYWORD (CHR, "chr")                                          \
+  TIGER_TOKEN_KEYWORD (CHR, "chr")                                              \
+  TIGER_TOKEN_KEYWORD (CONCAT, "concat")                                              \
   TIGER_TOKEN_KEYWORD (DO, "do")                                                \
   TIGER_TOKEN_KEYWORD (ELSE, "else")                                            \
   TIGER_TOKEN_KEYWORD (END, "end")                                              \
-  TIGER_TOKEN_KEYWORD (EXIT, "exit")                                              \
+  TIGER_TOKEN_KEYWORD (EXIT, "exit")                                            \
   TIGER_TOKEN_KEYWORD (FLOAT, "real")                                           \
+  TIGER_TOKEN_KEYWORD (FLUSH, "flush")                                          \
   TIGER_TOKEN_KEYWORD (FOR, "for")                                              \
   TIGER_TOKEN_KEYWORD (FUNCTION, "function")                                    \
   TIGER_TOKEN_KEYWORD (IF, "if")                                                \
@@ -63,17 +65,20 @@ namespace Tiger
   TIGER_TOKEN_KEYWORD (INT, "int")                                              \
   TIGER_TOKEN_KEYWORD (LET, "let")                                              \
   TIGER_TOKEN_KEYWORD (NIL, "nil")                                              \
+  TIGER_TOKEN_KEYWORD (NOT, "not")                                              \
   TIGER_TOKEN_KEYWORD (OF, "of")                                                \
-  TIGER_TOKEN_KEYWORD (ORD, "ord")                                                \
-  TIGER_TOKEN_KEYWORD (READ, "getchar")                                            \
+  TIGER_TOKEN_KEYWORD (ORD, "ord")                                              \
+  TIGER_TOKEN_KEYWORD (READ, "getchar")                                         \
+  TIGER_TOKEN_KEYWORD (SIZE, "size")                                            \
   TIGER_TOKEN_KEYWORD (STRING, "string")                                        \
+  TIGER_TOKEN_KEYWORD (SUBSTRING, "substring")                                  \
   TIGER_TOKEN_KEYWORD (THEN, "then")                                            \
   TIGER_TOKEN_KEYWORD (TO, "to")                                                \
   TIGER_TOKEN_KEYWORD (TYPE, "type")                                            \
   TIGER_TOKEN_KEYWORD (VAR, "var")                                              \
   TIGER_TOKEN_KEYWORD (WHILE, "while")                                          \
   TIGER_TOKEN_KEYWORD (WRITE, "print")                                          \
-                                                                               \
+                                                                                \
   TIGER_TOKEN (LAST_TOKEN, "<last-token-marker>")
 
 enum /* class */ TokenId

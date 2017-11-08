@@ -1,0 +1,8 @@
+/* OK */
+
+let
+var a : string := getchar()
+in
+print("uma frase")
+print (a)
+end
