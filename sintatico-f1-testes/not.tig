@@ -1,0 +1,4 @@
+for a := 0 to 255 do
+()
+
+/* for a := 0 to 255 do print(chr(a)) */

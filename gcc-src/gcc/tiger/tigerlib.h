@@ -7,10 +7,10 @@ int stringIgual(char *s, char *t);
 void printa(char *s);
 void limpaOut();
 int chartoint(char *s);
-struct string *inttochar(int i);
+char *inttochar(int i);
 int tamanho(char *s);
-struct string *subpalavra(struct string *s, int first, int n);
-struct string *concatena(struct string *a, struct string *b);
+char *subpalavra(char *s, int first, int n);
+char *concatena(char *a, char *b);
 int not(int i);
 
 #undef getchar

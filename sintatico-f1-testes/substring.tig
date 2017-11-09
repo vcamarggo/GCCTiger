@@ -1,0 +1,5 @@
+let
+var a : string := "teste"
+in
+print(substring(a,2,1))
+end

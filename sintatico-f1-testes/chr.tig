@@ -1,0 +1,7 @@
+let
+var a : string := ""
+var i := 65
+in
+a := chr(i)
+print (a)
+end
