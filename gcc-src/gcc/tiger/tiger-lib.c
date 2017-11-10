@@ -83,13 +83,10 @@ char *concatena(char *a, char *b)
  return str;
 }
 
-int not(int i)
+int nao(int i)
 {
 return !i;
 }
-
-#undef getchar
-
 
 char *pegachar()
 {

@@ -28,6 +28,7 @@ tiger_OBJS = \
     tiger/tiger-symbol-mapping.o \
     tiger/tiger-scope.o \
     tiger/tiger-convert.o \
+    tiger/tiger-lib.o \
     $(END)
 
 tiger1$(exeext): attribs.o $(tiger_OBJS) $(BACKEND) $(LIBDEPS)

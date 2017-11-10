@@ -11,7 +11,7 @@ char *inttochar(int i);
 int tamanho(char *s);
 char *subpalavra(char *s, int first, int n);
 char *concatena(char *a, char *b);
-int not(int i);
+int nao(int i);
 
 #undef getchar
 

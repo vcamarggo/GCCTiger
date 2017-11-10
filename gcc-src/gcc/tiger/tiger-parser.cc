@@ -43,7 +43,7 @@ private:
   const_TokenPtr expect_token (TokenId);
   void unexpected_token (const_TokenPtr);
 
-  // Expression parsing
+  /* Expression parsing*/
   int left_binding_power (const_TokenPtr tok);
   Tree null_denotation (const_TokenPtr tok);
   Tree left_denotation (const_TokenPtr tok, Tree left);
@@ -96,6 +96,7 @@ private:
 
   bool done_end ();
   bool done_in ();
+  bool done_right_paren ();
   bool done_end_or_else ();
   bool done_end_of_file ();
 
@@ -140,7 +141,7 @@ public:
   Tree parse_type_declaration ();
 
   Tree parse_type ();
-  //Tree parse_record ();
+  /*Tree parse_record ();*/
   Tree parse_field_declaration (std::vector<std::string> &field_names);
 
   Tree parse_assignment_exp (Tree var);
@@ -366,7 +367,7 @@ bool
 Parser::done_end ()
 {
   const_TokenPtr t = lexer.peek_token ();
-  return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE);
+  return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE || t->get_id () == Tiger::RIGHT_PAREN );
 }
 
 bool
@@ -374,20 +375,28 @@ Parser::done_end_or_else()
 {
   const_TokenPtr t = lexer.peek_token ();
   return (t->get_id () == Tiger::END || t->get_id () == Tiger::ELSE
-	  || t->get_id () == Tiger::END_OF_FILE);
+	  || t->get_id () == Tiger::END_OF_FILE || t->get_id () == Tiger::RIGHT_PAREN );
 }
 
 bool
 Parser::done_in()
 {
   const_TokenPtr t = lexer.peek_token ();
-  return (t->get_id () == Tiger::IN || t->get_id () == Tiger::END_OF_FILE);
+  return (t->get_id () == Tiger::IN || t->get_id () == Tiger::END_OF_FILE || t->get_id () == Tiger::RIGHT_PAREN );
+}
+
+bool
+Parser::done_right_paren()
+{
+  const_TokenPtr t = lexer.peek_token ();
+  return (t->get_id () == Tiger::RIGHT_PAREN || t->get_id () == Tiger::END_OF_FILE);
 }
 
 string
 Parser::parse_exp_seq(bool (Parser::*done) ())
 {
-  // Parse exps until done and append to the current exp list;
+  /* Parse exps until done and append to the current exp list;*/
+  //adicionar ; como separador
   string lastTreeType;
   while (!(this->*done) ())
     {
@@ -603,7 +612,7 @@ namespace
 {
 
 bool
-is_string_type (Tree type)
+is_string_type(Tree type)
 {
   gcc_assert (TYPE_P (type.get_tree ()));
   return type.get_tree_code () == POINTER_TYPE
@@ -651,10 +660,6 @@ Parser::print_type(Tree type)
     {
       return "void";
     }
-  if (type == char_type_node)
-    {
-      return "char mas n deveria ser";
-    }
   else
     {
       return "<<unknown-type>>";
@@ -687,7 +692,7 @@ Parser::retrieve_type(string type)
 Tree
 Parser::parse_field_declaration (std::vector<std::string> &field_names)
 {
-  // identifier ':' type ';'
+   identifier ':' type ';'
   const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
@@ -815,18 +820,18 @@ Parser::parse_type()
        it != dimensions.rend (); it++)
     {
       it->first = Tree (fold (it->first.get_tree ()), it->first.get_locus ());
-//       if (it->first.get_tree_code () != INTEGER_CST)
-// 	{
-// 	  error_at (it->first.get_locus (), "is not an integer constant");
-// 	  break;
-// 	}
+/*       if (it->first.get_tree_code () != INTEGER_CST)
+ 	{
+ 	  error_at (it->first.get_locus (), "is not an integer constant");
+ 	  break;
+ 	}*/
       it->second
 	= Tree (fold (it->second.get_tree ()), it->second.get_locus ());
-//       if (it->second.get_tree_code () != INTEGER_CST)
-// 	{
-// 	  error_at (it->second.get_locus (), "is not an integer constant");
-// 	  break;
-// 	}
+/*       if (it->second.get_tree_code () != INTEGER_CST)
+ 	{
+ 	  error_at (it->second.get_locus (), "is not an integer constant");
+ 	  break;
+ 	}*/
 
       if (!type.is_error ())
 	{
@@ -897,7 +902,7 @@ Parser::query_integer_variable (const std::string &name, location_t loc)
 Tree
 Parser::parse_assignment_exp(Tree var)
 {
-  // assignment_exp -> exp ":=" exp ";"
+  /* assignment_exp -> exp ":=" exp ";"*/
   Tree variable =  var;
 
   if (variable.is_error ())
@@ -995,11 +1000,12 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 
   /* FIXME - location*/
   Tree endif_label_expr = build_tree (LABEL_EXPR, UNKNOWN_LOCATION,
-				      void_type_node, endif_label_decl, else_part.get_exp_type());	
+				      void_type_node, 
+ 					endif_label_decl, then_part.get_exp_type());
   exp_list.append (endif_label_expr);
 
    Tree retTree = exp_list.get_tree ();
-   retTree.set_exp_type(else_part.get_exp_type());
+   retTree.set_exp_type(then_part.get_exp_type());
   return retTree;
 }
 
@@ -1033,7 +1039,7 @@ Parser::parse_if_exp()
   const_TokenPtr tok = lexer.peek_token ();
   if (tok->get_id () == Tiger::ELSE)
     {
-      // Consume 'else'
+      /* Consume 'else'*/
       skip_token (Tiger::ELSE);
       
       const_TokenPtr last_of_expr = lexer.peek_token ();
@@ -1056,16 +1062,16 @@ Parser::parse_if_exp()
 			skip_after_end ();
 			return Tree::error ();
 		}
-
-   } else if (then_exp.get_exp_type() != "void") {
-			error_at (tokThen->get_locus (),
-			"then body must no return value, but it returned %s type",
-			then_exp.get_exp_type().c_str());			
-			skip_after_end ();
-			return Tree::error ();
+         return build_if_exp (expr, then_exp, else_exp);
+   } if (then_exp.get_exp_type() == "void" || then_exp.get_exp_type() == "") {
+         return build_if_exp (expr, then_exp, else_exp);
    }
+	error_at (tokThen->get_locus (),
+	"then body must no return value, but it returned %s type",
+	then_exp.get_exp_type().c_str());			
+	skip_after_end ();
+	return Tree::error ();
 
-  return build_if_exp (expr, then_exp, else_exp);
 }
 
 Tree
@@ -1087,7 +1093,7 @@ Parser::build_while_exp(Tree bool_expr, Tree while_body)
   Tree while_body_label_decl
     = build_label_decl ("while_body", while_body.get_locus ());
   Tree end_of_while_label_decl
-    // FIXME - location
+    /* FIXME - location*/
     = build_label_decl ("end_of_while", UNKNOWN_LOCATION);
 
   Tree cond_expr
@@ -1105,12 +1111,12 @@ Parser::build_while_exp(Tree bool_expr, Tree while_body)
 
   exp_list.append (while_body);
 
-  // FIXME - location
+  /* FIXME - location*/
   Tree goto_check = build_tree (GOTO_EXPR, UNKNOWN_LOCATION, void_type_node,
 				while_check_label_decl);
   exp_list.append (goto_check);
 
-  // FIXME - location
+  /* FIXME - location*/
   Tree end_of_while_label_expr
     = build_tree (LABEL_EXPR, UNKNOWN_LOCATION, void_type_node,
 		  end_of_while_label_decl);
@@ -1120,7 +1126,6 @@ Parser::build_while_exp(Tree bool_expr, Tree while_body)
    retTree.set_exp_type("void");
   return retTree;
 
-  return exp_list.get_tree ();
 }
 
 Tree
@@ -1175,28 +1180,28 @@ Parser::build_for_exp (SymbolPtr ind_var, Tree lower_bound,
     return Tree::error ();
   Tree ind_var_decl = ind_var->get_tree_decl ();
 
-  // Lower
+  /* Lower*/
   if (lower_bound.is_error ())
     return Tree::error ();
 
-  // Upper
+  /* Upper*/
   if (upper_bound.is_error ())
     return Tree::error ();
 
-  // ind_var := lower;
+  /* ind_var := lower;*/
   TreeExpList exp_list;
 
   Tree init_ind_var = build_tree (MODIFY_EXPR, /* FIXME */ UNKNOWN_LOCATION,
 				  void_type_node, ind_var_decl, lower_bound);
   exp_list.append (init_ind_var);
 
-  // ind_var < upper
+  /* ind_var < upper*/
   Tree while_condition
     = build_tree (LT_EXPR, upper_bound.get_locus (), integer_type_node,
 		  ind_var_decl, upper_bound);
 
-  // for-body
-  // ind_var := ind_var + 1
+  /* for-body
+   ind_var := ind_var + 1*/
   Tree incr_ind_var
     = build_tree (MODIFY_EXPR, /* FIXME */ UNKNOWN_LOCATION, void_type_node,
 		  ind_var_decl,
@@ -1204,11 +1209,11 @@ Parser::build_for_exp (SymbolPtr ind_var, Tree lower_bound,
 			      ind_var_decl,
 			      build_int_cst_type (::integer_type_node, 1)));
 
-  // Wrap as a exp list
+  /* Wrap as a exp list*/
   TreeExpList for_exp_list = for_body_exp_list;
   for_exp_list.append (incr_ind_var);
 
-  // construct the associated while exp
+  /* construct the associated while exp*/
   Tree while_exp
     = build_while_exp (while_condition, for_exp_list.get_tree ());
   exp_list.append (while_exp);
@@ -1219,6 +1224,7 @@ Parser::build_for_exp (SymbolPtr ind_var, Tree lower_bound,
 Tree
 Parser::parse_for_exp()
 {
+  enter_scope ();
   const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
   if (identifier == NULL)
     {
@@ -1226,6 +1232,25 @@ Parser::parse_for_exp()
       return Tree::error ();
     }
 
+/*    SymbolPtr sym (new Symbol (Tiger::VARIABLE, identifier->get_str ()));
+          scope.get_current_mapping ().insert (sym);
+
+	  sym = query_variable (identifier->get_str (), identifier->get_locus ());
+
+  
+	  Tree decl;
+	    decl = build_decl (identifier->get_locus (), VAR_DECL,
+			  get_identifier (sym->get_name ().c_str ()),
+          integer_type_node);
+  
+	  DECL_CONTEXT (decl.get_tree()) = main_fndecl;
+
+	  gcc_assert (!stack_var_decl_chain.empty ());
+	  stack_var_decl_chain.back ().append (decl);
+
+	  sym->set_tree_decl (decl);
+
+*/
   if (!skip_token (Tiger::ASSIGN))
     {
       skip_after_end ();
@@ -1250,43 +1275,23 @@ Parser::parse_for_exp()
 
   const_TokenPtr t = lexer.peek_token ();  
 
-  enter_scope ();
   string typeFor =  parse_exp_seq (&Parser::done_end);
 
-  TreeSymbolMapping for_body_tree_scope = leave_scope ();
-  Tree for_body_exp = for_body_tree_scope.bind_expr;
-  for_body_exp.set_exp_type(typeFor);
+
+
+	  SymbolPtr ind_var
+	    = query_integer_variable (identifier->get_str (), identifier->get_locus ());
+
+         TreeSymbolMapping for_body_tree_scope = leave_scope ();
+         Tree for_body_exp = for_body_tree_scope.bind_expr;
+         for_body_exp.set_exp_type(typeFor);
 
 		if (for_body_exp.is_error ()) {
 		    skip_after_end ();
 		    return Tree::error ();
 		}
-
-	  SymbolPtr sym (new Symbol (Tiger::VARIABLE, identifier->get_str ()));
-          scope.get_current_mapping ().insert (sym);
-
-	  sym = query_variable (identifier->get_str (), identifier->get_locus ());
-
-  
-	  Tree decl;
-	    decl = build_decl (identifier->get_locus (), VAR_DECL,
-			  get_identifier (sym->get_name ().c_str ()),
-integer_type_node);
-  
-	  DECL_CONTEXT (decl.get_tree()) = main_fndecl;
-
-	  gcc_assert (!stack_var_decl_chain.empty ());
-	  stack_var_decl_chain.back ().append (decl);
-
-	  sym->set_tree_decl (decl);
-
-
-    
+     
 	if(for_body_exp.get_exp_type() == "void" || for_body_exp.get_exp_type() == ""){
-		 // Induction var
-	  SymbolPtr ind_var
-	    = query_integer_variable (identifier->get_str (), identifier->get_locus ());
-
 	  return build_for_exp (ind_var, lower_bound, upper_bound, for_body_exp);
 	}
 
@@ -1310,7 +1315,7 @@ Parser::get_not_addr ()
       tree fndecl_type
 	= build_function_type_array (integer_type_node, 1, fndecl_type_param);
 
-      tree not_fn_decl = build_fn_decl ("not", fndecl_type);
+      tree not_fn_decl = build_fn_decl ("nao", fndecl_type);
       DECL_EXTERNAL (not_fn_decl) = 1;
 
       not_fn
@@ -1338,6 +1343,7 @@ Parser::parse_not_function ()
     {
       return Tree::error ();
     }
+  
 
    if (expr.get_type () == integer_type_node){
       tree args[] = {expr.get_tree ()};
@@ -1940,7 +1946,7 @@ Parser::get_puts_addr ()
 Tree
 Parser::parse_write_function()
 {
-  // write_statement -> "write" expression ";"
+  /* write_statement -> "write" expression ";"*/
 
  if (!skip_token (Tiger::LEFT_PAREN))
     {
@@ -1948,7 +1954,6 @@ Parser::parse_write_function()
     }
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
-  
    if (expr.is_error ())
     return Tree::error ();
 
@@ -1958,7 +1963,6 @@ Parser::parse_write_function()
     }
 
   if (is_string_type (expr.get_type ())){
-      // Alternatively we could use printf('%s\n', expr) instead of puts(expr)
       tree args[] = {expr.get_tree ()};
 
       Tree puts_fn = get_puts_addr ();
@@ -1969,7 +1973,7 @@ Parser::parse_write_function()
       return stmt;
     } else {
       error_at (first_of_expr->get_locus (),
-		"type string is expected write operand, but value is of type %s",
+		"type string is expected print operand, but value is of type %s",
 		print_type (expr.get_type ()));
       return Tree::error ();
     }
@@ -1984,15 +1988,11 @@ Parser::parse_exp()
 }
 
 
-// This is a Pratt parser
+/* This is a Pratt parser*/
 Tree
 Parser::parse_exp(int right_binding_power)
 {
   const_TokenPtr current_token = lexer.peek_token ();
-  if(current_token->get_id () == Tiger::RIGHT_PAREN){
-  return Tree ();
-  }
-
   lexer.skip_token ();
  
   Tree expr = null_denotation (current_token);
@@ -2015,7 +2015,7 @@ namespace
 {
 enum binding_powers
 {
-  // Highest priority
+  /* Highest priority*/
   LBP_HIGHEST = 100,
 
   LBP_DOT = 90,
@@ -2041,12 +2041,12 @@ enum binding_powers
   LBP_LOGICAL_AND = 10,
   LBP_LOGICAL_OR = 5,
 
-  // Lowest priority
+  /* Lowest priority*/
   LBP_LOWEST = 0,
 };
 }
 
-// This implements priorities
+/* This implements priorities*/
 int
 Parser::left_binding_power(const_TokenPtr token)
 {
@@ -2080,15 +2080,15 @@ Parser::left_binding_power(const_TokenPtr token)
       return LBP_LOGICAL_OR;
     case Tiger::AND:
       return LBP_LOGICAL_AND;
-    // Anything that cannot appear after a left operand
-    // is considered a terminator
+    /* Anything that cannot appear after a left operand
+     is considered a terminator*/
     default:
       return LBP_LOWEST;
     }
 }
 
-// This is invoked when a token (including prefix operands) is found at a
-// "prefix" position
+/* This is invoked when a token (including prefix operands) is found at a
+ "prefix" position*/
 Tree
 Parser::null_denotation(const_TokenPtr tok)
 {
@@ -2111,7 +2111,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	
       }
     case Tiger::INTEGER_LITERAL:
-      // FIXME : check ranges
+      /* FIXME : check ranges */
       return Tree (build_int_cst_type (integer_type_node,
 				       atoi (tok->get_str ().c_str ())),
 		   tok->get_locus (), "int");
@@ -2136,7 +2136,14 @@ Parser::null_denotation(const_TokenPtr tok)
       break;
     case Tiger::LEFT_PAREN:
       {
-	Tree expr = parse_exp ();
+	 enter_scope ();
+ 	 parse_exp_seq (&Parser::done_right_paren);
+	 TreeSymbolMapping paren_body_tree_scope = leave_scope ();
+  	Tree paren_body_exp = paren_body_tree_scope.bind_expr;
+
+        if (paren_body_exp.is_error ())
+          return Tree::error ();  
+  
 	tok = lexer.peek_token ();
 	if (tok->get_id () != Tiger::RIGHT_PAREN)
 	  error_at (tok->get_locus (), "expecting ) but %s found\n",
@@ -2144,7 +2151,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	else
 	  lexer.skip_token ();
 
-	return Tree (expr, tok->get_locus (), expr.get_exp_type());
+	return Tree (paren_body_exp, tok->get_locus (), paren_body_exp.get_exp_type());
       }
     case Tiger::PLUS:
       {
@@ -2357,13 +2364,13 @@ Parser::binary_div(const_TokenPtr tok, Tree left)
   if (left.get_type () == integer_type_node
       && right.get_type () == integer_type_node)
     {
-      // Integer division (truncating, like in C)
+      /* Integer division (truncating, like in C)*/
       return build_tree (TRUNC_DIV_EXPR, tok->get_locus (), integer_type_node,
 			 left, right, print_type(left.get_type()));
     }
   else
     {
-      // Real division
+      /* Real division*/
       Tree tree_type = coerce_binary_arithmetic (tok, &left, &right);
       if (tree_type.is_error ())
 	return Tree::error ();
@@ -2571,8 +2578,8 @@ Parser::binary_field_ref(const const_TokenPtr tok, Tree left)
 		     Tree ());
 }
 
-// This is invoked when a token (likely an operand) is found at a (likely
-// infix) non-prefix position
+/* This is invoked when a token (likely an operand) is found at a (likely
+ infix) non-prefix position*/
 Tree
 Parser::left_denotation(const_TokenPtr tok, Tree left)
 {
@@ -2638,9 +2645,9 @@ Parser::parse_exp_naming_variable()
 
 }
 
-// ------------------------------------------------------
-// ------------------------------------------------------
-// ------------------------------------------------------
+/* ------------------------------------------------------
+ ------------------------------------------------------
+ ------------------------------------------------------*/
 
 static void tiger_parse_file (const char *filename);
 
@@ -2656,7 +2663,7 @@ tiger_parse_files (int num_files, const char **files)
 static void
 tiger_parse_file (const char *filename)
 {
-  // FIXME: handle stdin "-"
+  /* FIXME: handle stdin "-"*/
   FILE *file = fopen (filename, "r");
   if (file == NULL)
     {
