@@ -1,7 +1,7 @@
 /* for correto */
 
 let 
-   var a : int := 5
+   var i : int := 5
 in
 (for i := 1 to 10 do
 print ("loop for"))

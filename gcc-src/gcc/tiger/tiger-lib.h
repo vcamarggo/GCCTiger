@@ -12,7 +12,4 @@ int tamanho(char *s);
 char *subpalavra(char *s, int first, int n);
 char *concatena(char *a, char *b);
 int nao(int i);
-
-#undef getchar
-
 char *pegachar();

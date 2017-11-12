@@ -1,2 +1,2 @@
 /* error : parentese nao balanceado*/
-while(10 > 5) do (5+6))
+while 10 > 5 do (5+6))

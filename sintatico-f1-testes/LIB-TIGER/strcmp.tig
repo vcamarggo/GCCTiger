@@ -3,6 +3,6 @@ var a : string := getchar()
 var b : string := getchar()
 var i := 2
 in
-i := strcmp(a,b)
+i := strcmp(a,b);
 if i = 0  then print ("strcmp funcionou") else if i > 0  then print ("a > b") else print ("b > a")
 end
