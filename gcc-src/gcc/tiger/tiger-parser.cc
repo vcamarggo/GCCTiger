@@ -819,18 +819,8 @@ Parser::parse_type()
        it != dimensions.rend (); it++)
     {
       it->first = Tree (fold (it->first.get_tree ()), it->first.get_locus ());
-/*       if (it->first.get_tree_code () != INTEGER_CST)
- 	{
- 	  error_at (it->first.get_locus (), "is not an integer constant");
- 	  break;
- 	}*/
       it->second
 	= Tree (fold (it->second.get_tree ()), it->second.get_locus ());
-/*       if (it->second.get_tree_code () != INTEGER_CST)
- 	{
- 	  error_at (it->second.get_locus (), "is not an integer constant");
- 	  break;
- 	}*/
 
       if (!type.is_error ())
 	{
@@ -2333,6 +2323,22 @@ Parser::coerce_binary_arithmetic(const_TokenPtr tok, Tree *left, Tree *right)
 	  return left_type;
 	}
     }
+  else if ((left_type == integer_type_node && right_type == float_type_node)
+	   || (left_type == float_type_node && right_type == integer_type_node))
+    {
+      // We will coerce the integer into a float
+      if (left_type == integer_type_node)
+	{
+	  *left = build_tree (FLOAT_EXPR, left->get_locus (), float_type_node,
+			      left->get_tree ());
+	}
+      else
+	{
+	  *right = build_tree (FLOAT_EXPR, right->get_locus (),
+			       float_type_node, right->get_tree ());
+	}
+      return float_type_node;
+    }
 
   error_at (tok->get_locus (),
 	    "invalid operands of type %s and %s for operator %s",
@@ -2367,7 +2373,7 @@ Parser::binary_plus(const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (PLUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
+  return build_tree (PLUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
 }
 
 Tree
@@ -2381,7 +2387,7 @@ Parser::binary_minus(const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (MINUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
+  return build_tree (MINUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
 }
 
 Tree
@@ -2395,7 +2401,7 @@ Parser::binary_mult(const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (MULT_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
+  return build_tree (MULT_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
 }
 
 Tree
@@ -2421,7 +2427,7 @@ Parser::binary_div(const_TokenPtr tok, Tree left)
 
       gcc_assert (tree_type == float_type_node);
 
-      return build_tree (RDIV_EXPR, tok->get_locus (), tree_type, left, right, print_type(left.get_type()));
+      return build_tree (RDIV_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));//aqui
     }
 }
 
