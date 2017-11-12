@@ -18,6 +18,7 @@
 
 .deps
 .libs
+.out
 
 autom4te.cache
 config.cache
