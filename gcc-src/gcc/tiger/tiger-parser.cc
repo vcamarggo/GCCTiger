@@ -41,6 +41,8 @@ private:
   void skip_after_end_var ();
   void skip_after_colon ();
   void skip_next_declaration_in ();
+  void skip_after_in_end ();
+  void skip_after_function_call ();
 
   bool skip_token (TokenId);
   const_TokenPtr expect_token (TokenId);
@@ -221,14 +223,11 @@ Parser::skip_next_declaration_in()
 {
   const_TokenPtr t = lexer.peek_token ();
 
-  while (t->get_id () != Tiger::VAR && t->get_id () != Tiger::TYPE && t->get_id () != Tiger::IN)
+  while (t->get_id () != Tiger::VAR && t->get_id () != Tiger::TYPE && t->get_id () != Tiger::IN && t->get_id () !=Tiger::FUNCTION)
     {
       lexer.skip_token ();
       t = lexer.peek_token ();
     }
-
-  if (t->get_id () != Tiger::IN)
-    lexer.skip_token ();
 }
 
 void
@@ -261,6 +260,41 @@ Parser::skip_after_end ()
   if (t->get_id () == Tiger::END)
     lexer.skip_token ();
 }
+
+
+/* OK */
+void
+Parser::skip_after_in_end ()
+{
+  const_TokenPtr t = lexer.peek_token ();
+
+  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END && t->get_id () != Tiger::IN)
+    {
+      lexer.skip_token ();
+      t = lexer.peek_token ();
+    }
+
+  if (t->get_id () == Tiger::IN || t->get_id () == Tiger::END)
+    lexer.skip_token ();
+}
+
+
+/* OK */
+void
+Parser::skip_after_function_call ()
+{
+  const_TokenPtr t = lexer.peek_token ();
+
+  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END && t->get_id () != Tiger::RIGHT_PAREN)
+    {
+      lexer.skip_token ();
+      t = lexer.peek_token ();
+    }
+
+  if (t->get_id () == Tiger::RIGHT_PAREN)
+    lexer.skip_token ();
+}
+
 
 /* OK */
 const_TokenPtr
@@ -415,9 +449,7 @@ Parser::parse_descriptor_seq(bool (Parser::*done) ())
     {
       Tree exp = parse_variable_declaration ();
       get_current_exp_list ().append (exp);
-      if (exp.is_error ())
-          break;
-      t = lexer.peek_token ();
+     t = lexer.peek_token ();
     }
 }
 
@@ -498,9 +530,9 @@ Parser::parse_let_exp()
       TreeSymbolMapping let_scope = leave_scope ();
       Tree let_exp = let_scope.bind_expr;
       let_exp.set_exp_type ("void");
-      
-      if (let_exp.is_error ())
-          return Tree::error ();      
+      if (let_exp.is_error ()){
+          skip_after_in_end ();
+          return Tree::error ();      }
 
     if (!skip_token (Tiger::END)){
       return Tree::error ();
@@ -550,7 +582,7 @@ Parser::parse_variable_declaration()
         type_tree = parse_type ();
     
     if (type_tree.is_error ()) {
-      skip_after_end_var ();
+      skip_next_declaration_in ();
       return Tree::error ();
     }
    } 
@@ -563,7 +595,7 @@ Parser::parse_variable_declaration()
 
   Tree expr = parse_exp ();
     if (expr.is_error ()) {
-      skip_after_end_var ();
+      skip_next_declaration_in ();
     return Tree::error ();
     }
 
@@ -589,6 +621,13 @@ Parser::parse_variable_declaration()
 			  get_identifier (sym->get_name ().c_str ()),
 			  retrieve_type(expr.get_exp_type ()).get_tree ());
   } else {
+    if(print_type (type_tree.get_tree ()) != print_type (expr.get_type ())){
+        error_at (identifier->get_locus (),
+		"type '%s' is not compatible with '%s'",
+		print_type (type_tree.get_tree ()), print_type (expr.get_type ()));//aqui
+      skip_next_declaration_in ();
+      return Tree::error ();
+    }
     decl = build_decl (identifier->get_locus (), VAR_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
 			  type_tree.get_tree ());
@@ -1325,8 +1364,9 @@ Parser::parse_not_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
   
-   if (expr.is_error ())
-    return Tree::error ();
+    if (expr.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1388,8 +1428,9 @@ Parser::parse_exit_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
   
-   if (expr.is_error ())
-    return Tree::error ();
+   if (expr.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1450,8 +1491,9 @@ Parser::parse_chr_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
   
-   if (expr.is_error ())
-    return Tree::error ();
+   if (expr.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1512,8 +1554,9 @@ Parser::parse_substring_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr1 = parse_exp ();
   
-   if (expr1.is_error ())
-    return Tree::error ();
+   if (expr1.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
 
    if (!skip_token (Tiger::COMMA))
@@ -1524,8 +1567,9 @@ Parser::parse_substring_function ()
   const_TokenPtr second_of_expr = lexer.peek_token ();
    Tree expr2 = parse_exp ();
 
-  if (expr2.is_error ())
-    return Tree::error ();
+  if (expr2.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
   
   if (!skip_token (Tiger::COMMA))
     {
@@ -1535,8 +1579,9 @@ Parser::parse_substring_function ()
   const_TokenPtr third_of_expr = lexer.peek_token ();
    Tree expr3 = parse_exp ();
 
-   if (expr3.is_error ())
-    return Tree::error ();
+   if (expr3.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1609,8 +1654,9 @@ Parser::parse_concat_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr1 = parse_exp ();
   
-   if (expr1.is_error ())
-    return Tree::error ();
+   if (expr1.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
 
    if (!skip_token (Tiger::COMMA))
@@ -1621,8 +1667,9 @@ Parser::parse_concat_function ()
   const_TokenPtr second_of_expr = lexer.peek_token ();
    Tree expr2 = parse_exp ();
   
-   if (expr2.is_error ())
-    return Tree::error ();
+   if (expr2.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1678,7 +1725,7 @@ Parser::get_strcmp_addr ()
 }
 
 Tree
-Parser::parse_strcmp_function ()
+Parser::parse_strcmp_function()
 {
  
  if (!skip_token (Tiger::LEFT_PAREN))
@@ -1688,8 +1735,9 @@ Parser::parse_strcmp_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr1 = parse_exp ();
   
-   if (expr1.is_error ())
-    return Tree::error ();
+   if (expr1.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
 
    if (!skip_token (Tiger::COMMA))
@@ -1700,8 +1748,9 @@ Parser::parse_strcmp_function ()
   const_TokenPtr second_of_expr = lexer.peek_token ();
    Tree expr2 = parse_exp ();
   
-   if (expr2.is_error ())
-    return Tree::error ();
+   if (expr2.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1758,7 +1807,7 @@ Parser::get_size_addr ()
 }
 
 Tree
-Parser::parse_size_function ()
+Parser::parse_size_function()
 {
  
  if (!skip_token (Tiger::LEFT_PAREN))
@@ -1768,8 +1817,9 @@ Parser::parse_size_function ()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
   
-   if (expr.is_error ())
-    return Tree::error ();
+   if (expr.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1831,8 +1881,9 @@ Parser::parse_ord_function()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
   
-   if (expr.is_error ())
-    return Tree::error ();
+   if (expr.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -1965,8 +2016,9 @@ Parser::parse_write_function()
     }
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
-   if (expr.is_error ())
-    return Tree::error ();
+   if (expr.is_error ()){
+    skip_after_function_call ();
+    return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
@@ -2326,7 +2378,6 @@ Parser::coerce_binary_arithmetic(const_TokenPtr tok, Tree *left, Tree *right)
   else if ((left_type == integer_type_node && right_type == float_type_node)
 	   || (left_type == float_type_node && right_type == integer_type_node))
     {
-      // We will coerce the integer into a float
       if (left_type == integer_type_node)
 	{
 	  *left = build_tree (FLOAT_EXPR, left->get_locus (), float_type_node,
@@ -2682,7 +2733,6 @@ Parser::parse_exp_naming_variable()
   Tree expr = parse_exp ();
   if (expr.is_error ())
     return expr;
-  // talvez mudar aqui
   if (expr.get_tree_code () != MODIFY_EXPR && expr.get_tree_code () != ARRAY_REF
       && expr.get_tree_code () != COMPONENT_REF)
     {

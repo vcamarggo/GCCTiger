@@ -1,0 +1,9 @@
+/* OK */
+
+let
+var a : int := 2
+var b : real := 2.0
+var c : string := "2"
+in
+print (a);print(b);print(c)
+end
