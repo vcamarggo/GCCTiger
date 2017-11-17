@@ -143,6 +143,7 @@ public:
   void parse_program ();
 
 
+  Tree parse_declaration ();
   Tree parse_variable_declaration ();
   Tree parse_type_declaration ();
 
@@ -447,9 +448,24 @@ Parser::parse_descriptor_seq(bool (Parser::*done) ())
   const_TokenPtr t = lexer.peek_token ();
   while (!(this->*done) ())
     {
-      Tree exp = parse_variable_declaration ();
+      Tree exp = parse_declaration ();
       get_current_exp_list ().append (exp);
      t = lexer.peek_token ();
+    }
+}
+
+
+Tree
+Parser::parse_declaration()
+{
+  const_TokenPtr tok = lexer.peek_token ();
+  switch (tok->get_id ())
+    {
+    case Tiger::VAR:
+     return parse_variable_declaration();
+    default:
+      unexpected_token (tok);
+      return Tree::error ();
     }
 }
 
