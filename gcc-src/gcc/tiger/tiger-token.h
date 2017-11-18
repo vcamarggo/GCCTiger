@@ -59,7 +59,7 @@ namespace Tiger
   TIGER_TOKEN_KEYWORD (FLOAT, "real")                                           \
   TIGER_TOKEN_KEYWORD (FLUSH, "flush")                                          \
   TIGER_TOKEN_KEYWORD (FOR, "for")                                              \
-  TIGER_TOKEN_KEYWORD (FUNCTION, "function")                                    \
+  TIGER_TOKEN_KEYWORD (FUNC, "function")                                    \
   TIGER_TOKEN_KEYWORD (IF, "if")                                                \
   TIGER_TOKEN_KEYWORD (IN, "in")                                                \
   TIGER_TOKEN_KEYWORD (INT, "int")                                              \

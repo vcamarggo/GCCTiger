@@ -19,6 +19,12 @@ SymbolMapping::insert (SymbolPtr s)
   gcc_assert (p.second);
 }
 
+void
+SymbolMapping::remove (SymbolPtr s)
+{
+  map.erase (s->get_name ());
+}
+
 SymbolPtr
 SymbolMapping::get (const std::string &str) const
 {

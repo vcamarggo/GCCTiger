@@ -1,0 +1,7 @@
+/* a */
+let
+   var i : int := if 1<2 then 3 else 4
+in
+  print(i)
+end
+

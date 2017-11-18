@@ -13,6 +13,7 @@ struct SymbolMapping
 public:
 
   void insert (SymbolPtr s);
+  void remove (SymbolPtr s);
   SymbolPtr get (const std::string &str) const;
 
 private:

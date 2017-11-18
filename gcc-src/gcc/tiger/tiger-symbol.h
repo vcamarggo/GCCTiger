@@ -18,6 +18,7 @@ enum /* class */ SymbolKind
 {
   INVALID,
   VARIABLE,
+  FUNCTION,
   TYPENAME
 };
 
@@ -42,7 +43,8 @@ public:
   void set_tree_decl (Tree decl_)
   {
     gcc_assert ((kind == VARIABLE && decl_.get_tree_code() == VAR_DECL)
-                    || (kind == TYPENAME && decl_.get_tree_code() == TYPE_DECL));
+                    || (kind == TYPENAME && decl_.get_tree_code() == TYPE_DECL) 
+                        || (kind == FUNCTION && decl_.get_tree_code() == FUNCTION_DECL));
     decl = decl_;
   }
 
