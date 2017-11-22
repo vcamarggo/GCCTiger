@@ -23,7 +23,7 @@ enum /* class */ FunctionKind
 struct Function
 {
 public:
-  Function (FunctionKind kind, const std::string &name_, tree return_type_node_, std::vector<tree> params_type_node_) : kind(kind), name (name_), return_type_node(return_type_node_), params_type_node(params_type_node_), decl (error_mark_node)
+  Function (FunctionKind kind, const std::string &name_, tree return_type_node_, std::vector<tree> params_type_node_, int lib_func_) : kind(kind), name (name_), return_type_node(return_type_node_), params_type_node(params_type_node_), lib_func(lib_func_), decl (error_mark_node)
   {
     gcc_assert (name.size () > 0);
   }
@@ -41,6 +41,11 @@ public:
   int get_nr_args () const
   {
     return params_type_node.size ();
+  }
+
+  int is_lib_func () const
+  {
+    return lib_func;
   }
 
   tree get_param (int i) const
@@ -74,6 +79,7 @@ private:
   std::string name;
   tree return_type_node;
   std::vector<tree>  params_type_node;
+  int lib_func;
   Tree decl;
 };
 

@@ -31,6 +31,8 @@
 
 #define MAIN_PAREN_RULES 0
 #define OTHER_PAREN_RULES 1
+#define USER_FUNC 0
+#define LIB_FUNC 1
 
 using namespace std;
 namespace Tiger
@@ -326,17 +328,17 @@ void Parser::prepare_function_mapping(){
 
   FunctionPtr substring 
           (new Function 
-                   (Tiger::FUNCTION, "substring", build_pointer_type (char_type_node), double_integer_string_node_list));//doesn work
+                   (Tiger::FUNCTION, "substring", build_pointer_type (char_type_node), double_integer_string_node_list, LIB_FUNC));
   FunctionPtr concat 
           (new Function 
-                   (Tiger::FUNCTION, "concat", build_pointer_type (char_type_node), double_string_node_list));//doesn work
-  FunctionPtr size (new Function (Tiger::FUNCTION, "size", integer_type_node, string_node_list));
-  FunctionPtr ord (new Function (Tiger::FUNCTION, "ord", integer_type_node, string_node_list));
-  FunctionPtr chr (new Function (Tiger::FUNCTION, "chr", build_pointer_type (char_type_node), integer_node_list));
-  FunctionPtr getchar (new Function (Tiger::FUNCTION, "getchar", build_pointer_type (char_type_node), null_list));
-  FunctionPtr flush (new Function (Tiger::FUNCTION, "flush", void_type_node, null_list));
-  FunctionPtr negate (new Function (Tiger::FUNCTION, "negate", integer_type_node, integer_node_list));
-  FunctionPtr exit (new Function (Tiger::FUNCTION, "exit", integer_type_node, integer_node_list));
+                   (Tiger::FUNCTION, "concat", build_pointer_type (char_type_node), double_string_node_list, LIB_FUNC));
+  FunctionPtr size (new Function (Tiger::FUNCTION, "size", integer_type_node, string_node_list, LIB_FUNC));
+  FunctionPtr ord (new Function (Tiger::FUNCTION, "ord", integer_type_node, string_node_list, LIB_FUNC));
+  FunctionPtr chr (new Function (Tiger::FUNCTION, "chr", build_pointer_type (char_type_node), integer_node_list, LIB_FUNC));
+  FunctionPtr getchar (new Function (Tiger::FUNCTION, "getchar", build_pointer_type (char_type_node), null_list, LIB_FUNC));
+  FunctionPtr flush (new Function (Tiger::FUNCTION, "flush", void_type_node, null_list, LIB_FUNC));
+  FunctionPtr negate (new Function (Tiger::FUNCTION, "negate", integer_type_node, integer_node_list, LIB_FUNC));
+  FunctionPtr exit (new Function (Tiger::FUNCTION, "exit", integer_type_node, integer_node_list, LIB_FUNC));
 
   scope.get_current_function_mapping ().insert (substring);
   scope.get_current_function_mapping ().insert (concat);
@@ -594,7 +596,8 @@ Parser::build_let_exp (Tree let_exp)
 Tree
 Parser::parse_function_declaration()
 {
-  /* function_declaration function name (arg : type) : type = exp*/
+  std::vector<tree> param_node_list;
+  param_node_list.push_back(integer_type_node);
   if (!skip_token (Tiger::FUNC))
     {
       skip_next_declaration_in ();
@@ -613,10 +616,19 @@ Parser::parse_function_declaration()
       skip_after_end ();
       return Tree::error ();
    }
+    tok = lexer.peek_token();
     while (tok->get_id() != Tiger::RIGHT_PAREN){
-      tok = lexer.peek_token();
-      lexer.skip_token();
+        skip_token(Tiger::IDENTIFIER);
+        skip_token(Tiger::COLON);
+        Tree type_param = parse_type ();
+        tok = lexer.peek_token();
+        if(tok->get_id() == Tiger::RIGHT_PAREN)
+	   break;
+        skip_token(Tiger::COMMA);
+        lexer.skip_token();
     }
+        skip_token(Tiger::RIGHT_PAREN);
+
 
   Tree type_tree;
   tok = lexer.peek_token ();
@@ -646,10 +658,9 @@ Parser::parse_function_declaration()
     return Tree::error ();
     }  
 
-  std::vector<tree> null_node_list;
   type_tree = expr.get_type ();
 
-  FunctionPtr sym (new Function (Tiger::FUNCTION, identifier->get_str (), type_tree.get_tree (), null_node_list));
+  FunctionPtr sym (new Function (Tiger::FUNCTION, identifier->get_str (), type_tree.get_tree (), param_node_list, USER_FUNC));
   if (scope.get_current_function_mapping ().get (identifier->get_str ()))
     {
 	scope.get_current_function_mapping ().remove (sym);
@@ -666,7 +677,7 @@ Parser::parse_function_declaration()
   enter_scope ();
   Tree decl;
   if(typeNulo){
-   if(expr.get_tree () != void_type_node){
+   if(expr.get_type () != void_type_node){
       error_at (identifier->get_locus (),
 		"procedure must be void, but it is '%s'",
 		print_type (expr.get_type ()));
@@ -697,23 +708,29 @@ Parser::parse_function_declaration()
 
   sym->set_tree_decl (decl);
 
-//inicia aqui
  tree function_fndecl_type_param[] = {};
   tree function_fndecl_type
-    = build_function_type_array (integer_type_node, 0, function_fndecl_type_param);
+    = build_function_type_array (type_tree.get_tree (), 0, function_fndecl_type_param);
   function_fndecl = build_fn_decl (sym->get_name ().c_str (), function_fndecl_type);
 
-  tree resdecl
-    = build_decl (UNKNOWN_LOCATION, RESULT_DECL, NULL_TREE, integer_type_node);
-  DECL_CONTEXT (resdecl) = function_fndecl;
-  DECL_RESULT (function_fndecl) = resdecl;
-  tree set_result
-    = build2 (INIT_EXPR, void_type_node, DECL_RESULT (function_fndecl),
-	      build_int_cst_type (integer_type_node, 5));
 
-  tree return_exp = build1 (RETURN_EXPR, void_type_node, set_result);
+         if(expr.get_type () != void_type_node){
+            tree resdecl
+	    = build_decl (UNKNOWN_LOCATION, RESULT_DECL, NULL_TREE, type_tree.get_tree ());
+             DECL_CONTEXT (resdecl) = function_fndecl;
+             DECL_RESULT (function_fndecl) = resdecl;
+	     tree set_result
+	           = build2 (INIT_EXPR, void_type_node, DECL_RESULT (function_fndecl),
+		      expr.get_tree ());
+          
+	     tree return_exp = build1 (RETURN_EXPR, void_type_node, set_result);
+             get_current_exp_list ().append (return_exp);
+          } else {
+ 	      tree resdecl2
+                   = build_decl (UNKNOWN_LOCATION, RESULT_DECL, NULL_TREE, void_type_node);
+                   DECL_CONTEXT (resdecl2) = function_fndecl;
+          }
 
-  get_current_exp_list ().append (return_exp);
   TreeSymbolMapping function_tree_scope = leave_scope ();
   Tree function_block = function_tree_scope.block;
 
@@ -730,10 +747,10 @@ Parser::parse_function_declaration()
 
   function_fndecl = NULL_TREE;
 
-  function_fn
+  Tree function
    = build1 (ADDR_EXPR, build_pointer_type (function_fndecl_type), function_fndecl);
 
-  return function_fn;
+  return function;
 }
 
 
@@ -1100,7 +1117,7 @@ Tree
 Parser::parse_function_call (string nameFunc)
 {
   FunctionPtr func = scope.lookupFunction (nameFunc);
-  int nr_args = func->get_nr_args();
+  int nr_args = func->get_nr_args ();
   tree args[nr_args];
   if (!skip_token (Tiger::LEFT_PAREN))
     {
@@ -1110,22 +1127,22 @@ Parser::parse_function_call (string nameFunc)
    for(int i =0 ; i < nr_args; i++){
   const_TokenPtr exp_tok = lexer.peek_token ();
        Tree exp = parse_exp ();
-
+       if (exp.is_error ()){
+           skip_after_function ();
+           return Tree::error ();
+       }
        //trabalhar aqui
        if(exp.get_type () != func->get_params_type_node ()[i] 
 	&& print_type (exp.get_type ()) != print_type (func->get_params_type_node()[i])){
                error_at (exp_tok->get_locus (),
-		"parameter %d type %s must be %s", i,
+		"parameter %d of type %s must be %s", i+1,
 		print_type (exp.get_type ()),
 		print_type (func->get_params_type_node()[i]));
                 skip_after_function ();
                 return Tree::error ();
        }
 
-       if (exp.is_error ()){
-           skip_after_function ();
-           return Tree::error ();
-	}else args[i] = exp.get_tree ();
+        args[i] = exp.get_tree ();
 	if(i<nr_args -1){
         skip_token(Tiger::COMMA);}
    }
@@ -1140,17 +1157,20 @@ Parser::parse_function_call (string nameFunc)
 				TYPE_QUAL_CONST)) /* const char* */
       };
       tree fndecl_type
-	= build_varargs_function_type_array (build_pointer_type (char_type_node), 1,
+	= build_varargs_function_type_array (func->get_return_type_node (), 1,
 					     fndecl_type_param);
 
       tree function_fn_decl = build_fn_decl (func->get_name ().c_str (), fndecl_type);
-      DECL_EXTERNAL (function_fn_decl) = 1;
+      if(func->is_lib_func ())
+	DECL_EXTERNAL (function_fn_decl) = 1;
+      else
+	DECL_EXTERNAL (function_fn_decl) = 0;
 
       function_fn
 	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), function_fn_decl);
 
       tree stmt
-    	= build_call_array_loc (first_of_expr->get_locus (), build_pointer_type (char_type_node),
+    	= build_call_array_loc (first_of_expr->get_locus (), func->get_return_type_node (),
 			    function_fn.get_tree (), nr_args, args);
 
   return stmt;
@@ -1410,7 +1430,7 @@ Parser::parse_while_exp()
   const_TokenPtr t = lexer.peek_token ();  
 
   enter_scope ();
-  tree typeWhile = parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
+  tree type_while = parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
   TreeSymbolMapping while_body_tree_scope = leave_scope ();
   
   Tree while_body_exp = while_body_tree_scope.bind_expr;
@@ -1420,13 +1440,13 @@ Parser::parse_while_exp()
 		    return Tree::error ();
 		}
 
-	if(typeWhile == void_type_node){
+	if(type_while == void_type_node){
 		return build_while_exp (conditional_expr, while_body_exp);
 	}
 
 	error_at (t->get_locus (),
 	"while body must no return value, but it returned '%s' type",
-	print_type (typeWhile));			
+	print_type (type_while));			
 	skip_after_end ();
 	return Tree::error ();  
 }
