@@ -1,10 +1,12 @@
 #define getchar _getchar
 #define concat _concat
+#define substring _substring
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #undef getchar
 #undef concat
+#undef substring
 
 
 int *iniciaArray(int size, int init)
@@ -20,12 +22,6 @@ int *allocaRegistro(int size)
  p = a = (int *)malloc(size);
  for(i=0;i<size;i+=sizeof(int)) *p++ = 0;
  return a;
-}
-
-struct string {int length; unsigned char chars[1];};
-
-int stringIgual(char *s, char *t)
-{ return strcmp(s,t);
 }
 
 void printa(char *s)
@@ -45,7 +41,7 @@ int ord(char *s)
      return -1;
   }
   else
-     return atoi(s);
+     return s[0];
 }
 
 char *chr(int i)
@@ -64,7 +60,7 @@ int size(char *s)
  return strlen(s);
 }
 
-char *subpalavra(char *s, unsigned int first, int n)
+char *substring(char *s, int first, int n)
 {
    if (first > strlen(s)  -1) 
    {printf("ERROR: first out of range\n"); exit(1);}
