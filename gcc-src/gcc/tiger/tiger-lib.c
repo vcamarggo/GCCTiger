@@ -1,6 +1,11 @@
+#define getchar _getchar
+#define concat _concat
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#undef getchar
+#undef concat
+
 
 int *iniciaArray(int size, int init)
 {int i;
@@ -28,13 +33,13 @@ void printa(char *s)
 puts(s);
 }
 
-void limpaOut()
+void flush()
 {
  fflush(stdout);
 }
 
 
-int chartoint(char *s)
+int ord(char *s)
 {
   if(s== NULL || strlen(s) == 0){
      return -1;
@@ -43,7 +48,7 @@ int chartoint(char *s)
      return atoi(s);
 }
 
-char *inttochar(int i)
+char *chr(int i)
 {
  if (i<0 || i>=256) 
    {printf("chr(%d) out of range\n",i); exit(1);}
@@ -54,12 +59,12 @@ char *inttochar(int i)
  return str;
 }
 
-int tamanho(char *s)
+int size(char *s)
 { 
  return strlen(s);
 }
 
-char *subpalavra(char *s, int first, int n)
+char *subpalavra(char *s, unsigned int first, int n)
 {
    if (first > strlen(s)  -1) 
    {printf("ERROR: first out of range\n"); exit(1);}
@@ -75,7 +80,7 @@ char *subpalavra(char *s, int first, int n)
   return str;
 }
 
-char *concatena(char *a, char *b)
+char *concat(char *a, char *b)
 {
  char *str = (char *) malloc (sizeof(char) * (strlen(a) + strlen(b)));
  strcat(str,a);
@@ -83,12 +88,11 @@ char *concatena(char *a, char *b)
  return str;
 }
 
-int nao(int i)
-{
+int negate(int i){
 return !i;
 }
 
-char *pegachar()
+char *getchar()
 {
 char *str;
 str = (char *) malloc (sizeof(char)*2);

@@ -24,6 +24,8 @@ tiger_OBJS = \
     tiger/tiger-parser.o \
     tiger/tiger-token.o \
     tiger/tiger-lexer.o \
+    tiger/tiger-function.o \
+    tiger/tiger-function-mapping.o \
     tiger/tiger-symbol.o \
     tiger/tiger-symbol-mapping.o \
     tiger/tiger-scope.o \

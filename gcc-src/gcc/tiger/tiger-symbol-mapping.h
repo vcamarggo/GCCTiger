@@ -4,6 +4,10 @@
 #include "tiger/tiger-symbol.h"
 #include <tr1/memory>
 #include <map>
+#include <list>
+#include <string>
+
+using namespace std;
 
 namespace Tiger
 {

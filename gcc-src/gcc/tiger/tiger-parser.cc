@@ -6,6 +6,8 @@
 #include "tiger/tiger-tree.h"
 #include "tiger/tiger-symbol.h"
 #include "tiger/tiger-symbol-mapping.h"
+#include "tiger/tiger-function.h"
+#include "tiger/tiger-function-mapping.h"
 #include "tiger/tiger-scope.h"
 
 
@@ -42,7 +44,7 @@ private:
   void skip_after_colon ();
   void skip_next_declaration_in ();
   void skip_after_in_end ();
-  void skip_after_function_call ();
+  void skip_after_function ();
 
   bool skip_token (TokenId);
   const_TokenPtr expect_token (TokenId);
@@ -61,16 +63,10 @@ private:
   Tree get_function_addr (string tok_str);
   Tree get_puts_addr ();
   Tree get_printf_addr ();
-  Tree get_getchar_addr ();
-  Tree get_flush_addr ();
   Tree get_ord_addr ();
   Tree get_chr_addr ();
-  Tree get_size_addr ();
   Tree get_substring_addr ();
   Tree get_strcmp_addr ();
-  Tree get_concat_addr ();
-  Tree get_not_addr ();
-  Tree get_exit_addr ();
 
   Tree build_label_decl (const char *name, location_t loc);
   Tree build_let_exp (Tree let_exp);
@@ -80,7 +76,6 @@ private:
 			    Tree for_body_exp_list);
 
   const char *print_type (Tree type);
-  Tree retrieve_type (string type);
 
   TreeExpList &get_current_exp_list ();
 
@@ -96,11 +91,10 @@ private:
 
   SymbolPtr query_type (const std::string &name, location_t loc);
   SymbolPtr query_variable (const std::string &name, location_t loc);
-  SymbolPtr query_variable_and_function (const std::string &name, location_t loc);
-  SymbolPtr query_function (const std::string &name, location_t loc);
+  FunctionPtr query_function (const std::string &name);
   SymbolPtr query_integer_variable (const std::string &name, location_t loc);
 
-  string parse_exp_seq (bool (Parser::*done) (), int level);
+  tree parse_exp_seq (bool (Parser::*done) (), int level);
   void parse_descriptor_seq (bool (Parser::*done) ());
 
   bool done_end ();
@@ -138,13 +132,13 @@ private:
 #undef BINARY_HANDLER
 
 public:
-  Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), printf_fn (), getchar_fn (), flush_fn (),
-  ord_fn (), chr_fn (), size_fn (), substring_fn (), strcmp_fn (), not_fn (), concat_fn (), exit_fn()
+  Parser (Lexer &lexer_) : lexer (lexer_), puts_fn (), printf_fn (),
+  substring_fn (), strcmp_fn ()
   {
   }
 
   void parse_program ();
-
+  void prepare_function_mapping ();
 
   Tree parse_declaration ();
   Tree parse_variable_declaration ();
@@ -156,7 +150,7 @@ public:
   Tree parse_field_declaration (std::vector<std::string> &field_names);
 
   Tree parse_assignment_exp (Tree var);
-  Tree parse_function_call (Tree function, string tok_str);
+  Tree parse_function_call (string tok_str);
   Tree parse_if_exp ();
   Tree parse_while_exp ();
   Tree parse_for_exp();
@@ -166,15 +160,10 @@ public:
   Tree parse_function ();
   Tree parse_write_function ();
   Tree parse_read_function ();
-  Tree parse_flush_function ();
   Tree parse_ord_function ();
   Tree parse_chr_function ();
-  Tree parse_size_function ();
   Tree parse_substring_function ();
   Tree parse_strcmp_function ();
-  Tree parse_not_function ();
-  Tree parse_concat_function ();
-  Tree parse_exit_function ();
 
   Tree parse_exp ();
   Tree parse_exp_naming_variable();
@@ -186,19 +175,13 @@ private:
   Scope scope;
 
   tree main_fndecl;
+  tree function_fndecl;
 
   Tree puts_fn;
   Tree printf_fn;
-  Tree getchar_fn;
-  Tree flush_fn;
-  Tree ord_fn;
-  Tree chr_fn;
-  Tree size_fn;
   Tree substring_fn;
   Tree strcmp_fn;
-  Tree not_fn;
-  Tree concat_fn;
-  Tree exit_fn;
+  Tree function_fn;
 
   std::vector<TreeExpList> stack_exp_list;
   std::vector<TreeChain> stack_var_decl_chain;
@@ -287,7 +270,7 @@ Parser::skip_after_in_end()
 
 /* OK */
 void
-Parser::skip_after_function_call ()
+Parser::skip_after_function ()
 {
   const_TokenPtr t = lexer.peek_token ();
 
@@ -314,7 +297,7 @@ Parser::expect_token(Tiger::TokenId token_id)
     }
   else
     {
-      error_at (t->get_locus (), "expecting %s but %s found\n",
+      error_at (t->get_locus (), "expecting '%s' but '%s' found\n",
 		get_token_description (token_id), t->get_token_description ());
       return const_TokenPtr ();
     }
@@ -331,7 +314,39 @@ Parser::skip_token(Tiger::TokenId token_id)
 void
 Parser::unexpected_token(const_TokenPtr t)
 {
-  ::error_at (t->get_locus (), "unexpected %s\n", t->get_token_description ());
+  ::error_at (t->get_locus (), "unexpected '%s'\n", t->get_token_description ());
+}
+
+void Parser::prepare_function_mapping(){
+  std::vector<tree> null_list;
+
+  std::vector<tree> integer_node_list;
+  integer_node_list.push_back (integer_type_node);
+
+  std::vector<tree> string_node_list;
+  string_node_list.push_back (build_pointer_type (char_type_node));
+
+  std::vector<tree> double_string_node_list;
+  double_string_node_list.push_back (build_pointer_type (char_type_node));
+  double_string_node_list.push_back (build_pointer_type (char_type_node));
+
+  FunctionPtr concat (new Function (Tiger::FUNCTION, "concat", build_pointer_type (char_type_node), double_string_node_list));
+  FunctionPtr size (new Function (Tiger::FUNCTION, "size", integer_type_node, string_node_list));
+  FunctionPtr ord (new Function (Tiger::FUNCTION, "ord", integer_type_node, string_node_list));
+  FunctionPtr chr (new Function (Tiger::FUNCTION, "chr", build_pointer_type (char_type_node), integer_node_list));
+  FunctionPtr getchar (new Function (Tiger::FUNCTION, "getchar", build_pointer_type (char_type_node), null_list));
+  FunctionPtr flush (new Function (Tiger::FUNCTION, "flush", void_type_node, null_list));
+  FunctionPtr negate (new Function (Tiger::FUNCTION, "negate", integer_type_node, integer_node_list));
+  FunctionPtr exit (new Function (Tiger::FUNCTION, "exit", integer_type_node, integer_node_list));
+
+  scope.get_current_function_mapping ().insert (concat);
+  scope.get_current_function_mapping ().insert (size);
+  scope.get_current_function_mapping ().insert (ord);
+  scope.get_current_function_mapping ().insert (chr);
+  scope.get_current_function_mapping ().insert (getchar);
+  scope.get_current_function_mapping ().insert (flush);
+  scope.get_current_function_mapping ().insert (negate);
+  scope.get_current_function_mapping ().insert (exit);
 }
 
 void
@@ -350,7 +365,7 @@ Parser::parse_program()
   /* Enter top level scope*/
   
   enter_scope ();
- 
+  prepare_function_mapping ();
   /* program -> exp**/
   parse_exp_seq (&Parser::done_end_of_file, MAIN_PAREN_RULES);
   /* Append "return 0;"*/
@@ -422,15 +437,15 @@ Parser::done_right_paren()
   return (t->get_id () == Tiger::RIGHT_PAREN);
 }
 
-string
+tree
 Parser::parse_exp_seq(bool (Parser::*done) (), int level)
 {
   /* Parse exps until done and append to the current exp list;*/
-  string lastTreeType;
+  tree lastTreeType = void_type_node;
   while (!(this->*done) ())
     {
       Tree exp = parse_exp ();
-      lastTreeType = exp.get_exp_type ();
+      lastTreeType = exp.get_type ().get_tree ();
       get_current_exp_list ().append (exp);
       const_TokenPtr tok = lexer.peek_token ();
       if (tok->get_id () == Tiger::SEMICOLON){
@@ -438,7 +453,7 @@ Parser::parse_exp_seq(bool (Parser::*done) (), int level)
       }else if(level == 0){ /* level 0 == main() */
           tok = lexer.peek_token ();
           if (tok->get_id () != Tiger::END_OF_FILE){
-              error_at (tok->get_locus (), "expecting end of file but %s found\n", tok->get_token_description ());
+              error_at (tok->get_locus (), "expecting end of file but '%s' found\n", tok->get_token_description ());
           }
       }else break;
       
@@ -552,7 +567,6 @@ Parser::parse_let_exp()
       parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
       TreeSymbolMapping let_scope = leave_scope ();
       Tree let_exp = let_scope.bind_expr;
-      let_exp.set_exp_type ("void");
       if (let_exp.is_error ()){
           skip_after_end ();
           return Tree::error ();      
@@ -573,7 +587,6 @@ Parser::build_let_exp (Tree let_exp)
   exp_list.append (let_exp);  
 
   Tree retTree = exp_list.get_tree ();
-  retTree.set_exp_type("void");
   return retTree;
 }
 
@@ -627,25 +640,33 @@ Parser::parse_function_declaration()
       return Tree::error ();
     }
 
-  Tree expr = parse_exp ();
+   Tree expr = parse_exp ();
     if (expr.is_error ()) {
       skip_after_end ();
     return Tree::error ();
-    }
+    }  
 
-  SymbolPtr sym (new Symbol (Tiger::FUNCTION, identifier->get_str ()));
-  if (scope.get_current_mapping ().get (identifier->get_str ()))
+  std::vector<tree> null_node_list;
+  type_tree = expr.get_type ();
+
+  FunctionPtr sym (new Function (Tiger::FUNCTION, identifier->get_str (), type_tree.get_tree (), null_node_list));
+  if (scope.get_current_function_mapping ().get (identifier->get_str ()))
     {
-	scope.get_current_mapping ().remove (sym);
+	scope.get_current_function_mapping ().remove (sym);
     }
-  scope.get_current_mapping ().insert (sym);
+  scope.get_current_function_mapping ().insert (sym);
 
-  sym = query_function (identifier->get_str (), identifier->get_locus ());
+  sym = query_function (identifier->get_str ());
+  if(sym == NULL){
+     error_at (identifier->get_locus (), "function '%s' not declared in the current scope",
+		identifier->get_str ()); 
+     return Tree::error ();
+  }
 
-  
+  enter_scope ();
   Tree decl;
   if(typeNulo){
-   if(retrieve_type(expr.get_exp_type ()).get_tree () != void_type_node){
+   if(expr.get_tree () != void_type_node){
       error_at (identifier->get_locus (),
 		"procedure must be void, but it is '%s'",
 		print_type (expr.get_type ()));
@@ -653,10 +674,9 @@ Parser::parse_function_declaration()
       return Tree::error ();
    }
 
-     
-  decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
+      decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
-			  retrieve_type(expr.get_exp_type ()).get_tree ());
+			  type_tree.get_tree ());
   } else {
     if(print_type (type_tree.get_tree ()) != print_type (expr.get_type ())){
         error_at (tok->get_locus (),
@@ -665,22 +685,56 @@ Parser::parse_function_declaration()
       skip_after_end ();
       return Tree::error ();
     }
+    cout << "algo2 "<<print_type(expr.get_type ().get_tree ())<< " end"<<endl;
     decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
 			  type_tree.get_tree ());
   }
   
-  DECL_CONTEXT (decl.get_tree()) = main_fndecl;
+  DECL_CONTEXT (decl.get_tree()) = function_fndecl;
 
   gcc_assert (!stack_var_decl_chain.empty ());
   stack_var_decl_chain.back ().append (decl);
 
   sym->set_tree_decl (decl);
-  //resolver aqui
-  Tree retTree
-    = build_tree (ADDR_EXPR, identifier->get_locus (), retrieve_type(expr.get_exp_type ()).get_tree (), decl);
 
-  return retTree;
+//inicia aqui
+ tree function_fndecl_type_param[] = {};
+  tree function_fndecl_type
+    = build_function_type_array (integer_type_node, 0, function_fndecl_type_param);
+  function_fndecl = build_fn_decl (sym->get_name ().c_str (), function_fndecl_type);
+
+  tree resdecl
+    = build_decl (UNKNOWN_LOCATION, RESULT_DECL, NULL_TREE, integer_type_node);
+  DECL_CONTEXT (resdecl) = function_fndecl;
+  DECL_RESULT (function_fndecl) = resdecl;
+  tree set_result
+    = build2 (INIT_EXPR, void_type_node, DECL_RESULT (function_fndecl),
+	      build_int_cst_type (integer_type_node, 5));
+
+  tree return_exp = build1 (RETURN_EXPR, void_type_node, set_result);
+
+  get_current_exp_list ().append (return_exp);
+  TreeSymbolMapping function_tree_scope = leave_scope ();
+  Tree function_block = function_tree_scope.block;
+
+  BLOCK_SUPERCONTEXT (function_block.get_tree ()) = function_fndecl;
+  DECL_INITIAL (function_fndecl) = function_block.get_tree ();
+  DECL_SAVED_TREE (function_fndecl) = function_tree_scope.bind_expr.get_tree ();
+
+  DECL_EXTERNAL (function_fndecl) = 0;
+  DECL_PRESERVE_P (function_fndecl) = 1;
+
+  gimplify_function_tree (function_fndecl);
+
+  cgraph_node::finalize_function (function_fndecl, true);
+
+  function_fndecl = NULL_TREE;
+
+  function_fn
+   = build1 (ADDR_EXPR, build_pointer_type (function_fndecl_type), function_fndecl);
+
+  return function_fn;
 }
 
 
@@ -746,10 +800,12 @@ Parser::parse_variable_declaration()
   
   Tree decl;
   if(typeNulo){
-     
+
+  type_tree = expr.get_type ();
+   
   decl = build_decl (identifier->get_locus (), VAR_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
-			  retrieve_type(expr.get_exp_type ()).get_tree ());
+			   type_tree.get_tree ());
   } else {
     if(print_type (type_tree.get_tree ()) != print_type (expr.get_type ())){
         error_at (identifier->get_locus (),
@@ -832,28 +888,6 @@ Parser::print_type(Tree type)
     {
       return "<<unknown-type>>";
     }
-}
-
-Tree
-Parser::retrieve_type(string type)
-{
-  if (type == "int" )
-    {
-      return integer_type_node;
-    }
-  else if (type == "float")
-    {
-      return float_type_node;
-    }
-  else if (type == "string")
-    {
-      return build_pointer_type (char_type_node);
-    }
-  else if (type == "void")
-    {
-      return void_type_node;
-    }
-   return NULL;
 }
 
 /*
@@ -1037,44 +1071,16 @@ Parser::query_variable(const std::string &name, location_t loc)
   return sym;
 }
 
-SymbolPtr
-Parser::query_function(const std::string &name, location_t loc)
+FunctionPtr
+Parser::query_function(const std::string &name)
 {
-  SymbolPtr sym = scope.lookup (name);
-  if (sym == NULL)
-    {
-      error_at (loc, "function '%s' not declared in the current scope",
-		name.c_str ());
-    }
-  else if (sym->get_kind () != Tiger::FUNCTION)
-    {
-      error_at (loc, "name '%s' is not a function", name.c_str ());
-      sym = SymbolPtr();
-    }
-  return sym;
-}
-
-SymbolPtr
-Parser::query_variable_and_function(const std::string &name, location_t loc)
-{
-  SymbolPtr sym = scope.lookup (name);
-  if (sym == NULL)
-    {
-      error_at (loc, "neither a function or a variable '%s' is declared in the current scope",
-		name.c_str ());
-    }
-  else if (sym->get_kind () != Tiger::FUNCTION && sym->get_kind () != Tiger::VARIABLE)
-    {
-      error_at (loc, "name '%s' is not a variable or a function", name.c_str ());
-      sym = SymbolPtr();
-    }
-  return sym;
+return scope.lookupFunction (name);
 }
 
 SymbolPtr
 Parser::query_integer_variable (const std::string &name, location_t loc)
 {
-  SymbolPtr sym = query_variable_and_function (name, loc);
+  SymbolPtr sym = query_variable (name, loc);
   if (sym != NULL)
     {
       Tree var_decl = sym->get_tree_decl ();
@@ -1092,51 +1098,52 @@ Parser::query_integer_variable (const std::string &name, location_t loc)
 }
 
 Tree
-Parser::get_function_addr (string tok_str)
+Parser::parse_function_call (string nameFunc)
 {
-  Tree function_fn;
-  if (function_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_varargs_function_type_array (integer_type_node, 0,
-					     fndecl_type_param);
-
-      tree function_fn_decl = build_fn_decl (tok_str.c_str (), fndecl_type);
-      DECL_EXTERNAL (function_fn_decl) = 1;
-
-      function_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), function_fn_decl);
-    }
-
-  return function_fn;
-}
-
-Tree
-Parser::parse_function_call (Tree function, string tok_str)
-{
+  FunctionPtr func = scope.lookupFunction (nameFunc);
+  tree args[]= {};
+  int nr_args = func->get_nr_args();
   const_TokenPtr first_of_expr = lexer.peek_token ();
+  cout <<"nr args " << nr_args <<endl;
   if (!skip_token (Tiger::LEFT_PAREN))
     {
       return Tree::error ();
     }
+   for(int i =0 ; i < nr_args; i++){
+
+       Tree exp = parse_exp ().get_tree ();
+       //trabalhar aqui
+       if (exp.is_error ()){
+           skip_after_function ();
+           return Tree::error ();
+	}else args[i] = exp.get_tree ();
+	if(i<nr_args -1){
+        skip_token(Tiger::COMMA);}
+   }
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
       return Tree::error ();
     }
+    cout<<"avancou"<<endl;
+     tree fndecl_type_param[] = {
+	build_pointer_type (
+	  build_qualified_type (char_type_node,
+				TYPE_QUAL_CONST)) /* const char* */
+      };
+      tree fndecl_type
+	= build_varargs_function_type_array (func->get_return_type_node (), nr_args,
+					     fndecl_type_param);
 
-  tree args[]= {};
+      tree function_fn_decl = build_fn_decl (func->get_name ().c_str (), fndecl_type);
+      DECL_EXTERNAL (function_fn_decl) = 1;
 
-  Tree function_fn = get_function_addr (tok_str);
+      Tree function_fn
+	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), function_fn_decl);
 
   tree stmt
-    = build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-			    function_fn.get_tree (), 0, args);
+    = build_call_array_loc (first_of_expr->get_locus (), func->get_return_type_node (),
+			    function_fn.get_tree (), nr_args, args);
 
   return stmt;
 }
@@ -1163,7 +1170,7 @@ Parser::parse_assignment_exp(Tree var)
   if (expr.is_error ())
     return Tree::error ();
 
-  if(retrieve_type(expr.get_exp_type ()).get_tree () == void_type_node){
+  if(expr.get_type () == void_type_node){
       error_at (identifier->get_locus (),
 		"var cannot receive void");
       skip_next_declaration_in();
@@ -1212,15 +1219,16 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 
   Tree endif_label_decl = build_label_decl ("end_if", then_part.get_locus ());
 
+  
   Tree goto_then = build_tree (GOTO_EXPR, bool_expr.get_locus (),
-			       void_type_node, then_label_decl, "build goto then");
+			       void_type_node, then_label_decl);
   Tree goto_endif = build_tree (GOTO_EXPR, bool_expr.get_locus (),
-				void_type_node, endif_label_decl, "build goto endif");
+				void_type_node, endif_label_decl);
 
   Tree goto_else_or_endif;
   if (!else_part.is_null ())
-    goto_else_or_endif = build_tree (GOTO_EXPR, bool_expr.get_locus (),
-				     void_type_node, else_label_decl, "build goto else or endif");
+   goto_else_or_endif = build_tree (GOTO_EXPR, bool_expr.get_locus (),
+				     void_type_node, else_label_decl);
   else
     goto_else_or_endif = goto_endif;
 
@@ -1228,11 +1236,11 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 
   Tree cond_expr
     = build_tree (COND_EXPR, bool_expr.get_locus (), void_type_node, bool_expr,
-		  goto_then, goto_else_or_endif, "build cond expr");
+		  goto_then, goto_else_or_endif);
   exp_list.append (cond_expr);
 
-  Tree then_label_expr = build_tree (LABEL_EXPR, then_part.get_locus (),
-				     void_type_node, then_label_decl, "build then");
+Tree then_label_expr = build_tree (LABEL_EXPR, then_part.get_locus (),
+				     void_type_node, then_label_decl);
   exp_list.append (then_label_expr);
 
   exp_list.append (then_part);
@@ -1242,7 +1250,7 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
       exp_list.append (goto_endif);
 
       Tree else_label_expr = build_tree (LABEL_EXPR, else_part.get_locus (),
-					 void_type_node, else_label_decl, "build else label");
+					 void_type_node, else_label_decl);
       exp_list.append (else_label_expr);
 
       exp_list.append (else_part);
@@ -1250,13 +1258,12 @@ Parser::build_if_exp (Tree bool_expr, Tree then_part, Tree else_part)
 
   Tree endif_label_expr = build_tree (LABEL_EXPR, UNKNOWN_LOCATION,
 				      void_type_node, 
- 					endif_label_decl, then_part.get_exp_type());
+ 					endif_label_decl);
   exp_list.append (endif_label_expr);
   // ver retorno do if
   /* DECL_RESULT
     This macro returns the RESULT_DECL for the function.  */
    Tree retTree = exp_list.get_tree ();
-   retTree.set_exp_type(then_part.get_exp_type());
   return retTree;
 }
 
@@ -1275,10 +1282,10 @@ Parser::parse_if_exp()
   
   const_TokenPtr tokThen = lexer.peek_token ();
   enter_scope ();
-  string typeThen = parse_exp_seq (&Parser::done_end_or_else, OTHER_PAREN_RULES);
+  tree type_then = parse_exp_seq (&Parser::done_end_or_else, OTHER_PAREN_RULES);
   TreeSymbolMapping then_tree_scope = leave_scope ();
   Tree then_exp = then_tree_scope.bind_expr;
-  then_exp.set_exp_type (typeThen);
+  
   
     if (then_exp.is_error ()) {
       skip_after_end ();
@@ -1286,7 +1293,7 @@ Parser::parse_if_exp()
     }
 
   Tree else_exp;
-  string typeElse;
+  tree type_else;
   const_TokenPtr tok = lexer.peek_token ();
   if (tok->get_id () == Tiger::ELSE)
     {
@@ -1296,30 +1303,29 @@ Parser::parse_if_exp()
       const_TokenPtr last_of_expr = lexer.peek_token ();
 
       enter_scope ();
-      typeElse = parse_exp_seq (&Parser::done_end_or_else, OTHER_PAREN_RULES);
+      type_else = parse_exp_seq (&Parser::done_end_or_else, OTHER_PAREN_RULES);
       TreeSymbolMapping else_tree_scope = leave_scope ();
       else_exp = else_tree_scope.bind_expr;
-      else_exp.set_exp_type (typeElse);
 
 		if (else_exp.is_error ()) {
 		    skip_after_end ();
 		    return Tree::error ();
 		}
 
-		if(else_exp.get_exp_type() != then_exp.get_exp_type()){
+		if(type_then != type_else){
 			error_at (last_of_expr->get_locus (),
-			"then exp type %s and else exp type %s differs",
-			then_exp.get_exp_type().c_str(), else_exp.get_exp_type().c_str());			
+			"then exp type '%s' and else exp type '%s' differs", 
+			print_type(type_then),print_type(type_else));			
 			skip_after_end ();
 			return Tree::error ();
 		}
          return build_if_exp (expr, then_exp, else_exp);
-   } if (then_exp.get_exp_type() == "void" || then_exp.get_exp_type() == "") {
+   } if (type_then == void_type_node) {
          return build_if_exp (expr, then_exp, else_exp);
    }
 	error_at (tokThen->get_locus (),
-	"then body must no return value, but it returned %s type",
-	then_exp.get_exp_type().c_str());			
+	"then body must no return value, but it returned '%s' type",
+	print_type(then_exp.get_type ()));			
 	skip_after_end ();
 	return Tree::error ();
 
@@ -1371,7 +1377,6 @@ Parser::build_while_exp(Tree bool_expr, Tree while_body)
   exp_list.append (end_of_while_label_expr);
 
    Tree retTree = exp_list.get_tree ();
-   retTree.set_exp_type("void");
   return retTree;
 
 }
@@ -1384,38 +1389,36 @@ Parser::parse_while_exp()
 
 
 		if (conditional_expr.is_error ()) {
-		    skip_after_function_call ();
+		    skip_after_function ();
 		    return Tree::error ();
 		}
 
   if (!skip_token (Tiger::DO))
     {
-      skip_after_function_call ();
+      skip_after_function ();
       return Tree::error ();
     }
 
   const_TokenPtr t = lexer.peek_token ();  
 
   enter_scope ();
-  string typeWhile = parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
+  tree typeWhile = parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
   TreeSymbolMapping while_body_tree_scope = leave_scope ();
   
   Tree while_body_exp = while_body_tree_scope.bind_expr;
-  while_body_exp.set_exp_type(typeWhile);
-  
 
 		if (while_body_exp.is_error ()) {
-		    skip_after_function_call ();
+		    skip_after_function ();
 		    return Tree::error ();
 		}
 
-	if(while_body_exp.get_exp_type() == "void" || while_body_exp.get_exp_type() == ""){
+	if(typeWhile == void_type_node){
 		return build_while_exp (conditional_expr, while_body_exp);
 	}
 
 	error_at (t->get_locus (),
-	"while body must no return value, but it returned %s type",
-	while_body_exp.get_exp_type().c_str());			
+	"while body must no return value, but it returned '%s' type",
+	print_type (typeWhile));			
 	skip_after_end ();
 	return Tree::error ();  
 }
@@ -1498,13 +1501,13 @@ Parser::parse_for_exp()
 
   if (!skip_token (Tiger::DO))
     {
-      skip_after_function_call ();
+      skip_after_function ();
       return Tree::error ();
     }
 
   const_TokenPtr t = lexer.peek_token ();  
 
-  string typeFor =  parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
+  tree typeFor =  parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
 
 
 
@@ -1513,212 +1516,23 @@ Parser::parse_for_exp()
 
          TreeSymbolMapping for_body_tree_scope = leave_scope ();
          Tree for_body_exp = for_body_tree_scope.bind_expr;
-         for_body_exp.set_exp_type(typeFor);
 
 		if (for_body_exp.is_error ()) {
-		    skip_after_function_call ();
+		    skip_after_function ();
 		    return Tree::error ();
 		}
      
-	if(for_body_exp.get_exp_type() == "void" || for_body_exp.get_exp_type() == ""){
+	if(typeFor == void_type_node){
 	  return build_for_exp (ind_var, lower_bound, upper_bound, for_body_exp);
 	}
 
 	error_at (t->get_locus (),
-	"for body must no return value, but it returned %s type",
-	for_body_exp.get_exp_type().c_str());			
+	"for body must no return value, but it returned '%s' type",
+	print_type (typeFor));			
 	skip_after_end ();
 	return Tree::error (); 
 }
 
-Tree
-Parser::get_not_addr ()
-{
-  if (not_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_function_type_array (integer_type_node, 1, fndecl_type_param);
-
-      tree not_fn_decl = build_fn_decl ("nao", fndecl_type);
-      DECL_EXTERNAL (not_fn_decl) = 1;
-
-      not_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), not_fn_decl);
-    }
-
-  return not_fn;
-}
-
-Tree
-Parser::parse_not_function ()
-{
-  
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr = parse_exp ();
-  
-    if (expr.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-  
-
-   if (expr.get_type () == integer_type_node){
-      tree args[] = {expr.get_tree ()};
-
-      Tree not_fn = get_not_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-				not_fn.get_tree (), 1, args);
-      return stmt;
-    } else {
-      error_at (first_of_expr->get_locus (),
-		"type int is expected not operand, but value is of type %s",
-		print_type (expr.get_type ()));
-      return Tree::error ();
-    }
-  
-  gcc_unreachable ();
-}
-
-
-Tree
-Parser::get_exit_addr ()
-{
-  if (exit_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_function_type_array (void_type_node, 1, fndecl_type_param);
-
-      tree exit_fn_decl = build_fn_decl ("exit", fndecl_type);
-      DECL_EXTERNAL (exit_fn_decl) = 1;
-
-      exit_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), exit_fn_decl);
-    }
-
-  return exit_fn;
-}
-
-Tree
-Parser::parse_exit_function ()
-{
-  
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr = parse_exp ();
-  
-   if (expr.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-   if (expr.get_type () == integer_type_node){
-      tree args[] = {expr.get_tree ()};
-
-      Tree exit_fn = get_exit_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), void_type_node,
-				exit_fn.get_tree (), 1, args);
-      return stmt;
-    } else {
-      error_at (first_of_expr->get_locus (),
-		"type int is expected exit operand, but value is of type %s",
-		print_type (expr.get_type ()));
-      return Tree::error ();
-    }
-  
-  gcc_unreachable ();
-}
-
-Tree
-Parser::get_chr_addr ()
-{
-  if (chr_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_function_type_array (build_pointer_type (char_type_node), 1,
-					     fndecl_type_param);
-
-      tree chr_fn_decl = build_fn_decl ("inttochar", fndecl_type);
-      DECL_EXTERNAL (chr_fn_decl) = 1;
-
-      chr_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), chr_fn_decl);
-    }
-
-  return chr_fn;
-}
-
-Tree
-Parser::parse_chr_function ()
-{
-  
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr = parse_exp ();
-  
-   if (expr.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-   if (expr.get_type () == integer_type_node){
-      tree args[] = {expr.get_tree ()};
-
-      Tree chr_fn = get_chr_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), build_pointer_type (char_type_node),
-				chr_fn.get_tree (), 1, args);
-      return stmt;
-    } else {
-      error_at (first_of_expr->get_locus (),
-		"type int is expected chr operand, but value is of type %s",
-		print_type (expr.get_type ()));
-      return Tree::error ();
-    }
-  
-  gcc_unreachable ();
-}
 
 Tree
 Parser::get_substring_addr ()
@@ -1756,7 +1570,7 @@ Parser::parse_substring_function ()
   Tree expr1 = parse_exp ();
   
    if (expr1.is_error ()){
-    skip_after_function_call ();
+    skip_after_function ();
     return Tree::error ();}
 
 
@@ -1769,7 +1583,7 @@ Parser::parse_substring_function ()
    Tree expr2 = parse_exp ();
 
   if (expr2.is_error ()){
-    skip_after_function_call ();
+    skip_after_function ();
     return Tree::error ();}
   
   if (!skip_token (Tiger::COMMA))
@@ -1781,7 +1595,7 @@ Parser::parse_substring_function ()
    Tree expr3 = parse_exp ();
 
    if (expr3.is_error ()){
-    skip_after_function_call ();
+    skip_after_function ();
     return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
@@ -1791,17 +1605,17 @@ Parser::parse_substring_function ()
 
   if (!is_string_type (expr1.get_type ())){
      error_at (first_of_expr->get_locus (),
-		"type string is expected at first substring operand, but value is of type %s",
+		"type string is expected at first substring operand, but value is of type '%s'",
 		print_type (expr1.get_type ()));
       return Tree::error ();
   } else if(expr2.get_type () != integer_type_node){
      error_at (second_of_expr->get_locus (),
-		"type int is expected at second substring operand, but value is of type %s",
+		"type int is expected at second substring operand, but value is of type '%s'",
 		print_type (expr2.get_type ()));
       return Tree::error ();
     } else if(expr3.get_type () != integer_type_node){
      error_at (third_of_expr->get_locus (),
-		"type int is expected at third substring operand, but value is of type %s",
+		"type int is expected at third substring operand, but value is of type '%s'",
 		print_type (expr3.get_type ()));
       return Tree::error ();
     } else {
@@ -1818,88 +1632,6 @@ Parser::parse_substring_function ()
   gcc_unreachable ();
 }
 
-
-
-Tree
-Parser::get_concat_addr ()
-{
-  if (concat_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_varargs_function_type_array (build_pointer_type (char_type_node), 1,
-					     fndecl_type_param);
-
-      tree concat_fn_decl = build_fn_decl ("concatena", fndecl_type);
-      DECL_EXTERNAL (concat_fn_decl) = 1;
-
-      concat_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), concat_fn_decl);
-    }
-
-  return concat_fn;
-}
-
-Tree
-Parser::parse_concat_function ()
-{
- 
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr1 = parse_exp ();
-  
-   if (expr1.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-
-   if (!skip_token (Tiger::COMMA))
-    {
-      return Tree::error ();
-    }
-
-  const_TokenPtr second_of_expr = lexer.peek_token ();
-   Tree expr2 = parse_exp ();
-  
-   if (expr2.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-  if (!is_string_type (expr1.get_type ())){
-     error_at (first_of_expr->get_locus (),
-		"type string is expected at first concat operand, but value is of type %s",
-		print_type (expr1.get_type ()));
-      return Tree::error ();
-  } else if(!is_string_type (expr2.get_type ())){
-     error_at (second_of_expr->get_locus (),
-		"type string is expected at second concat operand, but value is of type %s",
-		print_type (expr2.get_type ()));
-      return Tree::error ();
-    } else {
-      tree args[] = {expr1.get_tree (), expr2.get_tree ()};
-
-      Tree concat_fn = get_concat_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), build_pointer_type (char_type_node),
-				concat_fn.get_tree (), 2, args);
-      return stmt;
-    }
-  
-  gcc_unreachable ();
-}
 
 Tree
 Parser::get_strcmp_addr ()
@@ -1937,7 +1669,7 @@ Parser::parse_strcmp_function()
   Tree expr1 = parse_exp ();
   
    if (expr1.is_error ()){
-    skip_after_function_call ();
+    skip_after_function ();
     return Tree::error ();}
 
 
@@ -1950,7 +1682,7 @@ Parser::parse_strcmp_function()
    Tree expr2 = parse_exp ();
   
    if (expr2.is_error ()){
-    skip_after_function_call ();
+    skip_after_function ();
     return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
@@ -1960,12 +1692,12 @@ Parser::parse_strcmp_function()
 
   if (!is_string_type (expr1.get_type ())){
      error_at (first_of_expr->get_locus (),
-		"type string is expected at first strcmp operand, but value is of type %s",
+		"type string is expected at first strcmp operand, but value is of type '%s'",
 		print_type (expr1.get_type ()));
       return Tree::error ();
   } else if(!is_string_type (expr2.get_type ())){
      error_at (second_of_expr->get_locus (),
-		"type string is expected at second strcmp operand, but value is of type %s",
+		"type string is expected at second strcmp operand, but value is of type '%s'",
 		print_type (expr2.get_type ()));
       return Tree::error ();
     } else {
@@ -1982,183 +1714,6 @@ Parser::parse_strcmp_function()
   gcc_unreachable ();
 }
 
-
-Tree
-Parser::get_size_addr ()
-{
-  if (size_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_varargs_function_type_array (integer_type_node, 1,
-					     fndecl_type_param);
-
-      tree size_fn_decl = build_fn_decl ("tamanho", fndecl_type);
-      DECL_EXTERNAL (size_fn_decl) = 1;
-
-      size_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), size_fn_decl);
-    }
-
-  return size_fn;
-}
-
-Tree
-Parser::parse_size_function()
-{
- 
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr = parse_exp ();
-  
-   if (expr.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-  if (is_string_type (expr.get_type ())){
-      tree args[] = {expr.get_tree ()};
-
-      Tree size_fn = get_size_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-				size_fn.get_tree (), 1, args);
-      return stmt;
-    } else {
-      error_at (first_of_expr->get_locus (),
-		"type string is expected size operand, but value is of type %s",
-		print_type (expr.get_type ()));
-      return Tree::error ();
-    }
-  
-  gcc_unreachable ();
-}
-
-Tree
-Parser::get_ord_addr ()
-{
-  if (ord_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_varargs_function_type_array (build_pointer_type (char_type_node), 1,
-					     fndecl_type_param);
-
-      tree ord_fn_decl = build_fn_decl ("chartoint", fndecl_type);
-      DECL_EXTERNAL (ord_fn_decl) = 1;
-
-      ord_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), ord_fn_decl);
-    }
-
-  return ord_fn;
-}
-
-
-Tree
-Parser::parse_ord_function()
-{
-
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr = parse_exp ();
-  
-   if (expr.is_error ()){
-    skip_after_function_call ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-  if (is_string_type (expr.get_type ())){
-      tree args[] = {expr.get_tree ()};
-
-      Tree ord_fn = get_ord_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-				ord_fn.get_tree (), 1, args);
-      return stmt;
-    } else {
-      error_at (first_of_expr->get_locus (),
-		"type string is expected ord operand, but value is of type %s",
-		print_type (expr.get_type ()));
-      return Tree::error ();
-    }
-  
-  gcc_unreachable ();
-}
-
-
-Tree
-Parser::get_getchar_addr ()
-{
-  if (getchar_fn.is_null ())
-    {
-      tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-      tree fndecl_type
-	= build_varargs_function_type_array (build_pointer_type (char_type_node), 0,
-					     fndecl_type_param);
-
-      tree getchar_fn_decl = build_fn_decl ("pegachar", fndecl_type);
-      DECL_EXTERNAL (getchar_fn_decl) = 1;
-
-      getchar_fn
-	= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), getchar_fn_decl);
-    }
-
-  return getchar_fn;
-}
-
-Tree
-Parser::parse_read_function ()
-{
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
-  tree args[]= {};
-
-  Tree getchar_fn = get_getchar_addr ();
-
-  tree stmt
-    = build_call_array_loc (first_of_expr->get_locus (), build_pointer_type (char_type_node),
-			    getchar_fn.get_tree (), 0, args);
-
-  return stmt;
-}
 
 Tree
 Parser::get_puts_addr ()
@@ -2218,7 +1773,7 @@ Parser::parse_write_function()
   const_TokenPtr first_of_expr = lexer.peek_token ();
   Tree expr = parse_exp ();
    if (expr.is_error ()){
-    skip_after_function_call ();
+    skip_after_function ();
     return Tree::error ();}
 
    if (!skip_token (Tiger::RIGHT_PAREN))
@@ -2265,7 +1820,7 @@ Parser::parse_write_function()
       return stmt;
     } else {
       error_at (first_of_expr->get_locus (),
-		"a primitive type is expected print operand, but value is of type %s",
+		"a primitive type is expected print operand, but value is of type '%s'",
 		print_type (expr.get_type ()));
       return Tree::error ();
     } 
@@ -2386,23 +1941,27 @@ Parser::null_denotation(const_TokenPtr tok)
   switch (tok->get_id ())
     {
     case Tiger::IDENTIFIER:
-      {
-	SymbolPtr s = query_variable_and_function (tok->get_str (), tok->get_locus ());
-	if (s == NULL)
-	  return Tree::error ();
-        if(lexer.peek_token ()->get_id () == Tiger::ASSIGN){
+   {
+     FunctionPtr f = query_function (tok->get_str ());
+	if (f == NULL){
+	  SymbolPtr s = query_variable (tok->get_str (), tok->get_locus ());
+          if (s == NULL)
+             return Tree::error ();
+          else if(lexer.peek_token ()->get_id () == Tiger::ASSIGN)
               return parse_assignment_exp (Tree (s->get_tree_decl (), tok->get_locus ()));
-        }if(lexer.peek_token ()->get_id () == Tiger::LEFT_PAREN){
-              return parse_function_call (Tree (s->get_tree_decl (), tok->get_locus ()), tok->get_str ());
-        }else{
+          else
               return Tree (s->get_tree_decl (), tok->get_locus ());
+        } else if (lexer.peek_token ()->get_id () == Tiger::LEFT_PAREN)
+              return parse_function_call (tok->get_str ());
+          else { 
+              unexpected_token(tok);
+              return Tree::error();
+          }
         }
-	
-      }
     case Tiger::INTEGER_LITERAL:
       return Tree (build_int_cst_type (integer_type_node,
 				       atoi (tok->get_str ().c_str ())),
-		   tok->get_locus (), "int");
+		   tok->get_locus ());
       break;
      case Tiger::REAL_LITERAL:
       {
@@ -2411,7 +1970,7 @@ Parser::null_denotation(const_TokenPtr tok)
 			   TYPE_MODE (float_type_node));
 
 	return Tree (build_real (float_type_node, real_value),
-		     tok->get_locus (), "float");
+		     tok->get_locus ());
       }
       break;
     case Tiger::STRING_LITERAL:
@@ -2419,7 +1978,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	std::string str = tok->get_str ();
 	const char *c_str = str.c_str ();
 	return Tree (build_string_literal (::strlen (c_str) + 1, c_str),
-		     tok->get_locus (), "string");
+		     tok->get_locus ());
       }
       break;
     case Tiger::LEFT_PAREN:
@@ -2427,19 +1986,18 @@ Parser::null_denotation(const_TokenPtr tok)
 	 enter_scope ();
  	 parse_exp_seq (&Parser::done_right_paren, OTHER_PAREN_RULES);
 	 TreeSymbolMapping paren_body_tree_scope = leave_scope ();
-  	Tree paren_body_exp = paren_body_tree_scope.bind_expr;
+  	 Tree paren_body_exp = paren_body_tree_scope.bind_expr;
 
         if (paren_body_exp.is_error ())
           return Tree::error ();  
   
 	tok = lexer.peek_token ();
 	if (tok->get_id () != Tiger::RIGHT_PAREN)
-	  error_at (tok->get_locus (), "expecting ) but %s found\n",
+	  error_at (tok->get_locus (), "expecting ) but '%s' found\n",
 		    tok->get_token_description ());
 	else
 	  lexer.skip_token ();
-
-	return Tree (paren_body_exp, tok->get_locus (), paren_body_exp.get_exp_type());
+	return Tree (paren_body_exp, tok->get_locus ());
       }
     case Tiger::PLUS:
       {
@@ -2450,7 +2008,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	    || expr.get_type () != float_type_node)
 	  {
 	    error_at (tok->get_locus (),
-		      "operand of unary plus must be int or real but it is %s",
+		      "operand of unary plus must be int or real but it is '%s'",
 		      print_type (expr.get_type ()));
 	    return Tree::error ();
 	  } 
@@ -2464,73 +2022,9 @@ Parser::null_denotation(const_TokenPtr tok)
       return parse_for_exp ();
     case Tiger::WHILE:
       return parse_while_exp();
-    case Tiger::READ:
-      {
-      Tree retTree = parse_read_function ();
-      retTree.set_exp_type("string");
-      return retTree;
-      }
-      break;
     case Tiger::WRITE:
       {
       Tree retTree = parse_write_function ();
-      retTree.set_exp_type("void");
-      return retTree;
-      }
-      break;
-  case Tiger::ORD:
-      {
-      Tree retTree = parse_ord_function ();
-      retTree.set_exp_type("int");
-      return retTree;
-      }
-      break;
-  case Tiger::CHR:
-      {
-      Tree retTree = parse_chr_function ();
-      retTree.set_exp_type("string");
-      return retTree;
-      }
-      break;
-   case Tiger::CONCAT:
-      {
-      Tree retTree = parse_concat_function ();
-      retTree.set_exp_type("string");
-      return retTree;
-      }
-      break;
-   case Tiger::SUBSTRING:
-      {
-      Tree retTree = parse_substring_function ();
-      retTree.set_exp_type("string");
-      return retTree;
-      }
-      break;
-  case Tiger::STRCMP:
-      {
-      Tree retTree = parse_strcmp_function ();
-      retTree.set_exp_type("int");
-      return retTree;
-      }
-      break;
-   case Tiger::NOT:
-      {
-      Tree retTree = parse_not_function ();
-      retTree.set_exp_type("int");
-      return retTree;
-      }
-      break;
-   case Tiger::EXIT:
-      {
-      Tree retTree = parse_exit_function ();
-      retTree.set_exp_type("void");
-      return retTree;
-      }
-      break;
-   case Tiger::SIZE:
-      {
-      Tree retTree = parse_size_function ();
-      retTree.set_exp_type("int");
       return retTree;
       }
       break;
@@ -2545,7 +2039,7 @@ Parser::null_denotation(const_TokenPtr tok)
 	  {
 	    error_at (
 	      tok->get_locus (),
-	      "operand of unary minus must be int or real but it is %s",
+	      "operand of unary minus must be int or real but it is '%s'",
 	      print_type (expr.get_type ()));
 	    return Tree::error ();
 	  }
@@ -2594,7 +2088,7 @@ Parser::coerce_binary_arithmetic(const_TokenPtr tok, Tree *left, Tree *right)
     }
 
   error_at (tok->get_locus (),
-	    "invalid operands of type %s and %s for operator %s",
+	    "invalid operands of type '%s' and '%s' for operator '%s'",
 	    print_type (left_type), print_type (right_type),
 	    tok->get_token_description ());
   return Tree::error ();
@@ -2626,7 +2120,7 @@ Parser::binary_plus(const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (PLUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
+  return build_tree (PLUS_EXPR, tok->get_locus (), tree_type, left, right);
 }
 
 Tree
@@ -2640,7 +2134,7 @@ Parser::binary_minus(const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (MINUS_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
+  return build_tree (MINUS_EXPR, tok->get_locus (), tree_type, left, right);
 }
 
 Tree
@@ -2654,7 +2148,7 @@ Parser::binary_mult(const_TokenPtr tok, Tree left)
   if (tree_type.is_error ())
     return Tree::error ();
 
-  return build_tree (MULT_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
+  return build_tree (MULT_EXPR, tok->get_locus (), tree_type, left, right);
 }
 
 Tree
@@ -2669,7 +2163,7 @@ Parser::binary_div(const_TokenPtr tok, Tree left)
     {
       /* Integer division (truncating, like in C)*/
       return build_tree (TRUNC_DIV_EXPR, tok->get_locus (), integer_type_node,
-			 left, right, print_type(left.get_type()));
+			 left, right);
     }
   else
     {
@@ -2680,7 +2174,7 @@ Parser::binary_div(const_TokenPtr tok, Tree left)
 
       gcc_assert (tree_type == float_type_node);
 
-      return build_tree (RDIV_EXPR, tok->get_locus (), tree_type, left, right, print_type(tree_type));
+      return build_tree (RDIV_EXPR, tok->get_locus (), tree_type, left, right);
     }
 }
 
@@ -2697,7 +2191,7 @@ Parser::binary_equal(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (EQ_EXPR, tok->get_locus (), integer_type_node, left,
-		     right, "int");
+		     right);
 }
 
 Tree
@@ -2712,7 +2206,7 @@ Parser::binary_different(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (NE_EXPR, tok->get_locus (), integer_type_node, left,
-		     right, "int");
+		     right);
 }
 
 Tree
@@ -2727,7 +2221,7 @@ Parser::binary_lower_than(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (LT_EXPR, tok->get_locus (), integer_type_node, left,
-		     right, "int");
+		     right);
 }
 
 Tree
@@ -2742,7 +2236,7 @@ Parser::binary_lower_equal(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (LE_EXPR, tok->get_locus (), integer_type_node, left,
-		     right, "int");
+		     right);
 }
 
 Tree
@@ -2757,7 +2251,7 @@ Parser::binary_greater_than(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (GT_EXPR, tok->get_locus (), integer_type_node, left,
-		     right, "int");
+		     right);
 }
 
 Tree
@@ -2772,7 +2266,7 @@ Parser::binary_greater_equal(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (GE_EXPR, tok->get_locus (), integer_type_node, left,
-		     right, "int");
+		     right);
 }
 
 bool
@@ -2783,7 +2277,7 @@ Parser::check_logical_operands(const_TokenPtr tok, Tree left, Tree right)
     {
       error_at (
 	tok->get_locus (),
-	"operands of operator %s must be integer but they are %s and %s\n",
+	"operands of operator '%s' must be integer but they are '%s' and '%s'\n",
 	tok->get_token_description (), print_type (left.get_type ()),
 	print_type (right.get_type ()));
       return false;
@@ -2803,7 +2297,7 @@ Parser::binary_logical_and(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (TRUTH_ANDIF_EXPR, tok->get_locus (), integer_type_node,
-		     left, right, "int");
+		     left, right);
 }
 
 Tree
@@ -2817,7 +2311,7 @@ Parser::binary_logical_or(const_TokenPtr tok, Tree left)
     return Tree::error ();
 
   return build_tree (TRUTH_ORIF_EXPR, tok->get_locus (), integer_type_node,
-		     left, right, "int");
+		     left, right);
 }
 
 Tree
@@ -2905,7 +2399,7 @@ Parser::parse_boolean_exp()
   if (expr.get_type () != integer_type_node)
     {
       error_at (expr.get_locus (),
-		"expected exp of integer type but its type is %s",
+		"expected exp of integer type but its type is '%s'",
 		print_type (expr.get_type ()));
       return Tree::error ();
     }
@@ -2922,7 +2416,7 @@ Parser::parse_integer_exp()
   if (expr.get_type () != integer_type_node)
     {
       error_at (expr.get_locus (),
-		"expected exp of integer type but its type is %s",
+		"expected exp of integer type but its type is '%s'",
 		print_type (expr.get_type ()));
       return Tree::error ();
     }

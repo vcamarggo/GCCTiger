@@ -1,7 +1,9 @@
 /* a */
 let
-   var i : int := if 1<2 then 3 else 4
+   var i : int := 5
+   function cinco() : int = 1+4
 in
+  cinco();
   print(i)
 end
 

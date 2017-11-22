@@ -25,8 +25,6 @@ public:
   Tree (tree t_) : t (t_), loc (EXPR_LOCATION (t)) {}
   Tree (tree t_, location_t loc_) : t (t_), loc (loc_) {}
   Tree (Tree t_, location_t loc_) : t (t_.get_tree ()), loc (loc_) {}
-  Tree (tree t_, location_t loc_, std::string tipo_) : t (t_), loc (loc_), type (tipo_) {}
-  Tree (Tree t_, location_t loc_, std::string tipo_) : t (t_.get_tree ()), loc (loc_), type (tipo_) {}
 
   location_t
   get_locus () const
@@ -82,22 +80,9 @@ public:
     return TREE_TYPE (t);
   }
 
-  void
-  set_exp_type (std::string tipo)
-  {
-    type = tipo;
-  }
-
-  std::string
-  get_exp_type()
-  {
-    return type;
-  }
-
 private:
   tree t;
   location_t loc;
-  std::string type;
 };
 
 inline bool operator==(Tree t1, Tree t2) { return t1.get_tree () == t2.get_tree (); }
@@ -110,25 +95,9 @@ build_tree (tree_code tc, location_t loc, Tree type, Tree t1)
 }
 
 inline Tree
-build_tree (tree_code tc, location_t loc, Tree type, Tree t1, std::string tipo)
-{
-  Tree temp = build1_loc (loc, tc, type.get_tree (), t1.get_tree ());
-  temp.set_exp_type(tipo);
-  return temp;
-}
-
-inline Tree
 build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2)
 {
   return build2_loc (loc, tc, type.get_tree (), t1.get_tree (), t2.get_tree ());
-}
-
-inline Tree
-build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, std::string tipo)
-{
-  Tree temp = build2_loc (loc, tc, type.get_tree (), t1.get_tree (), t2.get_tree ());
-  temp.set_exp_type(tipo);
-  return temp;
 }
 
 inline Tree
@@ -136,14 +105,6 @@ build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, Tree t3)
 {
   return build3_loc (loc, tc, type.get_tree (), t1.get_tree (), t2.get_tree (),
 		     t3.get_tree ());
-}
-
-inline Tree
-build_tree (tree_code tc, location_t loc, Tree type, Tree t1, Tree t2, Tree t3, std::string tipo)
-{
-  Tree temp = build3_loc (loc, tc, type.get_tree (), t1.get_tree (), t2.get_tree (),t3.get_tree ());
-  temp.set_exp_type(tipo);
-  return temp;
 }
 
 inline Tree

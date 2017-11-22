@@ -1,0 +1,6 @@
+let
+var a : string :="a"
+var b : string := "b"
+in
+print(concat("a","b"))
+end
