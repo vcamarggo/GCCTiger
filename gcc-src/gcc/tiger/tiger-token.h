@@ -68,7 +68,6 @@ namespace Tiger
   TIGER_TOKEN_KEYWORD (TYPE, "type")                                            \
   TIGER_TOKEN_KEYWORD (VAR, "var")                                              \
   TIGER_TOKEN_KEYWORD (WHILE, "while")                                          \
-  TIGER_TOKEN_KEYWORD (WRITE, "print")                                          \
                                                                                 \
   TIGER_TOKEN (LAST_TOKEN, "<last-token-marker>")
 

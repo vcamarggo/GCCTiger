@@ -155,8 +155,6 @@ public:
   Tree parse_let_exp();
 
   Tree parse_function ();
-  Tree parse_write_function ();
-  Tree parse_read_function ();
 
   Tree parse_exp ();
   Tree parse_exp_naming_variable();
@@ -314,6 +312,9 @@ void Parser::prepare_function_mapping(){
   std::vector<tree> integer_node_list;
   integer_node_list.push_back (integer_type_node);
 
+  std::vector<tree> float_node_list;
+  float_node_list.push_back (float_type_node);
+
   std::vector<tree> string_node_list;
   string_node_list.push_back (build_pointer_type (char_type_node));
 
@@ -338,6 +339,9 @@ void Parser::prepare_function_mapping(){
   FunctionPtr getchar (new Function (Tiger::FUNCTION, "getchar", build_pointer_type (char_type_node), null_list, LIB_FUNC));
   FunctionPtr flush (new Function (Tiger::FUNCTION, "flush", void_type_node, null_list, LIB_FUNC));
   FunctionPtr negate (new Function (Tiger::FUNCTION, "negate", integer_type_node, integer_node_list, LIB_FUNC));
+  FunctionPtr print (new Function (Tiger::FUNCTION, "print", void_type_node, string_node_list, LIB_FUNC));
+  FunctionPtr printInt (new Function (Tiger::FUNCTION, "printInt", void_type_node, integer_node_list, LIB_FUNC));
+  FunctionPtr printFloat (new Function (Tiger::FUNCTION, "printFloat", void_type_node, float_node_list, LIB_FUNC));
   FunctionPtr exit (new Function (Tiger::FUNCTION, "exit", integer_type_node, integer_node_list, LIB_FUNC));
 
   scope.get_current_function_mapping ().insert (substring);
@@ -348,6 +352,9 @@ void Parser::prepare_function_mapping(){
   scope.get_current_function_mapping ().insert (getchar);
   scope.get_current_function_mapping ().insert (flush);
   scope.get_current_function_mapping ().insert (negate);
+  scope.get_current_function_mapping ().insert (print);
+  scope.get_current_function_mapping ().insert (printInt);
+  scope.get_current_function_mapping ().insert (printFloat);
   scope.get_current_function_mapping ().insert (exit);
 }
 
@@ -597,7 +604,8 @@ Tree
 Parser::parse_function_declaration()
 {
   std::vector<tree> param_node_list;
-  param_node_list.push_back(integer_type_node);
+  
+
   if (!skip_token (Tiger::FUNC))
     {
       skip_next_declaration_in ();
@@ -620,7 +628,7 @@ Parser::parse_function_declaration()
     while (tok->get_id() != Tiger::RIGHT_PAREN){
         skip_token(Tiger::IDENTIFIER);
         skip_token(Tiger::COLON);
-        Tree type_param = parse_type ();
+        param_node_list.push_back(parse_type ().get_type ().get_tree ());
         tok = lexer.peek_token();
         if(tok->get_id() == Tiger::RIGHT_PAREN)
 	   break;
@@ -906,56 +914,14 @@ Parser::print_type(Tree type)
     }
 }
 
-/*
-Tree
-Parser::parse_field_declaration (std::vector<std::string> &field_names)
-{
-   identifier ':' type ';'
-  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
-  if (identifier == NULL)
-    {
-      skip_after_end_of_line ();
-      return Tree::error ();
-    }
-
-  skip_token (Tiger::COLON);
-
-  Tree type = parse_type ();
-
-  skip_token (Tiger::SEMICOLON);
-
-  if (type.is_error ())
-    return Tree::error ();
-
-  if (std::find (field_names.begin (), field_names.end (),
-		 identifier->get_str ())
-      != field_names.end ())
-    {
-      error_at (identifier->get_locus (), "repeated field name");
-      return Tree::error ();
-    }
-  field_names.push_back (identifier->get_str ());
-
-  Tree field_decl
-    = build_decl (identifier->get_locus (), FIELD_DECL,
-		  get_identifier (identifier->get_str ().c_str ()),
-		  type.get_tree());
-  TREE_ADDRESSABLE (field_decl.get_tree ()) = 1;
-
-  return field_decl;
-}
-*/
-
 Tree
 Parser::parse_type()
 {
   /* type -> "int"
         | "float"
-        | "bool"
         | IDENTIFIER
-        | type '[' expr ']'
-        | type '(' expr : expr ')'
-        | "record" field-decl* "end"*/
+	| "string" 
+			*/
 
   const_TokenPtr t = lexer.peek_token ();
 
@@ -987,9 +953,6 @@ Parser::parse_type()
           type = TREE_TYPE (s->get_tree_decl ().get_tree ());
       }
       break;
-    /*case Tiger::RECORD:
-      type = parse_record ();
-      break;*/
     default:
       unexpected_token (t);
       return Tree::error ();
@@ -1117,27 +1080,30 @@ Tree
 Parser::parse_function_call (string nameFunc)
 {
   FunctionPtr func = scope.lookupFunction (nameFunc);
-  int nr_args = func->get_nr_args ();
-  tree args[nr_args];
-  if (!skip_token (Tiger::LEFT_PAREN))
+  	int nr_args = func->get_nr_args ();
+	cout<<nr_args<<endl;
+	tree args[nr_args];
+  	if (!skip_token (Tiger::LEFT_PAREN))
     {
       return Tree::error ();
     }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-   for(int i =0 ; i < nr_args; i++){
-  const_TokenPtr exp_tok = lexer.peek_token ();
-       Tree exp = parse_exp ();
-       if (exp.is_error ()){
-           skip_after_function ();
-           return Tree::error ();
-       }
-       //trabalhar aqui
-       if(exp.get_type () != func->get_params_type_node ()[i] 
-	&& print_type (exp.get_type ()) != print_type (func->get_params_type_node()[i])){
+	const_TokenPtr first_of_expr = lexer.peek_token ();
+   	for(int i =0 ; i < nr_args; i++){
+
+		const_TokenPtr exp_tok = lexer.peek_token ();
+		Tree exp = parse_exp ();
+		
+		if (exp.is_error ()){
+			skip_after_function ();
+			return Tree::error ();
+		}
+
+//trabalhar aqui pq ta dando erro na comparacao
+       if(exp.get_type () != func->get_params_type_node ()[i]){
                error_at (exp_tok->get_locus (),
-		"parameter %d of type %s must be %s", i+1,
-		print_type (exp.get_type ()),
-		print_type (func->get_params_type_node()[i]));
+				"parameter %d of type %s must be %s", i+1,
+				print_type (exp.get_type ().get_tree ()),
+				print_type (func->get_params_type_node()[i]));
                 skip_after_function ();
                 return Tree::error ();
        }
@@ -1288,10 +1254,8 @@ Tree then_label_expr = build_tree (LABEL_EXPR, then_part.get_locus (),
 				      void_type_node, 
  					endif_label_decl);
   exp_list.append (endif_label_expr);
-  // ver retorno do if
-  /* DECL_RESULT
-    This macro returns the RESULT_DECL for the function.  */
-   Tree retTree = exp_list.get_tree ();
+
+  Tree retTree = exp_list.get_tree ();
   return retTree;
 }
 
@@ -1435,10 +1399,10 @@ Parser::parse_while_exp()
   
   Tree while_body_exp = while_body_tree_scope.bind_expr;
 
-		if (while_body_exp.is_error ()) {
-		    skip_after_function ();
-		    return Tree::error ();
-		}
+	if (while_body_exp.is_error ()) {
+	    skip_after_function ();
+	    return Tree::error ();
+	}
 
 	if(type_while == void_type_node){
 		return build_while_exp (conditional_expr, while_body_exp);
@@ -1607,71 +1571,6 @@ Parser::get_printf_addr ()
     }
 
   return printf_fn;
-}
-
-Tree
-Parser::parse_write_function()
-{
-
- if (!skip_token (Tiger::LEFT_PAREN))
-    {
-      return Tree::error ();
-    }
-  const_TokenPtr first_of_expr = lexer.peek_token ();
-  Tree expr = parse_exp ();
-   if (expr.is_error ()){
-    skip_after_function ();
-    return Tree::error ();}
-
-   if (!skip_token (Tiger::RIGHT_PAREN))
-    {
-      return Tree::error ();
-    }
-
- if (expr.get_type () == integer_type_node)
-    {
-      const char *format_integer = "%d\n";
-      tree args[]
-	= {build_string_literal (strlen (format_integer) + 1, format_integer),
-	   expr.get_tree ()};
-
-      Tree printf_fn = get_printf_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-				printf_fn.get_tree (), 2, args);
-
-      return stmt;
-    }  else if (expr.get_type () == float_type_node)
-    {
-      const char *format_float = "%f\n";
-      tree args[]
-	= {build_string_literal (strlen (format_float) + 1, format_float),
-	   convert (double_type_node, expr.get_tree ())};
-
-      Tree printf_fn = get_printf_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), integer_type_node,
-				printf_fn.get_tree (), 2, args);
-
-      return stmt;
-    } else if (is_string_type (expr.get_type ())){
-      tree args[] = {expr.get_tree ()};
-
-      Tree puts_fn = get_puts_addr ();
-
-      tree stmt
-	= build_call_array_loc (first_of_expr->get_locus (), void_type_node,
-				puts_fn.get_tree (), 1, args);
-      return stmt;
-    } else {
-      error_at (first_of_expr->get_locus (),
-		"a primitive type is expected print operand, but value is of type '%s'",
-		print_type (expr.get_type ()));
-      return Tree::error ();
-    } 
-  gcc_unreachable ();
 }
 
 Tree
@@ -1869,11 +1768,6 @@ Parser::null_denotation(const_TokenPtr tok)
       return parse_for_exp ();
     case Tiger::WHILE:
       return parse_while_exp();
-    case Tiger::WRITE:
-      {
-      Tree retTree = parse_write_function ();
-      return retTree;
-      }
       break;
     case Tiger::MINUS:
       {

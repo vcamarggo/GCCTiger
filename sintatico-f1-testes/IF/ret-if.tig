@@ -1,0 +1,2 @@
+/* correct if */
+print(if 30 > 20 then "a" else "v")

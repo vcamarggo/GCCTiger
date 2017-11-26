@@ -1,9 +1,7 @@
 /* a */
 let
-   var i : int := 5
-   function cinco() : int = 1+4
+   function inteiro(a:int) : int = 1+1
 in
-  cinco();
-  print(i)
+ 	print(inteiro(1))
 end
 
