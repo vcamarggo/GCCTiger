@@ -1,7 +1,7 @@
 /* a */
 let
-   function inteiro(a:int, b:string) : int = a+a
+   function inteiro(a:int) : int = a+a
 in
- 	printInt(inteiro(3, "a"))
+ 	printInt(inteiro(3))
 end
 

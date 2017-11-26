@@ -42,6 +42,7 @@ struct Parser
 {
 private:
   void skip_after_end ();
+  void skip_after_end_semicolon ();
   void skip_after_end_var ();
   void skip_after_colon ();
   void skip_next_declaration_in ();
@@ -235,8 +236,20 @@ Parser::skip_after_end()
       t = lexer.peek_token ();
     }
 
-  if (t->get_id () == Tiger::END)
-    lexer.skip_token ();
+}
+
+/* OK */
+void
+Parser::skip_after_end_semicolon()
+{
+  const_TokenPtr t = lexer.peek_token ();
+
+  while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END && t->get_id () != Tiger::SEMICOLON)
+    {
+      lexer.skip_token ();
+      t = lexer.peek_token ();
+    }
+
 }
 
 
@@ -603,32 +616,55 @@ Parser::build_let_exp (Tree let_exp)
 Tree
 Parser::parse_function_declaration()
 {
-  std::vector<tree> param_node_list;
-  
+	std::vector<tree> param_node_list;
 
-  if (!skip_token (Tiger::FUNC))
-    {
-      skip_next_declaration_in ();
-      return Tree::error ();
-    }
+	if (!skip_token (Tiger::FUNC))
+	{
+		skip_next_declaration_in ();
+		return Tree::error ();
+	}
 
-  const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
-  if (identifier == NULL)
-    {
-      skip_after_end ();
-      return Tree::error ();
-    }
+	const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
+	if (identifier == NULL)
+	{
+		skip_after_end ();
+		return Tree::error ();
+	}
 
-  const_TokenPtr tok = lexer.peek_token();
-  if(!skip_token(Tiger::LEFT_PAREN)){
-      skip_after_end ();
-      return Tree::error ();
-   }
+	const_TokenPtr tok = lexer.peek_token();
+	if(!skip_token(Tiger::LEFT_PAREN)){
+		skip_after_end ();
+		return Tree::error ();
+	}
+
     tok = lexer.peek_token();
     while (tok->get_id() != Tiger::RIGHT_PAREN){
-        skip_token(Tiger::IDENTIFIER);
+		const_TokenPtr identifierVar = expect_token (Tiger::IDENTIFIER);     
         skip_token(Tiger::COLON);
-        param_node_list.push_back(parse_type ().get_tree ());
+		Tree type_tree = parse_type ().get_tree ();
+        param_node_list.push_back(type_tree.get_tree ());
+
+		/*SymbolPtr sym (new Symbol (Tiger::VARIABLE, identifierVar->get_str ()));
+		if (scope.get_current_mapping ().get (identifierVar->get_str ()))
+		{
+			scope.get_current_mapping ().remove (sym);
+		}
+		scope.get_current_mapping ().insert (sym);
+
+		sym = query_variable (identifierVar->get_str (), identifierVar->get_locus ());
+
+		Tree decl;
+		decl = build_decl (identifierVar->get_locus (), VAR_DECL, 
+		get_identifier (sym->get_name ().c_str ()),
+		type_tree.get_tree ());
+
+		DECL_CONTEXT (decl.get_tree()) = main_fndecl;
+
+		gcc_assert (!stack_var_decl_chain.empty ());
+		stack_var_decl_chain.back ().append (decl);
+
+		sym->set_tree_decl (decl);*/
+
         tok = lexer.peek_token();
         if(tok->get_id() == Tiger::RIGHT_PAREN)
 	   break;
@@ -1096,7 +1132,6 @@ Parser::parse_function_call (string nameFunc)
 			return Tree::error ();
 		}
 
-//trabalhar aqui pq ta dando erro na comparacao
        if(exp.get_type () != func->get_params_type_node ()[i] 
 			&& print_type (exp.get_type ()) != print_type (func->get_params_type_node ()[i])){
                error_at (exp_tok->get_locus (),
@@ -1114,6 +1149,7 @@ Parser::parse_function_call (string nameFunc)
 
    if (!skip_token (Tiger::RIGHT_PAREN))
     {
+	  skip_after_end_semicolon ();
       return Tree::error ();
     }
     tree fndecl_type_param[] = {
