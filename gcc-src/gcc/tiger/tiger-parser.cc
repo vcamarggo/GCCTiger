@@ -628,12 +628,11 @@ Parser::parse_function_declaration()
     while (tok->get_id() != Tiger::RIGHT_PAREN){
         skip_token(Tiger::IDENTIFIER);
         skip_token(Tiger::COLON);
-        param_node_list.push_back(parse_type ().get_type ().get_tree ());
+        param_node_list.push_back(parse_type ().get_tree ());
         tok = lexer.peek_token();
         if(tok->get_id() == Tiger::RIGHT_PAREN)
 	   break;
         skip_token(Tiger::COMMA);
-        lexer.skip_token();
     }
         skip_token(Tiger::RIGHT_PAREN);
 
@@ -1081,7 +1080,6 @@ Parser::parse_function_call (string nameFunc)
 {
   FunctionPtr func = scope.lookupFunction (nameFunc);
   	int nr_args = func->get_nr_args ();
-	cout<<nr_args<<endl;
 	tree args[nr_args];
   	if (!skip_token (Tiger::LEFT_PAREN))
     {
@@ -1099,7 +1097,8 @@ Parser::parse_function_call (string nameFunc)
 		}
 
 //trabalhar aqui pq ta dando erro na comparacao
-       if(exp.get_type () != func->get_params_type_node ()[i]){
+       if(exp.get_type () != func->get_params_type_node ()[i] 
+			&& print_type (exp.get_type ()) != print_type (func->get_params_type_node ()[i])){
                error_at (exp_tok->get_locus (),
 				"parameter %d of type %s must be %s", i+1,
 				print_type (exp.get_type ().get_tree ()),
