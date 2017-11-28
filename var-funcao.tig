@@ -1,7 +1,7 @@
 /* a */
 let
-   function somaUm(a:int) : int = a+1
+   function varFun(a:int, b: int) : int = a+b
 in
- 	printInt(somaUm(3));print("");
+ 	printInt(varFun(3,4));print("");
 end
 

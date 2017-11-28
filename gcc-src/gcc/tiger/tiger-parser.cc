@@ -201,6 +201,9 @@ Parser::skip_after_end() {
 		lexer.skip_token ();
 		t = lexer.peek_token ();
 	}
+
+	if (t->get_id () == Tiger::END)
+		lexer.skip_token ();
 }
 
 /* OK */
@@ -557,14 +560,15 @@ Parser::parse_function_declaration() {
 
 		SymbolPtr sym(new Symbol(Tiger::VARIABLE, identifierVar->get_str()));
 		if (scope.get_current_mapping().get(identifierVar->get_str())) {
-		    scope.get_current_mapping().remove(sym);
+		    error_at (identifier->get_locus (), "parameter '%s' is duplicated", identifierVar->get_str ().c_str ()); 
+			return Tree::error ();
 		}
 		scope.get_current_mapping().insert(sym);
 
 		Tree decl = build_decl(identifierVar->get_locus(), VAR_DECL,
 		                       get_identifier(sym->get_name().c_str()),
 		                       type_tree.get_tree ());
-		DECL_CONTEXT(decl.get_tree()) = main_fndecl;
+		DECL_CONTEXT(decl.get_tree()) = function_fndecl;
 
 		gcc_assert(!stack_var_decl_chain.empty());
 		stack_var_decl_chain.back().append(decl);
@@ -632,7 +636,7 @@ Parser::parse_function_declaration() {
 		}
 		decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
-			  type_tree.get_tree ());
+			  void_type_node);
 	} else {
 		if(print_type (type_tree.get_tree ()) != print_type (expr.get_type ())){
 			error_at (tok->get_locus (), "type '%s' is not compatible with '%s'", print_type (type_tree.get_tree ()), 
@@ -640,7 +644,7 @@ Parser::parse_function_declaration() {
 			skip_after_end ();
 			return Tree::error ();
 		}
-    decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
+  		decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
 			  type_tree.get_tree ());
   	}
@@ -692,6 +696,70 @@ Parser::parse_function_declaration() {
 	return function;
 }
 
+
+Tree
+Parser::parse_function_call (string nameFunc) {
+  FunctionPtr func = scope.lookupFunction (nameFunc);
+  	int nr_args = func->get_nr_args ();
+	tree args[nr_args];
+  	if (!skip_token (Tiger::LEFT_PAREN)) {
+      return Tree::error ();
+    }
+	const_TokenPtr first_of_expr = lexer.peek_token ();
+   	for(int i =0 ; i < nr_args; i++){
+
+		const_TokenPtr exp_tok = lexer.peek_token ();
+		Tree exp = parse_exp ();
+		
+		if (exp.is_error ()) {
+			skip_after_function ();
+			return Tree::error ();
+		}
+
+		if(exp.get_type () != func->get_params_type_node ()[i] 
+			&& print_type (exp.get_type ()) != print_type (func->get_params_type_node ()[i])){
+			   error_at (exp_tok->get_locus (),
+				"parameter %d of type %s must be %s", i+1,
+				print_type (exp.get_type ().get_tree ()),
+				print_type (func->get_params_type_node()[i]));
+				skip_after_function ();
+				return Tree::error ();
+		}
+
+		args[i] = exp.get_tree ();
+		if(i<nr_args -1){
+			skip_token(Tiger::COMMA);
+		}
+	}
+
+	if (!skip_token (Tiger::RIGHT_PAREN)) {
+	  skip_after_end_semicolon ();
+	  return Tree::error ();
+	}
+    tree fndecl_type_param[] = {
+	build_pointer_type (
+	  build_qualified_type (char_type_node,
+				TYPE_QUAL_CONST)) /* const char* */
+      };
+	tree fndecl_type
+		= build_varargs_function_type_array (func->get_return_type_node (), 1,
+					 fndecl_type_param);
+
+	tree function_fn_decl = build_fn_decl (func->get_name ().c_str (), fndecl_type);
+	if(func->is_lib_func ())
+		DECL_EXTERNAL (function_fn_decl) = 1;
+	else
+		DECL_EXTERNAL (function_fn_decl) = 0;
+
+	function_fn
+		= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), function_fn_decl);
+
+	tree stmt
+		= build_call_array_loc (first_of_expr->get_locus (), func->get_return_type_node (),
+			function_fn.get_tree (), nr_args, args);
+
+	return stmt;
+}
 
 Tree
 Parser::parse_variable_declaration() {
@@ -905,19 +973,16 @@ Parser::parse_type() {
     }
 
   for (Dimensions::reverse_iterator it = dimensions.rbegin ();
-       it != dimensions.rend (); it++)
-    {
+       it != dimensions.rend (); it++) {
       it->first = Tree (fold (it->first.get_tree ()), it->first.get_locus ());
-      it->second
-	= Tree (fold (it->second.get_tree ()), it->second.get_locus ());
+      it->second = Tree (fold (it->second.get_tree ()), it->second.get_locus ());
 
-      if (!type.is_error ())
-	{
-	  Tree range_type
-	    = build_range_type (integer_type_node, it->first.get_tree (),
-				it->second.get_tree ());
-	  type = build_array_type (type.get_tree (), range_type.get_tree ());
-	}
+      if (!type.is_error ()) {
+		  Tree range_type
+			= build_range_type (integer_type_node, it->first.get_tree (),
+					it->second.get_tree ());
+		  type = build_array_type (type.get_tree (), range_type.get_tree ());
+	  }
     }
 
   return type;
@@ -970,70 +1035,6 @@ Parser::query_integer_variable (const std::string &name, location_t loc) {
 	}
 
 	return sym;
-}
-
-Tree
-Parser::parse_function_call (string nameFunc) {
-  FunctionPtr func = scope.lookupFunction (nameFunc);
-  	int nr_args = func->get_nr_args ();
-	tree args[nr_args];
-  	if (!skip_token (Tiger::LEFT_PAREN)) {
-      return Tree::error ();
-    }
-	const_TokenPtr first_of_expr = lexer.peek_token ();
-   	for(int i =0 ; i < nr_args; i++){
-
-		const_TokenPtr exp_tok = lexer.peek_token ();
-		Tree exp = parse_exp ();
-		
-		if (exp.is_error ()) {
-			skip_after_function ();
-			return Tree::error ();
-		}
-
-		if(exp.get_type () != func->get_params_type_node ()[i] 
-			&& print_type (exp.get_type ()) != print_type (func->get_params_type_node ()[i])){
-			   error_at (exp_tok->get_locus (),
-				"parameter %d of type %s must be %s", i+1,
-				print_type (exp.get_type ().get_tree ()),
-				print_type (func->get_params_type_node()[i]));
-				skip_after_function ();
-				return Tree::error ();
-		}
-
-		args[i] = exp.get_tree ();
-		if(i<nr_args -1){
-			skip_token(Tiger::COMMA);
-		}
-	}
-
-	if (!skip_token (Tiger::RIGHT_PAREN)) {
-	  skip_after_end_semicolon ();
-	  return Tree::error ();
-	}
-    tree fndecl_type_param[] = {
-	build_pointer_type (
-	  build_qualified_type (char_type_node,
-				TYPE_QUAL_CONST)) /* const char* */
-      };
-	tree fndecl_type
-		= build_varargs_function_type_array (func->get_return_type_node (), 1,
-					 fndecl_type_param);
-
-	tree function_fn_decl = build_fn_decl (func->get_name ().c_str (), fndecl_type);
-	if(func->is_lib_func ())
-		DECL_EXTERNAL (function_fn_decl) = 1;
-	else
-		DECL_EXTERNAL (function_fn_decl) = 0;
-
-	function_fn
-		= build1 (ADDR_EXPR, build_pointer_type (fndecl_type), function_fn_decl);
-
-	tree stmt
-		= build_call_array_loc (first_of_expr->get_locus (), func->get_return_type_node (),
-			function_fn.get_tree (), nr_args, args);
-
-	return stmt;
 }
 
 Tree
