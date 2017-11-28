@@ -10,8 +10,6 @@
 #undef substring
 #undef print
 
-int *iniciaArray(int size, int init);
-int *allocaRegistro(int size);
 void print(char *s);
 void printInt(int i);
 void printFloat(float f);
