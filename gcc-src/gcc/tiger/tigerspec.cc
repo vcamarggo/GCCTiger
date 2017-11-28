@@ -7,8 +7,7 @@ lang_specific_driver (struct cl_decoded_option ** /* in_decoded_options */,
  
 /* Called before linking.  Returns 0 on success and -1 on failure.  */
 int
-lang_specific_pre_link (void)
-{
+lang_specific_pre_link (void) {
   /* Not used for Tiger.  */
   return 0;
 }

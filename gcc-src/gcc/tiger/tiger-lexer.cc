@@ -136,50 +136,47 @@ Lexer::build_token ()
 	// ***************
 	case '/':
           if (peek_input () == '*') {
-	      comment++;
-              skip_input();
-              current_column++;
-            while(peek_input() != EOF) {
-		if(peek_input() == '/'){
-			skip_input();
+		    comment++;
+	        skip_input();
 			current_column++;
-			if(peek_input() == '*'){
-				skip_input();
-				current_column++;
-				comment++;
-			}
-		}else if(peek_input() == '*'){
-		    skip_input();
-		    current_column++;
-		    if(peek_input() == '/'){
-			current_column++;
-			skip_input();
-			comment--;
-			if(comment==0){
-				current_column++;
-				break;
-			}
-    		    }
+			while(peek_input() != EOF) {
+				if(peek_input() == '/'){
+					skip_input();
+					current_column++;
+					if(peek_input() == '*'){
+						skip_input();
+						current_column++;
+						comment++;
+					}
+				}else if(peek_input() == '*'){
+				    skip_input();
+				    current_column++;
+				    if(peek_input() == '/'){
+						current_column++;
+						skip_input();
+						comment--;
+						if(comment==0){
+							current_column++;
+							break;
+						}
+    		    	}
                 }
                 current_column++;
                 skip_input();
 	     }
-	  }
-          else{
+	  } else{
 	      current_column++;
 	      return Token::make (SLASH, loc);
-      	}
+      }
 	continue;
 	case ':':
-	  if (peek_input () == '=')
-	    {
+	  if (peek_input () == '=') {
 	      skip_input ();
 	      current_column += 2;
 
 	      return Token::make (ASSIGN, loc);
 	    }
-	  else
-	    {
+	  else {
 	      current_column++;
 	      return Token::make (COLON, loc);
 	    }
@@ -220,15 +217,13 @@ Lexer::build_token ()
 	  current_column++;
 	  return Token::make (SEMICOLON, loc);
 	case '<':
-	  if (peek_input () == '=')
-	    {
+	  if (peek_input () == '=') {
 	      skip_input ();
 	      current_column += 2;
 
 	      return Token::make (LOWER_OR_EQUAL, loc);
 	    }
-	  else if (peek_input () == '>')
-	    {
+	  else if (peek_input () == '>') {
 	      skip_input ();
 	      current_column += 2;
 
@@ -241,15 +236,13 @@ Lexer::build_token ()
 	    }
 	  break;
 	case '>':
-	  if (peek_input () == '=')
-	    {
+	  if (peek_input () == '=') {
 	      skip_input ();
 	      current_column += 2;
 
 	      return Token::make (GREATER_OR_EQUAL, loc);
 	    }
-	  else
-	    {
+	  else {
 	      current_column++;
 	      return Token::make (GREATER, loc);
 	    }
@@ -272,17 +265,14 @@ Lexer::build_token ()
       // ***************************
       // * Identifiers or keywords *
       // ***************************
-      if (ISALPHA (current_char))
-	{
+      if (ISALPHA (current_char)) {
 	  std::string str;
 	  str.reserve (16); // some sensible default
 	  str += current_char;
 
 	  int length = 1;
 	  current_char = peek_input ();
-	  while (ISALPHA (current_char) || ISDIGIT (current_char)
-		 || current_char == '_')
-	    {
+	  while (ISALPHA (current_char) || ISDIGIT (current_char) || current_char == '_') {
 	      length++;
 
 	      str += current_char;
@@ -293,12 +283,10 @@ Lexer::build_token ()
 	  current_column += length;
 
 	  TokenId keyword = classify_keyword (str);
-	  if (keyword == IDENTIFIER)
-	    {
+	  if (keyword == IDENTIFIER) {
 	      return Token::make_identifier (loc, str);
 	    }
-	  else
-	    {
+	  else {
 	      return Token::make (keyword, loc);
 	    }
 	}
@@ -306,8 +294,7 @@ Lexer::build_token ()
       // ****************************
       // * Integer or real literals *
       // ****************************
-      if (ISDIGIT (current_char)  || current_char == '.')
-	{
+      if (ISDIGIT (current_char)  || current_char == '.') {
 	  std::string str;
 	  str.reserve (16);
 	  str += current_char;
@@ -316,8 +303,7 @@ Lexer::build_token ()
 
 	  int length = 1;
 	  current_char = peek_input ();
-	  while (ISDIGIT (current_char) || (!is_real && current_char == '.'))
-	    {
+	  while (ISDIGIT (current_char) || (!is_real && current_char == '.')) {
 	      length++;
 
 	      is_real = is_real || (current_char == '.');
@@ -329,12 +315,10 @@ Lexer::build_token ()
 
 	  current_column += length;
 
-	  if (is_real)
-	    {
+	  if (is_real) {
 	      return Token::make_real (loc, str);
 	    }
-	  else
-	    {
+	  else {
 	      return Token::make_integer (loc, str);
 	    }
 	}
@@ -342,15 +326,13 @@ Lexer::build_token ()
       // *******************
       // * String literals *
       // *******************
-      if (current_char == '"')
-	{
+      if (current_char == '"') {
 	  std::string str;
 	  str.reserve (16); // some sensible default
 
 	  int length = 1;
 	  current_char = peek_input ();
-	  while (current_char != '\n' && current_char != '"')
-	    {
+	  while (current_char != '\n' && current_char != '"') {
 	      length++;
 
 	      str += current_char;
@@ -360,49 +342,41 @@ Lexer::build_token ()
 
 	  current_column += length;
 
-	  if (current_char == '\n')
-	    {
+	  if (current_char == '\n') {
 	      error_at (get_current_location (), "unended string literal");
 	    }
-	  else if (current_char == '"')
-	    {
+	  else if (current_char == '"') {
 	      skip_input ();
 	    }
-	  else
-	    {
+	  else {
 	      gcc_unreachable ();
 	    }
 
 	  return Token::make_string (loc, str);
 	}
 
-      // Martians
       error_at (loc, "unexpected character '%x'", current_char);
       current_column++;
     }
 }
 
 const_TokenPtr
-Lexer::peek_token (int n)
-{
+Lexer::peek_token (int n) {
   return token_queue.peek (n);
 }
 
 const_TokenPtr
-Lexer::peek_token ()
-{
+Lexer::peek_token () {
   return peek_token (0);
 }
 
 void
-Lexer::skip_token (int n)
-{
+Lexer::skip_token (int n) {
   token_queue.skip (n);
 }
 
 void
-Lexer::skip_token ()
-{
+Lexer::skip_token () {
   skip_token (0);
 }
 }

@@ -13,15 +13,13 @@ struct Scope
 {
 public:
   SymbolMapping &
-  get_current_mapping ()
-  {
+  get_current_mapping () {
     gcc_assert (!map_stack.empty ());
     return map_stack.back ();
   }
 
   FunctionMapping &
-  get_current_function_mapping ()
-  {
+  get_current_function_mapping () {
     gcc_assert (!map_stack_function.empty ());
     return map_stack_function.back ();
   }

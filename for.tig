@@ -1,7 +1,0 @@
-/* for correto declarando implicitamente*/
-let
-	var x : int := 100
-in
-	(for x := 1 to 3 do
-	printInt(x);print(""));printInt(x);print("")
-end	

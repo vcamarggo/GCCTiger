@@ -10,8 +10,7 @@ namespace Tiger
 {
 
 void
-SymbolMapping::insert (SymbolPtr s)
-{
+SymbolMapping::insert (SymbolPtr s) {
   gcc_assert (s != NULL);
   std::pair<Map::iterator, bool> p
     = map.insert (std::make_pair (s->get_name (), s));
@@ -20,8 +19,7 @@ SymbolMapping::insert (SymbolPtr s)
 }
 
 void
-SymbolMapping::remove (SymbolPtr s)
-{
+SymbolMapping::remove (SymbolPtr s) {
   map.erase (s->get_name ());
 }
 
@@ -29,8 +27,7 @@ SymbolPtr
 SymbolMapping::get (const std::string &str) const
 {
   Map::const_iterator it = map.find (str);
-  if (it != map.end ())
-    {
+  if (it != map.end ()) {
       return it->second;
     }
   return SymbolPtr();

@@ -8,8 +8,7 @@
 // This is required by some generic routines
 
 tree
-convert (tree type, tree expr)
-{
+convert (tree type, tree expr) {
   if (type == error_mark_node
       || expr == error_mark_node
       || TREE_TYPE (expr) == error_mark_node)

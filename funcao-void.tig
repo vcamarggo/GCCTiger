@@ -1,0 +1,7 @@
+/* a */
+let
+   function voidFunc() = print("funcionou")
+in
+	voidFunc()
+end
+

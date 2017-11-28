@@ -22,82 +22,71 @@ char *concat(char *a, char *b);
 int negate(int i);
 char *getchar();
 
-void print(char *s)
-{
+void print(char *s) {
 	puts(s);
 }
 
-void printInt(int i)
-{
+void printInt(int i) {
 	printf("%d", i);
 }
 
-void printFloat(float f)
-{
+void printFloat(float f) {
 	printf("%f", f);
 }
 
-void flush()
-{
- fflush(stdout);
+void flush() {
+	fflush(stdout);
 }
 
 
-int ord(char *s)
-{
-  if(s== NULL || strlen(s) == 0){
-     return -1;
-  }
-  else
-     return s[0];
+int ord(char *s) {
+	if(s== NULL || strlen(s) == 0)
+		return -1;
+	else
+		return s[0];
 }
 
-char *chr(int i)
-{
- if (i<0 || i>=256) 
-   {printf("chr(%d) out of range\n",i); exit(1);}
- char *str;
- str = (char *) malloc (sizeof(char)*2);
- str[0] = i;
- str[1] = '\0';
- return str;
+char *chr(int i) {
+	if (i<0 || i>=256) 
+		{printf("chr(%d) out of range\n",i); exit(1);}
+	char *str;
+	str = (char *) malloc (sizeof(char)*2);
+	str[0] = i;
+	str[1] = '\0';
+	return str;
 }
 
-int size(char *s)
-{ 
- return strlen(s);
+int size(char *s) { 
+	return strlen(s);
 }
 
-char *substring(char *s, int first, int n)
-{
-   if (first > strlen(s)  -1) 
-   {printf("ERROR: first out of range\n"); exit(1);}
+char *substring(char *s, int first, int n) {
+	if (first > strlen(s)  -1) 
+	{printf("ERROR: first out of range\n"); exit(1);}
 
-   if (first + n > strlen(s)) 
-   {printf("ERROR: On out of range\n"); exit(1);}
+	if (first + n > strlen(s)) 
+	{printf("ERROR: On out of range\n"); exit(1);}
 
-  char *str = (char *) malloc (sizeof(char)*(n+1));
-  for (int i =0; i < n ; i++){
-      str[i] = s[first+i];
-  }
-  str[n] = '\0';
-  return str;
+	char *str = (char *) malloc (sizeof(char)*(n+1));
+	for (int i =0; i < n ; i++){
+	  str[i] = s[first+i];
+	}
+	str[n] = '\0';
+	return str;
 }
 
-char *concat(char *a, char *b)
-{
+char *concat(char *a, char *b) {
 	char *str = (char *) malloc (sizeof(char) * (strlen(a) + strlen(b)));
 	strcat(str,a);
 	strcat(str,b);
 	return str;
 }
 
-int negate(int i){
+int negate(int i) {
 	return !i;
 }
 
-char *getchar()
-{
+char *getchar() {
 	char *str;
 	str = (char *) malloc (sizeof(char)*2);
 	scanf( "%1s",str);

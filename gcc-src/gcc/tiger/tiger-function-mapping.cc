@@ -15,8 +15,7 @@ namespace Tiger
 {
 
 void
-FunctionMapping::insert (FunctionPtr s)
-{
+FunctionMapping::insert (FunctionPtr s) {
   gcc_assert (s != NULL);
   std::pair<Map::iterator, bool> p
     = map.insert (std::make_pair (s->get_name (), s));
@@ -25,8 +24,7 @@ FunctionMapping::insert (FunctionPtr s)
 }
 
 void
-FunctionMapping::remove (FunctionPtr s)
-{
+FunctionMapping::remove (FunctionPtr s) {
   map.erase (s->get_name ());
 }
 
@@ -34,8 +32,7 @@ FunctionPtr
 FunctionMapping::get (const std::string &str) const
 {
   Map::const_iterator it = map.find (str);
-  if (it != map.end ())
-    {
+  if (it != map.end ()) {
       return it->second;
     }
   return FunctionPtr();

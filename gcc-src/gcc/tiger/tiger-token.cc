@@ -4,10 +4,8 @@ namespace Tiger
 {
 
 const char *
-get_token_description (TokenId tid)
-{
-  switch (tid)
-    {
+get_token_description (TokenId tid) {
+  switch (tid) {
 #define TIGER_TOKEN(name, descr)                                                \
   case name:                                                                   \
     return descr;
@@ -21,10 +19,8 @@ get_token_description (TokenId tid)
 }
 
 const char *
-token_id_to_str (TokenId tid)
-{
-  switch (tid)
-    {
+token_id_to_str (TokenId tid) {
+  switch (tid) {
 #define TIGER_TOKEN(name, _)                                                    \
   case name:                                                                   \
     return #name;
