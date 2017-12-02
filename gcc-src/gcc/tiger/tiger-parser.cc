@@ -298,6 +298,7 @@ void Parser::prepare_function_mapping() {
 	FunctionPtr substring 
 		(new Function 
 			(Tiger::FUNCTION, "substring", build_pointer_type (char_type_node), double_integer_string_node_list, LIB_FUNC));
+	FunctionPtr strcomp (new Function (Tiger::FUNCTION, "strcomp", integer_type_node, double_string_node_list, LIB_FUNC));
 	FunctionPtr concat 
 		(new Function 
 			(Tiger::FUNCTION, "concat", build_pointer_type (char_type_node), double_string_node_list, LIB_FUNC));
@@ -313,6 +314,7 @@ void Parser::prepare_function_mapping() {
 	FunctionPtr exit (new Function (Tiger::FUNCTION, "exit", integer_type_node, integer_node_list, LIB_FUNC));
 
 	scope.get_current_function_mapping ().insert (substring);
+	scope.get_current_function_mapping ().insert (strcomp);
 	scope.get_current_function_mapping ().insert (concat);
 	scope.get_current_function_mapping ().insert (size);
 	scope.get_current_function_mapping ().insert (ord);

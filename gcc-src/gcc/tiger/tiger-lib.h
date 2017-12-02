@@ -17,6 +17,7 @@ void flush();
 int ord(char *s);
 char *chr(int i);
 int size(char *s);
+int strcomp(char *s, char *t);
 char *substring(char *s, int first, int n);
 char *concat(char *a, char *b);
 int negate(int i);
