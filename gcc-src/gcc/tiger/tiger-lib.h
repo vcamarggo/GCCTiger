@@ -12,7 +12,7 @@
 
 void print(char *s);
 void printInt(int i);
-void printFloat(float f);
+void printReal(float f);
 void flush();
 int ord(char *s);
 char *chr(int i);

@@ -1,0 +1,8 @@
+/* */
+let
+	var i : int := -1
+in
+	i:= -i; 
+
+	printInt(i)
+end

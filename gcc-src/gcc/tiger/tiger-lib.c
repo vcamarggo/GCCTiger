@@ -23,14 +23,14 @@ int negate(int i);
 char *getchar();
 
 void print(char *s) {
-	puts(s);
+	printf("%s", s);
 }
 
 void printInt(int i) {
 	printf("%d", i);
 }
 
-void printFloat(float f) {
+void printReal(float f) {
 	printf("%f", f);
 }
 

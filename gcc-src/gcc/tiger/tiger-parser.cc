@@ -42,6 +42,7 @@ struct Parser
 {
 private:
   void skip_after_end ();
+  void skip_to_end ();
   void skip_after_end_semicolon ();
   void skip_after_end_var ();
   void skip_next_declaration_in ();
@@ -173,7 +174,9 @@ void
 Parser::skip_next_declaration_in() {
 	const_TokenPtr t = lexer.peek_token ();
 
-	while (t->get_id () != Tiger::VAR && t->get_id () != Tiger::TYPE && t->get_id () != Tiger::IN && t->get_id () !=Tiger::FUNC) {
+	while (t->get_id () != Tiger::VAR && t->get_id () != Tiger::TYPE
+			 && t->get_id () != Tiger::IN && t->get_id () !=Tiger::FUNC && t->get_id () !=Tiger::END
+					 && t->get_id () !=Tiger::SEMICOLON) {
 		lexer.skip_token ();
 		t = lexer.peek_token ();
 	}
@@ -204,6 +207,17 @@ Parser::skip_after_end() {
 
 	if (t->get_id () == Tiger::END)
 		lexer.skip_token ();
+}
+
+/* OK */
+void
+Parser::skip_to_end() {
+	const_TokenPtr t = lexer.peek_token ();
+
+	while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END) {
+		lexer.skip_token ();
+		t = lexer.peek_token ();
+	}
 }
 
 /* OK */
@@ -295,7 +309,7 @@ void Parser::prepare_function_mapping() {
 	FunctionPtr negate (new Function (Tiger::FUNCTION, "negate", integer_type_node, integer_node_list, LIB_FUNC));
 	FunctionPtr print (new Function (Tiger::FUNCTION, "print", void_type_node, string_node_list, LIB_FUNC));
 	FunctionPtr printInt (new Function (Tiger::FUNCTION, "printInt", void_type_node, integer_node_list, LIB_FUNC));
-	FunctionPtr printFloat (new Function (Tiger::FUNCTION, "printFloat", void_type_node, float_node_list, LIB_FUNC));
+	FunctionPtr printReal (new Function (Tiger::FUNCTION, "printReal", void_type_node, float_node_list, LIB_FUNC));
 	FunctionPtr exit (new Function (Tiger::FUNCTION, "exit", integer_type_node, integer_node_list, LIB_FUNC));
 
 	scope.get_current_function_mapping ().insert (substring);
@@ -308,7 +322,7 @@ void Parser::prepare_function_mapping() {
 	scope.get_current_function_mapping ().insert (negate);
 	scope.get_current_function_mapping ().insert (print);
 	scope.get_current_function_mapping ().insert (printInt);
-	scope.get_current_function_mapping ().insert (printFloat);
+	scope.get_current_function_mapping ().insert (printReal);
 	scope.get_current_function_mapping ().insert (exit);
 }
 
@@ -433,6 +447,8 @@ Parser::parse_declaration() {
 			return parse_variable_declaration();
 		case Tiger::FUNC:
 			return parse_function_declaration();
+		case Tiger::TYPE:
+			return Tree::error ();
 		default:
 			unexpected_token (tok);
 			skip_after_end ();
@@ -510,7 +526,7 @@ Parser::parse_let_exp() {
 	TreeSymbolMapping let_scope = leave_scope ();
 	Tree let_exp = let_scope.bind_expr;
 	if (let_exp.is_error ()){
-		skip_after_end ();
+		skip_to_end ();
 		return Tree::error ();      
 	}
 
@@ -565,7 +581,7 @@ Parser::parse_function_declaration() {
 		}
 		scope.get_current_mapping().insert(sym);
 
-		Tree decl = build_decl(identifierVar->get_locus(), VAR_DECL,
+		Tree decl = build_decl(identifierVar->get_locus(), PARM_DECL,
 		                       get_identifier(sym->get_name().c_str()),
 		                       type_tree.get_tree ());
 		DECL_CONTEXT(decl.get_tree()) = function_fndecl;
@@ -614,6 +630,7 @@ Parser::parse_function_declaration() {
 
   	type_tree = expr.get_type ();
 
+	cout << print_type (type_tree)<<endl;
 	FunctionPtr sym (new Function (Tiger::FUNCTION, identifier->get_str (), type_tree.get_tree (), param_node_list, USER_FUNC));
 	if (scope.get_current_function_mapping ().get (identifier->get_str ())) {
 		scope.get_current_function_mapping ().remove (sym);
@@ -634,9 +651,8 @@ Parser::parse_function_declaration() {
 		  skip_after_end ();
 		  return Tree::error ();
 		}
-		decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
-			  get_identifier (sym->get_name ().c_str ()),
-			  void_type_node);
+		decl = build_decl (BUILTINS_LOCATION, RESULT_DECL, NULL_TREE,
+                                         void_type_node);
 	} else {
 		if(print_type (type_tree.get_tree ()) != print_type (expr.get_type ())){
 			error_at (tok->get_locus (), "type '%s' is not compatible with '%s'", print_type (type_tree.get_tree ()), 
@@ -647,18 +663,21 @@ Parser::parse_function_declaration() {
   		decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
 			  get_identifier (sym->get_name ().c_str ()),
 			  type_tree.get_tree ());
+
+		sym->set_tree_decl (decl);
   	}
-  
 	DECL_CONTEXT (decl.get_tree()) = function_fndecl;
 
 	gcc_assert (!stack_var_decl_chain.empty ());
 	stack_var_decl_chain.back ().append (decl);
 
-	sym->set_tree_decl (decl);
-
-	tree function_fndecl_type_param[] = {};
+	tree function_fndecl_type_param[param_node_list.size ()] = {};
+	if(param_node_list.size () > 0){
+		for(int i =0 ; i < param_node_list.size ();i++)
+			function_fndecl_type_param[i] = param_node_list[i];
+	}
 	tree function_fndecl_type
-		= build_function_type_array (type_tree.get_tree (), 0, function_fndecl_type_param);
+		= build_function_type_array (void_type_node, param_node_list.size (), function_fndecl_type_param);
 	function_fndecl = build_fn_decl (sym->get_name ().c_str (), function_fndecl_type);
 
 
@@ -685,6 +704,8 @@ Parser::parse_function_declaration() {
 	DECL_PRESERVE_P (function_fndecl) = 1;
 
 	gimplify_function_tree (function_fndecl);
+
+   	cgraph_node::add_new_function(function_fndecl, false);
 
 	cgraph_node::finalize_function (function_fndecl, true);
 
@@ -873,7 +894,7 @@ is_record_type(Tree type) {
 	return type.get_tree_code () == RECORD_TYPE;
 }
 
-const char *
+const char * 
 Parser::print_type(Tree type) {
 	gcc_assert (TYPE_P (type.get_tree ()));
 
@@ -1062,11 +1083,11 @@ Parser::parse_assignment_exp(Tree var) {
 		skip_next_declaration_in();
 		return Tree::error ();
 	}
-
+	
 	if (variable.get_type () != expr.get_type ()) {
 		error_at (first_of_expr->get_locus (), "cannot assign value of type %s to a variable of type %s",
 			print_type (expr.get_type ()), print_type (variable.get_type ()));
-		skip_next_declaration_in();
+		//skip_next_declaration_in();
 		return Tree::error ();
 	}
 
@@ -1569,8 +1590,7 @@ Parser::null_denotation(const_TokenPtr tok) {
 	Tree expr = parse_exp (LBP_UNARY_PLUS);
 	if (expr.is_error ())
 	  return Tree::error ();
-	if (expr.get_type () != integer_type_node
-	    || expr.get_type () != float_type_node)
+	if (expr.get_type () == build_pointer_type (char_type_node) || expr.get_type () == void_type_node)
 	  {
 	    error_at (tok->get_locus (),
 		      "operand of unary plus must be int or real but it is '%s'",
@@ -1594,7 +1614,7 @@ Parser::null_denotation(const_TokenPtr tok) {
 	if (expr.is_error ())
 	  return Tree::error ();
 
-	if (expr.get_type () != integer_type_node || expr.get_type () != float_type_node) {
+	if (expr.get_type () == build_pointer_type (char_type_node) || expr.get_type () == void_type_node) {
 		error_at (tok->get_locus (), "operand of unary minus must be int or real but it is '%s'",
 			print_type (expr.get_type ()));
 	    return Tree::error ();
