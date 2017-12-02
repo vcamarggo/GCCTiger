@@ -1,5 +1,61 @@
-Grammar for Tiger Imperative Language (TIL)
-==========================================
-
-Grammar
+Gramática pra Tiger feito por Fernando Carvalho e Vinícius Camargo
+Usou-se BNF extendida com '[' e ']' para zero ou uma e '{' e '}' para zero ou mais
 -------
+
+programa ::=
+	exp
+	| decs
+
+exp ::=
+# Literais.
+	integer
+	| real
+	| string
+
+# Variáveis.
+	| id
+
+# Atribuiçao.
+	| id := exp
+
+# Chamada de Função.
+	| id ( [ exp { , exp }] )
+
+# Operações.
+	| - exp
+	| exp op exp
+	| ( exps )
+
+
+# Estruturas de Controle.
+	| if exp then exp [else exp]
+	| while exp do exp
+	| for id := exp to exp do exp
+	| let decs in exps end
+
+# Sequência de expressões
+exps ::= [ exp { ; exp } ]
+
+#Declarações
+decs ::= { dec }
+
+#Declaração
+dec ::=
+# Declaração de variável.
+	| vardec
+# Declaração de função.
+	| function id ( params ) [ : type-id ] = exp
+
+#Declaração de variável expandida
+vardec ::= var id [ : type-id ] := exp
+
+#Parâmetro
+params ::= [ id : type-id { , id : type-id } ]
+
+#Tipos
+type-id ::= integer_type_node
+	| real_type_node
+	| string_type_node
+
+#Operadores
+op ::= + | - | * | / | = | <> | > | < | >= | <= | & | |
