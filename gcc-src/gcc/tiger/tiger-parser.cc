@@ -632,7 +632,6 @@ Parser::parse_function_declaration() {
 
   	type_tree = expr.get_type ();
 
-	cout << print_type (type_tree)<<endl;
 	FunctionPtr sym (new Function (Tiger::FUNCTION, identifier->get_str (), type_tree.get_tree (), param_node_list, USER_FUNC));
 	if (scope.get_current_function_mapping ().get (identifier->get_str ())) {
 		scope.get_current_function_mapping ().remove (sym);
@@ -653,8 +652,11 @@ Parser::parse_function_declaration() {
 		  skip_after_end ();
 		  return Tree::error ();
 		}
-		decl = build_decl (BUILTINS_LOCATION, RESULT_DECL, NULL_TREE,
-                                         void_type_node);
+		decl = build_decl (identifier->get_locus (), FUNCTION_DECL,
+			  get_identifier (sym->get_name ().c_str ()),
+			  void_type_node);
+
+		sym->set_tree_decl (decl);
 	} else {
 		if(print_type (type_tree.get_tree ()) != print_type (expr.get_type ())){
 			error_at (tok->get_locus (), "type '%s' is not compatible with '%s'", print_type (type_tree.get_tree ()), 
@@ -678,12 +680,13 @@ Parser::parse_function_declaration() {
 		for(int i =0 ; i < param_node_list.size ();i++)
 			function_fndecl_type_param[i] = param_node_list[i];
 	}
-	tree function_fndecl_type
-		= build_function_type_array (void_type_node, param_node_list.size (), function_fndecl_type_param);
-	function_fndecl = build_fn_decl (sym->get_name ().c_str (), function_fndecl_type);
 
 
+	tree function_fndecl_type;
 	if(expr.get_type () != void_type_node){
+		function_fndecl_type = 
+			build_function_type_array (type_tree.get_tree (), param_node_list.size (), function_fndecl_type_param);
+		function_fndecl = build_fn_decl (sym->get_name ().c_str (), function_fndecl_type);
 		tree resdecl
 			= build_decl (UNKNOWN_LOCATION, RESULT_DECL, NULL_TREE, type_tree.get_tree ());
 		DECL_CONTEXT (resdecl) = function_fndecl;
@@ -693,7 +696,16 @@ Parser::parse_function_declaration() {
 
 		tree return_exp = build1 (RETURN_EXPR, void_type_node, set_result);
 		get_current_exp_list ().append (return_exp);
-	} 
+	} else{
+		function_fndecl_type 
+			= build_function_type_array (void_type_node, param_node_list.size (), function_fndecl_type_param);
+		function_fndecl = build_fn_decl (sym->get_name ().c_str (), function_fndecl_type);
+
+		tree resdecl
+			= build_decl (BUILTINS_LOCATION, RESULT_DECL, NULL_TREE, void_type_node);
+		DECL_CONTEXT (resdecl) = function_fndecl;
+		DECL_RESULT (function_fndecl) = resdecl;
+	}
 
 	TreeSymbolMapping function_tree_scope = leave_scope ();
 	Tree function_block = function_tree_scope.block;

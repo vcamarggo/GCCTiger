@@ -1,7 +1,11 @@
 /* a */
 let
-   function voidFunc() = print("funcionou")
+   function voidFunc() = 
+						let
+						in
+							printInt(1)
+						end
 in
-	voidFunc()
+	voidFunc();
 end
 
