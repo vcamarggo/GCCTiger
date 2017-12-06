@@ -1,11 +1,13 @@
 /* a */
 let
-   function voidFunc() = 
+   function voidQuatro() = 
 						let
 						in
-							printInt(1)
+							printInt(4)
 						end
+   function dois() : int = 2
 in
-	voidFunc();
+	voidQuatro();
+	printInt(dois())
 end
 

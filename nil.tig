@@ -1,0 +1,5 @@
+let
+	var a := 2
+in
+	if a=nil then print("1")
+end
