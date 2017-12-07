@@ -1,8 +1,7 @@
 /* for correto */
 
 let 
-   var a : int := 5
 in
-(for a := 1 to 10 do
-print ("loop for"))
+for a := 1 to 10 do
+printInt (a);
 end

@@ -44,7 +44,6 @@ private:
   void skip_after_end ();
   void skip_to_end ();
   void skip_after_end_semicolon ();
-  void skip_after_end_var ();
   void skip_next_declaration_in ();
   void skip_after_function ();
 
@@ -92,6 +91,7 @@ private:
   void parse_descriptor_seq (bool (Parser::*done) ());
 
   bool done_end ();
+  bool done_end_break ();
   bool done_in ();
   bool done_right_paren ();
   bool done_end_or_else ();
@@ -180,19 +180,6 @@ Parser::skip_next_declaration_in() {
 		lexer.skip_token ();
 		t = lexer.peek_token ();
 	}
-}
-
-void
-Parser::skip_after_end_var() {
-	const_TokenPtr t = lexer.peek_token ();
-
-	while (t->get_id () != Tiger::END_OF_FILE && t->get_id () != Tiger::END && t->get_id () != Tiger::VAR) {
-		lexer.skip_token ();
-		t = lexer.peek_token ();
-	}
-
-	if (t->get_id () == Tiger::VAR)
-		lexer.skip_token ();
 }
 
 /* OK */
@@ -388,6 +375,13 @@ bool
 Parser::done_end() {
 	const_TokenPtr t = lexer.peek_token ();
 	return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE || t->get_id () == Tiger::RIGHT_PAREN );
+}
+
+bool
+Parser::done_end_break () {
+	const_TokenPtr t = lexer.peek_token ();
+	return (t->get_id () == Tiger::END || t->get_id () == Tiger::END_OF_FILE 
+			|| t->get_id () == Tiger::RIGHT_PAREN  || t->get_id () == Tiger::BREAK);
 }
 
 bool
@@ -1101,7 +1095,6 @@ Parser::parse_assignment_exp(Tree var) {
 	if (variable.get_type () != exp.get_type ()) {
 		error_at (first_of_exp->get_locus (), "cannot assign value of type %s to a variable of type %s",
 			print_type (exp.get_type ()), print_type (variable.get_type ()));
-		//skip_next_declaration_in();
 		return Tree::error ();
 	}
 
@@ -1184,55 +1177,48 @@ Parser::parse_if_exp() {
 	Tree exp = parse_boolean_exp ();
 
 	if (exp.is_error ()) {
-		skip_after_end ();
+		skip_to_end ();
 		return Tree::error ();
 	}
 
 	skip_token (Tiger::THEN);
 
 	const_TokenPtr tokThen = lexer.peek_token ();
-	enter_scope ();
-	tree type_then = parse_exp_seq (&Parser::done_end_or_else, OTHER_PAREN_RULES);
-	TreeSymbolMapping then_tree_scope = leave_scope ();
-	Tree then_exp = then_tree_scope.bind_exp;
-  
+
+	Tree then_exp = parse_exp ();
   
 	if (then_exp.is_error ()) {
-		skip_after_end ();
+		skip_to_end ();
 		return Tree::error ();
 	}
 
 	Tree else_exp;
-	tree type_else;
 	const_TokenPtr tok = lexer.peek_token ();
 	if (tok->get_id () == Tiger::ELSE) {
 		skip_token (Tiger::ELSE);
 
 		const_TokenPtr last_of_exp = lexer.peek_token ();
 
-		enter_scope ();
-		type_else = parse_exp_seq (&Parser::done_end_or_else, OTHER_PAREN_RULES);
-		TreeSymbolMapping else_tree_scope = leave_scope ();
-		else_exp = else_tree_scope.bind_exp;
+		Tree else_exp = parse_exp ();
 
 		if (else_exp.is_error ()) {
-		    skip_after_end ();
+		    skip_to_end ();
 		    return Tree::error ();
 		}
 
-		if(type_then != type_else){
+		if(then_exp.get_type () != else_exp.get_type ()){
 			error_at (last_of_exp->get_locus (),
 			"then exp type '%s' and else exp type '%s' differs", 
-			print_type(type_then),print_type(type_else));			
-			skip_after_end ();
+			print_type(then_exp.get_type ()),print_type(else_exp.get_type ()));			
+			skip_to_end ();
 			return Tree::error ();
 		}
          return build_if_exp (exp, then_exp, else_exp);
-	} if (type_then == void_type_node) {
+	} if (then_exp.get_type () == void_type_node) {
 		 return build_if_exp (exp, then_exp, else_exp);
 	}
 	error_at (tokThen->get_locus (), "then body must no return value, but it returned some value");			
-	skip_after_end ();
+	skip_to_end ();
 	return Tree::error ();
 
 }
@@ -1282,7 +1268,6 @@ Parser::build_while_exp(Tree bool_exp, Tree while_body) {
 
 Tree
 Parser::parse_while_exp() {
-
 	Tree conditional_exp = parse_boolean_exp ();
 
 	if (conditional_exp.is_error ()) {
@@ -1297,44 +1282,41 @@ Parser::parse_while_exp() {
 
 	const_TokenPtr t = lexer.peek_token ();  
 
-	enter_scope ();
-	tree type_while = parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
-	TreeSymbolMapping while_body_tree_scope = leave_scope ();
-
-	Tree while_body_exp = while_body_tree_scope.bind_exp;
+	Tree while_body_exp = parse_exp ();
 
 	if (while_body_exp.is_error ()) {
 	    skip_after_function ();
 	    return Tree::error ();
 	}
 
-	if(type_while == void_type_node){
+	if(while_body_exp.get_type () == void_type_node){
 		return build_while_exp (conditional_exp, while_body_exp);
 	}
 
 	error_at (t->get_locus (),
 	"while body must no return value, but it returned some value");			
-	skip_after_end ();
+	skip_to_end ();
 	return Tree::error ();  
 }
 
 Tree
 Parser::parse_for_exp() {
+	
   const_TokenPtr identifier = expect_token (Tiger::IDENTIFIER);
 	if (identifier == NULL) {
-		skip_after_end ();
+		skip_to_end ();
 		return Tree::error ();
 	}
 
 	if (!skip_token (Tiger::ASSIGN)) {
-		skip_after_end ();
+		skip_to_end ();
 		return Tree::error ();
 	}
 
 	Tree lower_bound = parse_integer_exp ();
 
 	if (!skip_token (Tiger::TO)) {
-		skip_after_end ();
+		skip_to_end ();
 		return Tree::error ();
 	}
 
@@ -1350,7 +1332,11 @@ Parser::parse_for_exp() {
 
     SymbolPtr sym(new Symbol(Tiger::VARIABLE, identifier->get_str()));
     if (scope.get_current_mapping().get(identifier->get_str())) {
-        scope.get_current_mapping().remove(sym);
+         error_at (identifier->get_locus (),
+			"name '%s' already declared in this scope",
+			identifier->get_str ().c_str ());		
+		skip_to_end ();
+		return Tree::error (); 
     }
     scope.get_current_mapping().insert(sym);
 
@@ -1368,26 +1354,23 @@ Parser::parse_for_exp() {
     get_current_exp_list().append(exp);
 
 
-	enter_scope();
 	const_TokenPtr t = lexer.peek_token ();  
-    tree type_for = parse_exp_seq (&Parser::done_end, OTHER_PAREN_RULES);
-
-	TreeSymbolMapping for_body_tree_scope = leave_scope ();
-	Tree for_body_exp = for_body_tree_scope.bind_exp;
+   	Tree for_body_exp = parse_exp ();
 
 	if (for_body_exp.is_error ()) {
 	    skip_after_function ();
 	    return Tree::error ();
 	}
 
-	if(type_for == void_type_node){
+	if(for_body_exp.get_type () == void_type_node){
 		SymbolPtr ind_var = query_integer_variable(identifier->get_str(), identifier->get_locus());
+		scope.get_current_mapping ().remove (ind_var);
 		return build_for_exp (ind_var, lower_bound, upper_bound, for_body_exp);
 	}
 
 	error_at (t->get_locus (),
 	"for body must no return value, but it returned some value");			
-	skip_after_end ();
+	skip_to_end ();
 	return Tree::error (); 
 }
 

@@ -1,8 +1,10 @@
-/* for correto */
+/* for incorreto */
 
 let 
    var i : int := 5
 in
-(for i := 1 to 10 do
-print ("loop for"))
+	(for i := 1 to 10 do
+		printInt (i));
+
+printInt(i)
 end
